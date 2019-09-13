@@ -1,21 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 using RoomLocator.Api.Middlewares;
 using RoomLocator.Data;
 using RoomLocator.Data.Config;
 using RoomLocator.Data.Services;
 using RoomLocator.Domain.Config;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace RoomLocator.Api
 {
@@ -40,6 +44,32 @@ namespace RoomLocator.Api
             services.Configure<ApiBehaviorOptions>(options => {
                 options.InvalidModelStateResponseFactory = InvalidModelHandler.HandleInvalidModelAggregate;
             });
+
+            services.AddApiVersioning(o =>
+            {
+                o.ReportApiVersions = true;
+                o.AssumeDefaultVersionWhenUnspecified = true;
+                o.DefaultApiVersion = new ApiVersion(1, 0);
+                o.ApiVersionReader = new UrlSegmentApiVersionReader();
+            });
+
+            services.AddVersionedApiExplorer(o =>
+            {
+                o.SubstituteApiVersionInUrl = true;
+                o.GroupNameFormat = "'v'VVV";
+            });
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "1.0",
+                    Title = "Room Locator API"
+                });
+                c.IncludeXmlComments(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "RoomLocator.Api.xml"));
+                c.DescribeAllEnumsAsStrings();
+                c.DocumentFilter<LowercaseDocumentFilter>();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,6 +90,39 @@ namespace RoomLocator.Api
             app.UseMvc();
 
             context.Database.Migrate();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Room Locator API V1"); });
+        }
+    }
+    
+    class LowercaseDocumentFilter : IDocumentFilter
+    {
+        public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
+        {
+            var paths = swaggerDoc.Paths;
+
+            var newPaths = new Dictionary<string, OpenApiPathItem>();
+            var removeKeys = new List<string>();
+            foreach (var path in paths)
+            {
+                var newKey = path.Key.ToLower();
+                if (newKey != path.Key)
+                {
+                    removeKeys.Add(path.Key);
+                    newPaths.Add(newKey, path.Value);
+                }
+            }
+
+            foreach (var path in newPaths)
+            {
+                swaggerDoc.Paths.Add(path.Key, path.Value);
+            }
+
+            foreach (var key in removeKeys)
+            {
+                swaggerDoc.Paths.Remove(key);
+            }
         }
     }
 }
