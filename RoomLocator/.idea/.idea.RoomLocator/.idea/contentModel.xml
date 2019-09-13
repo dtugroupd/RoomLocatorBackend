@@ -13,6 +13,7 @@
           <e p="ValuesController.cs" t="Include" />
         </e>
         <e p="Middlewares" t="Include">
+          <e p="ExceptionHandlingMiddleware.cs" t="Include" />
           <e p="InvalidModelHandler.cs" t="Include" />
         </e>
         <e p="obj" t="ExcludeRecursive">
@@ -74,6 +75,8 @@
         <e p="RoomLocator.Domain.csproj" t="IncludeRecursive" />
         <e p="Value.cs" t="Include" />
         <e p="ViewModels" t="Include">
+          <e p="ErrorViewModel.cs" t="Include" />
+          <e p="MultipleErrorsViewModel.cs" t="Include" />
           <e p="ValueViewModel.cs" t="Include" />
         </e>
       </e>
