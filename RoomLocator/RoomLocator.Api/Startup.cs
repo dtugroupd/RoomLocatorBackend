@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using RoomLocator.Api.Middlewares;
 using RoomLocator.Data;
 using RoomLocator.Data.Config;
 using RoomLocator.Data.Services;
@@ -35,6 +36,10 @@ namespace RoomLocator.Api
                 opt.UseSqlServer(Configuration.GetConnectionString("RoomLocator")));
             services.AddSingleton(AutoMapperConfig.CreateMapper());
             services.AddScoped<ValueService, ValueService>();
+            
+            services.Configure<ApiBehaviorOptions>(options => {
+                options.InvalidModelStateResponseFactory = InvalidModelHandler.HandleInvalidModelAggregate;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
