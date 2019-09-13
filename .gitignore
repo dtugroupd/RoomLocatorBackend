@@ -29,6 +29,7 @@ Obj/
 .vs/
 
 .vscode/
+.idea/
 /.idea/**/workspace.xml
 
 # MSTest test Results
