@@ -55,6 +55,7 @@ namespace RoomLocator.Api
                 app.UseHsts();
             }
 
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
             app.UseHttpsRedirection();
             app.UseMvc();
 
