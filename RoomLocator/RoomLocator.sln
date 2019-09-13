@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoomLocator.Data", "RoomLoc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoomLocator.Domain", "RoomLocator.Domain\RoomLocator.Domain.csproj", "{9911D939-B33B-4BAA-88AD-056AAF33D800}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{61E53DCA-7B66-4919-A2DB-F5C735906520}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{9911D939-B33B-4BAA-88AD-056AAF33D800}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9911D939-B33B-4BAA-88AD-056AAF33D800}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9911D939-B33B-4BAA-88AD-056AAF33D800}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61E53DCA-7B66-4919-A2DB-F5C735906520}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61E53DCA-7B66-4919-A2DB-F5C735906520}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61E53DCA-7B66-4919-A2DB-F5C735906520}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61E53DCA-7B66-4919-A2DB-F5C735906520}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

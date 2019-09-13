@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using RoomLocator.Data;
+using RoomLocator.Data.Services;
 using RoomLocator.Domain;
 using RoomLocator.Domain.InputModels;
 using RoomLocator.Domain.ViewModels;
@@ -22,45 +23,35 @@ namespace RoomLocator.Api.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<ValueViewModel>> Get()
+        public async Task<ActionResult<IEnumerable<ValueViewModel>>> Get()
         {
-            return Ok(_valueService.Get());
+            return Ok(await _valueService.Get());
         }
 
         [HttpGet("{id}")]
-        public ActionResult<ValueViewModel> Get(string id)
+        public async Task<ActionResult<ValueViewModel>> Get(string id)
         {
-            if (!_valueService.TryGetValue(id, out var value))
-            {
-                return NotFound();
-            }
-
-            return Ok(value);
+            return Ok(await _valueService.Get(id));
         }
 
         [HttpPost]
-        public ActionResult<ValueViewModel> Post([FromBody] ValueInputModel value)
+        public async Task<ActionResult<ValueViewModel>> Post([FromBody] ValueInputModel value)
         {
-            var createdValue = _valueService.Create(value);
+            var createdValue = await _valueService.Create(value);
             return CreatedAtAction(nameof(Get), new {id = createdValue.Id}, createdValue);
         }
 
         [HttpPut("{id}")]
-        public ActionResult<ValueViewModel> Put(string id, [FromBody] ValueInputModel value)
+        public async Task<ActionResult<ValueViewModel>> Put(string id, [FromBody] ValueInputModel value)
         {
-            if (!_valueService.TryGetValue(id, out var existingValue))
-            {
-                NotFound();
-            }
-
-            existingValue.Text = value.Text;
-
-            return Ok(existingValue);
+            var updatedValue = await _valueService.Update(id, value);
+            return Ok(updatedValue);
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(string id)
         {
+            await _valueService.Delete(id);
             return NoContent();
         }
     }

@@ -6,11 +6,14 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RoomLocator.Data;
+using RoomLocator.Data.Config;
+using RoomLocator.Data.Services;
 using RoomLocator.Domain.Config;
 
 namespace RoomLocator.Api
@@ -28,12 +31,14 @@ namespace RoomLocator.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddDbContext<RoomLocatorContext>(opt =>
+                opt.UseSqlServer(Configuration.GetConnectionString("RoomLocator")));
             services.AddSingleton(AutoMapperConfig.CreateMapper());
             services.AddScoped<ValueService, ValueService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, RoomLocatorContext context)
         {
             if (env.IsDevelopment())
             {
@@ -47,6 +52,8 @@ namespace RoomLocator.Api
 
             app.UseHttpsRedirection();
             app.UseMvc();
+
+            context.Database.Migrate();
         }
     }
 }
