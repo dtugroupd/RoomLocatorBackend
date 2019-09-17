@@ -11,6 +11,9 @@ using RoomLocator.Domain.ViewModels;
 
 namespace RoomLocator.Api.Controllers
 {
+    /// <summary>
+    /// Demo Controller - can be used as inspiration
+    /// </summary>
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
