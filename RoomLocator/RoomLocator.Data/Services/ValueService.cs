@@ -1,13 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using RoomLocator.Data.Config;
 using RoomLocator.Domain;
 using RoomLocator.Domain.InputModels;
 using RoomLocator.Domain.ViewModels;
+using Shared;
 
 namespace RoomLocator.Data.Services
 {
@@ -15,20 +15,34 @@ namespace RoomLocator.Data.Services
     {
         public ValueService(RoomLocatorContext context, IMapper mapper) : base(context, mapper) { }
         
-        public Task<ValueViewModel> Get(string id)
+        public async Task<ValueViewModel> Get(string id)
         {
-            return GetModel<Value, ValueViewModel>(_context.Values, x => x.Id == id);
+            var value = await _context.Values
+                .ProjectTo<ValueViewModel>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync(x => x.Id == id);
+            
+            if (value == null) throw NotFoundException.NotExistsWithProperty<Value>("id", id);
+
+            return value;
         }
 
-        public async Task<IEnumerable<ValueViewModel>> Get()
+        public Task<List<ValueViewModel>> Get()
         {
-            return _mapper.Map<ValueViewModel[]>(await _context.Values.ToListAsync());
+            return _context.Values
+                .ProjectTo<ValueViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
         }
 
-        public Task<ValueViewModel> Create(ValueInputModel valueToCreate)
+        public async Task<ValueViewModel> Create(ValueInputModel valueToCreate)
         {
-            return GetCreateModel<ValueInputModel, Value, ValueViewModel>(
-                _context.Values, valueToCreate);
+            var value = await _context.Values.FirstOrDefaultAsync(x => x.Text == valueToCreate.Text);
+            
+            if (value != null) throw DuplicateException.DuplicateEntry<Value>();
+
+            var createdValue = await _context.Values.AddAsync(_mapper.Map<Value>(valueToCreate));
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<ValueViewModel>(createdValue.Entity);
         }
 
         public async Task<ValueViewModel> Update(string id, ValueInputModel value)
@@ -38,14 +52,17 @@ namespace RoomLocator.Data.Services
             await _context.SaveChangesAsync();
 
             return _mapper.Map<ValueViewModel>(valueToUpdate);
-            
-            // TODO: Refactor to use below method instead
-//            return UpdateModel<ValueViewModel, Value, ValueViewModel>(_context.Values, value);
         }
 
-        public Task Delete(string id)
+        public async Task Delete(string id)
         {
-            return DeleteModel<Value>(_context.Values, x => x.Id == id);
+            var value = await _context.Values
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            if (value == null) return;
+
+            _context.Values.Remove(value);
+            await _context.SaveChangesAsync();
         }
     }
 }
