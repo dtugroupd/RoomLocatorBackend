@@ -1,8 +1,9 @@
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using RoomLocator.Domain.InputModels;
+using Microsoft.Extensions.Configuration;
 using RoomLocator.Domain.ViewModels;
 
 namespace RoomLocator.Api.Controllers
@@ -13,16 +14,18 @@ namespace RoomLocator.Api.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IHttpClientFactory _clientFactory;
+        private readonly IConfiguration _config;
 
-        public AuthController(IHttpClientFactory clientFactory)
+        public AuthController(IHttpClientFactory clientFactory, IConfiguration config)
         {
             _clientFactory = clientFactory;
+            _config = config;
         }
 
         [HttpGet("validate")]
         public async Task<ActionResult<TokenViewModel>> ValidateSsoTicket(string ticket)
         {
-            var service = "https://localhost:5001/api/v1/auth/validate";
+            var service = new Uri(Request.GetDisplayUrl()).GetLeftPart(UriPartial.Path);
             var validateUrl = $"https://auth.dtu.dk/dtu/validate?service={service}&ticket={ticket}";
 
             var request = new HttpRequestMessage(HttpMethod.Get, validateUrl);
@@ -41,8 +44,7 @@ namespace RoomLocator.Api.Controllers
                 return Unauthorized();
             }
 
-            return Redirect($"http://localhost:4200/validate?userId={responseMessage.Split("\n")[1]}");
+            return Redirect($"{_config["frontendUrl"]}/validate?userId={responseMessage.Split("\n")[1]}");
         }
-        
     }
 }

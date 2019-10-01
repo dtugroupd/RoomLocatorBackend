@@ -43,8 +43,7 @@ namespace RoomLocator.Api
             services.AddHttpClient("dtu-cas")
                 .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
                 {
-                    AllowAutoRedirect = true,
-                    MaxAutomaticRedirections = 10
+                    AllowAutoRedirect = true
                 });
             services.AddScoped<ValueService, ValueService>();
             
