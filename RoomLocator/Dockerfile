@@ -12,6 +12,7 @@ COPY . .
 WORKDIR /src/RoomLocator.Api
 RUN dotnet publish -c Release -o /app/out
 
+
 FROM microsoft/dotnet:aspnetcore-runtime
 WORKDIR /app
 COPY --from=build-env /app/out .
