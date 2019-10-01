@@ -9,6 +9,7 @@ namespace RoomLocator.Api.Controllers
     [Route("/")]
     public class IndexController : ControllerBase
     {
+        private string _healthMessage = "This pod is healthy"; 
         /// <summary>
         /// Health check, used for checking if the current pod is healthy
         /// </summary>
@@ -16,7 +17,13 @@ namespace RoomLocator.Api.Controllers
         [HttpGet]
         public ActionResult<string> Index()
         {
-            return Ok("This pod is healthy");
+            return _healthMessage;
+        }
+        
+        [HttpGet("api")]
+        public ActionResult<string> ApiIndex()
+        {
+            return _healthMessage;
         }
     }
 }
