@@ -2,6 +2,7 @@ FROM microsoft/dotnet:sdk AS build-env
 
 COPY . /app
 
+
 WORKDIR /src
 COPY ["RoomLocator.Api/RoomLocator.Api.csproj", "RoomLocator.Api/"]
 COPY ["RoomLocator.Data/RoomLocator.Data.csproj", "RoomLocator.Data/"]
