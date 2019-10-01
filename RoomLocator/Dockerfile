@@ -17,3 +17,4 @@ WORKDIR /app
 COPY --from=build-env /app/out .
 EXPOSE 80/tcp
 ENTRYPOINT [ "dotnet", "RoomLocator.Api.dll" ]
+
