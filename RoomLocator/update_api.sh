@@ -7,6 +7,7 @@ API_CONTAINER_NAME="api"
 
 source ${CURR_DIR}/start_database.sh
 
+
 start_api() {
     echo stuffs
     docker run \
