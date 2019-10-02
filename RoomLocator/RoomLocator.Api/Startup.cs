@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -39,6 +40,11 @@ namespace RoomLocator.Api
             services.AddDbContext<RoomLocatorContext>(opt =>
                 opt.UseSqlServer(Configuration.GetConnectionString("RoomLocator")));
             services.AddSingleton(AutoMapperConfig.CreateMapper());
+            services.AddHttpClient("dtu-cas")
+                .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+                {
+                    AllowAutoRedirect = true
+                });
             services.AddScoped<ValueService, ValueService>();
             
             services.Configure<ApiBehaviorOptions>(options => {
@@ -78,11 +84,25 @@ namespace RoomLocator.Api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseCors(builder =>
+                {
+                    builder.AllowCredentials();
+                    builder.WithOrigins("http://localhost:4200");
+                    builder.AllowAnyHeader();
+                    builder.AllowAnyMethod();
+                });
             }
             else
             {
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
+                app.UseCors(builder =>
+                {
+                    builder.AllowCredentials();
+                    builder.WithOrigins("https://se2-webapp04.compute.dtu.dk");
+                    builder.AllowAnyHeader();
+                    builder.AllowAnyMethod();
+                });
             }
 
             app.UseMiddleware<ExceptionHandlingMiddleware>();
