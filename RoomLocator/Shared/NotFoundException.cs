@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Shared
 {
@@ -23,6 +25,10 @@ namespace Shared
                 errorMessage
             );
         }
+
+        public static NotFoundException NotExistsWithProperty<T>(Expression<Func<T, string>> property, string value,
+            string errorMessage = null)
+            => NotExistsWithProperty<T>(((property.Body as MemberExpression)?.Member as PropertyInfo)?.Name ?? "null", value, errorMessage);
 
         private static NotFoundException PrependMessage<T>(string message, string preMessage)
         {

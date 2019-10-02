@@ -20,8 +20,8 @@ namespace RoomLocator.Data.Services
             var value = await _context.Values
                 .ProjectTo<ValueViewModel>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(x => x.Id == id);
-            
-            if (value == null) throw NotFoundException.NotExistsWithProperty<Value>("id", id);
+
+            if (value == null) throw NotFoundException.NotExistsWithProperty<Value>(x => x.Id, id);
 
             return value;
         }
