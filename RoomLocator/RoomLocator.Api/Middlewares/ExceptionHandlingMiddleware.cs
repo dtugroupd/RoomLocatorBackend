@@ -20,6 +20,7 @@ public class ExceptionHandlingMiddleware
 
         private readonly IDictionary<Type, HttpStatusCode> _exceptionCodes = new Dictionary<Type, HttpStatusCode> {
             { typeof(NotFoundException), HttpStatusCode.NotFound },
+            { typeof(DuplicateException), HttpStatusCode.Conflict },
 //            { typeof(DuplicationException), HttpStatusCode.Conflict },
             { typeof(InvalidRequestException), HttpStatusCode.BadRequest },
             { typeof(Exception), HttpStatusCode.InternalServerError },
