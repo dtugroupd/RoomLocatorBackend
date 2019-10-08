@@ -46,6 +46,7 @@ namespace RoomLocator.Api
                     AllowAutoRedirect = true
                 });
             services.AddScoped<ValueService, ValueService>();
+            services.AddScoped<UserService, UserService>();
             
             services.Configure<ApiBehaviorOptions>(options => {
                 options.InvalidModelStateResponseFactory = InvalidModelHandler.HandleInvalidModelAggregate;

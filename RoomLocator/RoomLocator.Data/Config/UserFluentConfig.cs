@@ -8,7 +8,7 @@ namespace RoomLocator.Data.Config
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.HasIndex(x => x.StudentId);
+            builder.HasIndex(x => x.StudentId).IsUnique();
         }
     }
 }
