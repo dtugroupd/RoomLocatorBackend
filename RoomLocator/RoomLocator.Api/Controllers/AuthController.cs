@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using RoomLocator.Data.Services;
 using RoomLocator.Domain.ViewModels;
 
 namespace RoomLocator.Api.Controllers
@@ -15,11 +16,15 @@ namespace RoomLocator.Api.Controllers
     {
         private readonly IHttpClientFactory _clientFactory;
         private readonly IConfiguration _config;
+        private readonly UserService _userService;
+        private readonly TokenService _tokenService;
 
-        public AuthController(IHttpClientFactory clientFactory, IConfiguration config)
+        public AuthController(IHttpClientFactory clientFactory, IConfiguration config, UserService userService, TokenService tokenService)
         {
             _clientFactory = clientFactory;
             _config = config;
+            _userService = userService;
+            _tokenService = tokenService;
         }
 
         [HttpGet("validate")]
@@ -44,7 +49,21 @@ namespace RoomLocator.Api.Controllers
                 return Unauthorized();
             }
 
-            return Redirect($"{_config["frontendUrl"]}/validate?userId={responseMessage.Split("\n")[1]}");
+            var studentId = responseMessage.Split("\n")[1];
+            var existingUser = await _userService.GetByStudentId(studentId);
+
+            string token = null;
+
+            if (existingUser == null)
+            {
+                token = _tokenService.GenerateRegisterUserToken(studentId);
+            }
+            else
+            {
+                token = await _tokenService.GenerateUserTokenAsync(studentId);
+            }
+
+            return Redirect($"{_config["frontendUrl"]}/validate?token={token ?? studentId}");
         }
     }
 }

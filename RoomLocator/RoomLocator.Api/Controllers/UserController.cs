@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RoomLocator.Data.Services;
 using RoomLocator.Domain.InputModels;
@@ -21,6 +23,7 @@ namespace RoomLocator.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "User")]
         public async Task<ActionResult<IEnumerable<UserViewModel>>> Get()
         {
             var users = await _userService.Get();
@@ -28,9 +31,17 @@ namespace RoomLocator.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "RegisterUser")]
         public async Task<ActionResult<UserViewModel>> Create(UserInputModel input)
         {
-            var createdUser = await _userService.Create(input);
+            var userToRegister = User.Claims.FirstOrDefault(x => x.Type == "RegisterUser")?.Value;
+
+            if (userToRegister == null)
+            {
+                return Forbid("Claim 'RegisterUser' is required to register new users");
+            }
+
+            var createdUser = await _userService.Create(userToRegister, input);
             return createdUser;
         }
     }

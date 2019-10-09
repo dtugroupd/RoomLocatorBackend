@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using RoomLocator.Data.Config;
 using RoomLocator.Domain;
@@ -18,27 +19,38 @@ namespace RoomLocator.Data.Services
 
         public async Task<IEnumerable<UserViewModel>> Get()
         {
-            var users = await _context.Users.ToListAsync();
+            var users = await _context.Users
+                .ProjectTo<UserViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
 
-//            var userViewModels = new List<UserViewModel>();
-//            foreach (var user in users)
-//            {
-//                userViewModels.Add(new UserViewModel() { StudentId = user.StudentId });
-//            }
-            var userViewModels = _mapper.Map<UserViewModel[]>(users);
-
-            return userViewModels;
+            return users;
         }
 
-        public async Task<UserViewModel> Create(UserInputModel input)
+        public async Task<UserViewModel> Get(string id)
+        {
+            var user = await _context.Users
+                .ProjectTo<UserViewModel>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            return user;
+        }
+
+        public async Task<UserViewModel> GetByStudentId(string studentId)
+        {
+            var user = await _context.Users
+                .ProjectTo<UserViewModel>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync(x => x.StudentId == studentId);
+
+            return user;
+        }
+
+        public async Task<UserViewModel> Create(string studentId, UserInputModel input)
         {
             var user = _mapper.Map<User>(input);
+            user.StudentId = studentId;
 
-//            var userExists = await _context.Users
-//                .Where(x => x.StudentId == input.StudentId)
-//                .AnyAsync();
             var userExists = await _context.Users
-                .AnyAsync(x => x.StudentId == input.StudentId);
+                .AnyAsync(x => x.StudentId == studentId);
 
             if (userExists)
             {
