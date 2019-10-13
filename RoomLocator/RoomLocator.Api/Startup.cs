@@ -46,7 +46,10 @@ namespace RoomLocator.Api
                     AllowAutoRedirect = true
                 });
             services.AddScoped<ValueService, ValueService>();
-            
+
+            // Adding the dependency injection (DI) for Sensor
+            services.AddScoped<SensorService, SensorService>();
+
             services.Configure<ApiBehaviorOptions>(options => {
                 options.InvalidModelStateResponseFactory = InvalidModelHandler.HandleInvalidModelAggregate;
             });
