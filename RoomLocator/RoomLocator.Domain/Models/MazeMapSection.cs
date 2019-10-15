@@ -6,7 +6,6 @@ namespace RoomLocator.Domain.Models
 {
     public class MazeMapSection
     {
-
         public int Id { get; set; }
         public int ZLevel { get; set; }
         public int? SurveyId { get; set; }

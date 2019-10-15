@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace RoomLocator.Domain.Models
+namespace RoomLocator.Domain.ViewModels
 {
-    public class Question
+    public class QuestionViewModel
     {
         public int Id { get; set; }
-        public virtual Survey Survey { get; set; }
-        public virtual IEnumerable<QuestionAnswer> QuestionAnswers { get; set; }
         public int SurveyId { get; set; }
+        public IEnumerable<QuestionAnswerViewModel> QuestionAnswers { get; set; }
         public string Text { get; set; }
     }
 }

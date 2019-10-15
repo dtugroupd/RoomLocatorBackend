@@ -15,11 +15,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using RoomLocator.Api.Helpers;
 using RoomLocator.Api.Middlewares;
 using RoomLocator.Data;
 using RoomLocator.Data.Config;
 using RoomLocator.Data.Services;
 using RoomLocator.Domain.Config;
+using RoomLocator.Domain.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace RoomLocator.Api
@@ -46,6 +48,7 @@ namespace RoomLocator.Api
                     AllowAutoRedirect = true
                 });
             services.AddScoped<ValueService, ValueService>();
+            services.AddScoped<MazeMapService, MazeMapService>();
             
             services.Configure<ApiBehaviorOptions>(options => {
                 options.InvalidModelStateResponseFactory = InvalidModelHandler.HandleInvalidModelAggregate;
@@ -91,6 +94,8 @@ namespace RoomLocator.Api
                     builder.AllowAnyHeader();
                     builder.AllowAnyMethod();
                 });
+
+                DatabaseSeedHelper.SeedDatabase(context);
             }
             else
             {
