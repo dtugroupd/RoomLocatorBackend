@@ -10,7 +10,7 @@ using RoomLocator.Data.Config;
 namespace RoomLocator.Data.Migrations
 {
     [DbContext(typeof(RoomLocatorContext))]
-    [Migration("20191015105353_MazeMapSectionEntities")]
+    [Migration("20191015114731_MazeMapSectionEntities")]
     partial class MazeMapSectionEntities
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -90,8 +90,7 @@ namespace RoomLocator.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("QuestionId")
-                        .IsUnique();
+                    b.HasIndex("QuestionId");
 
                     b.HasIndex("SurveyAnswerId");
 
@@ -165,9 +164,9 @@ namespace RoomLocator.Data.Migrations
             modelBuilder.Entity("RoomLocator.Domain.Models.QuestionAnswer", b =>
                 {
                     b.HasOne("RoomLocator.Domain.Models.Question", "Question")
-                        .WithOne("QuestionAnswer")
-                        .HasForeignKey("RoomLocator.Domain.Models.QuestionAnswer", "QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .WithMany("QuestionAnswers")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("RoomLocator.Domain.Models.SurveyAnswer", "SurveyAnswer")
                         .WithMany("QuestionAnswers")

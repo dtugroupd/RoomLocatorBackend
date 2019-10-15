@@ -119,7 +119,7 @@ namespace RoomLocator.Data.Migrations
                         column: x => x.QuestionId,
                         principalTable: "Questions",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_QuestionAnswers_SurveyAnswers_SurveyAnswerId",
                         column: x => x.SurveyAnswerId,
@@ -141,8 +141,7 @@ namespace RoomLocator.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_QuestionAnswers_QuestionId",
                 table: "QuestionAnswers",
-                column: "QuestionId",
-                unique: true);
+                column: "QuestionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_QuestionAnswers_SurveyAnswerId",
