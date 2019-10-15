@@ -9,7 +9,8 @@ namespace RoomLocator.Domain.Models
 
         public int Id { get; set; }
         public int ZLevel { get; set; }
+        public int? SurveyId { get; set; }
         public virtual Survey Survey { get; set; }
-        public double[][] Coordinates { get; set; }
+        public virtual IEnumerable<Coordinates> Coordinates { get; set; }
     }
 }
