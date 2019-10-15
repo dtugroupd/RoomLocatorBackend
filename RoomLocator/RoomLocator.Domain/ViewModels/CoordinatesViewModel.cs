@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace RoomLocator.Domain.ViewModels
+﻿namespace RoomLocator.Domain.ViewModels
 {
     public class CoordinatesViewModel
     {

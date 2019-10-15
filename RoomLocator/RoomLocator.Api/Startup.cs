@@ -17,11 +17,9 @@ using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using RoomLocator.Api.Helpers;
 using RoomLocator.Api.Middlewares;
-using RoomLocator.Data;
 using RoomLocator.Data.Config;
 using RoomLocator.Data.Services;
 using RoomLocator.Domain.Config;
-using RoomLocator.Domain.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace RoomLocator.Api
