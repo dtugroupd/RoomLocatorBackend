@@ -47,6 +47,7 @@ namespace RoomLocator.Api
                 });
             services.AddScoped<ValueService, ValueService>();
             services.AddScoped<MazeMapService, MazeMapService>();
+            services.AddScoped<SurveyService, SurveyService>();
             
             services.Configure<ApiBehaviorOptions>(options => {
                 options.InvalidModelStateResponseFactory = InvalidModelHandler.HandleInvalidModelAggregate;
