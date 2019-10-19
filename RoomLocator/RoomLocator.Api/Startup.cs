@@ -15,8 +15,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using RoomLocator.Api.Helpers;
 using RoomLocator.Api.Middlewares;
-using RoomLocator.Data;
 using RoomLocator.Data.Config;
 using RoomLocator.Data.Services;
 using RoomLocator.Domain.Config;
@@ -47,8 +47,13 @@ namespace RoomLocator.Api
                 });
             services.AddScoped<ValueService, ValueService>();
 
+
             // Adding the dependency injection (DI) for Sensor
             services.AddScoped<SensorService, SensorService>();
+
+
+            services.AddScoped<MazeMapService, MazeMapService>();
+            
 
             services.Configure<ApiBehaviorOptions>(options => {
                 options.InvalidModelStateResponseFactory = InvalidModelHandler.HandleInvalidModelAggregate;
@@ -94,6 +99,8 @@ namespace RoomLocator.Api
                     builder.AllowAnyHeader();
                     builder.AllowAnyMethod();
                 });
+
+                DatabaseSeedHelper.SeedDatabase(context);
             }
             else
             {
@@ -106,6 +113,9 @@ namespace RoomLocator.Api
                     builder.AllowAnyHeader();
                     builder.AllowAnyMethod();
                 });
+
+                // TODO: Remove seed before app is actually put in production
+                DatabaseSeedHelper.SeedDatabase(context);
             }
 
             app.UseMiddleware<ExceptionHandlingMiddleware>();
