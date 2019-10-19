@@ -12,6 +12,7 @@ namespace RoomLocator.Data.Config
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfiguration(new SensorFluentConfig());
             base.OnModelCreating(modelBuilder);
         }
     }

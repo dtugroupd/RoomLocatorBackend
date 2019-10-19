@@ -37,8 +37,8 @@ namespace RoomLocator.Api.Controllers
         [HttpPut("id")]
         public async Task<ActionResult<SensorViewModel>> Put(string id, [FromBody]SensorInputModel sensor)
         {
-            var updateSenser = await _sensorService.Update(id, sensor);
-            return Ok(updateSenser);
+            var updateSensor = await _sensorService.Update(id, sensor);
+            return Ok(updateSensor);
         }
 
         [HttpDelete("id")]
