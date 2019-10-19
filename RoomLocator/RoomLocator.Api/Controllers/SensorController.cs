@@ -34,21 +34,19 @@ namespace RoomLocator.Api.Controllers
             return createdSensor;
         }
 
-        //[httpput("{id}")]
-        //public async task<actionresult<sensorviewmodel>> put(string id, [frombody] sensorinputmodel input)
-        //{
-        //    var updatedsensor;
-        //        //update(id, value.name, value.type, value.longitude, value.latitude, 
-        //    //value.timestamp, value.unit, value.value, value.status);
-        //    return ok(updatedsensor);
-        //}
+        [HttpPut("id")]
+        public async Task<ActionResult<SensorViewModel>> Put(string id, [FromBody]SensorInputModel sensor)
+        {
+            var updateSenser = await _sensorService.Update(id, sensor);
+            return Ok(updateSenser);
+        }
 
-        //[httpdelete("{id}")]
-        //public async task<actionresult> delete(string id)
-        //{
-        //    await _sensorservice.delete(id);
-        //    return nocontent();
-        //}
-
+        [HttpDelete("id")]
+        public async Task<ActionResult> Delete(string id)
+        {
+            await _sensorService.Delete(id);
+            return NoContent();
+        }
+         
     }
 }
