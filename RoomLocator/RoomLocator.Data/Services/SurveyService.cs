@@ -24,6 +24,11 @@ namespace RoomLocator.Data.Services
             return await _context.Surveys.ProjectTo<SurveyViewModel>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<IEnumerable<SurveyViewModel>> GetAll()
+        {
+            return await _context.Surveys.ProjectTo<SurveyViewModel>(_mapper.ConfigurationProvider).ToListAsync();
+        }
+
         public async Task<SurveyViewModel> CreateSurvey(SurveyCreateViewModel survey)
         {
             if (survey == null)
@@ -51,6 +56,46 @@ namespace RoomLocator.Data.Services
             await _context.SaveChangesAsync();
 
             return _mapper.Map<SurveyViewModel>(surveyToCreate);
+        }
+
+        public async Task<SurveyAnswerViewModel> SubmitAnswer(SurveyAnswerSubmitViewModel viewModel)
+        {
+            var survey = await _context.Surveys.FirstOrDefaultAsync(x => x.Id == viewModel.SurveyId);
+
+            if (survey == null)
+                throw new InvalidRequestException("Invalid request", "Can not submit answer as survey doesn't exist.");
+
+            if (viewModel == null)
+                throw new InvalidRequestException("Invalid request", "Can not submit answer as answer is null.");
+
+            if (!viewModel.QuestionAnswers.Any())
+                throw new InvalidRequestException("Invalid request", "The answer must contain one or more question answers.");
+
+            foreach(var qa in viewModel.QuestionAnswers)
+            {
+                var question = await _context.Questions.FirstOrDefaultAsync(q => q.Id == qa.QuestionId);
+                if(question == null)
+                    throw new InvalidRequestException("Invalid request", "All question answers must reference an existing question.");
+            }
+
+            var surveyAnswerToCreate = new SurveyAnswer { SurveyId = viewModel.SurveyId };
+            await _context.AddAsync(surveyAnswerToCreate);
+            await _context.SaveChangesAsync();
+
+            var questionAnswersToCreate = viewModel.QuestionAnswers.Select(x => new QuestionAnswer
+            {
+                QuestionId = x.QuestionId,
+                SurveyAnswerId = surveyAnswerToCreate.Id,
+                Text = x.Text,
+                Score = x.Score
+            });
+
+            await _context.AddRangeAsync(questionAnswersToCreate);
+            await _context.SaveChangesAsync();
+
+            surveyAnswerToCreate.QuestionAnswers = questionAnswersToCreate;
+
+            return _mapper.Map<SurveyAnswerViewModel>(surveyAnswerToCreate);
         }
     }
 }

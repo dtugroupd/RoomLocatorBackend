@@ -12,6 +12,8 @@ namespace RoomLocator.Domain.Config.AutoMapperConfigs
         public QuestionMapping()
         {
             CreateMap<QuestionViewModel, Question>().ReverseMap();
+            CreateMap<QuestionCreateViewModel, Question>().ReverseMap();
+            CreateMap<QuestionAnswerSubmitViewModel, Question>().ReverseMap();
         }
     }
 }

@@ -7,7 +7,7 @@ namespace RoomLocator.Domain.ViewModels
     public class SurveyCreateViewModel
     {
         public int SectionId { get; set; }
-        public IEnumerable<QuestionViewModel> Questions { get; set; }
+        public IEnumerable<QuestionCreateViewModel> Questions { get; set; }
 
     }
 }
