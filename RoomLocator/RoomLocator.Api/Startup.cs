@@ -53,6 +53,7 @@ namespace RoomLocator.Api
 
 
             services.AddScoped<MazeMapService, MazeMapService>();
+            services.AddScoped<SurveyService, SurveyService>();
             
 
             services.Configure<ApiBehaviorOptions>(options => {

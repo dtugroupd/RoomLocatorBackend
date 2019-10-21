@@ -27,7 +27,7 @@ namespace RoomLocator.Data.Config
             builder.Entity<MazeMapSection>().HasMany(x => x.Coordinates).WithOne(x => x.MazeMapSection).HasForeignKey(x => x.MazeMapSectionId);
             builder.Entity<Survey>().HasMany(x => x.MazeMapSections).WithOne(x => x.Survey).IsRequired(required: false);
             builder.Entity<Survey>().HasMany(x => x.Questions).WithOne(x => x.Survey).HasForeignKey(x => x.SurveyId);
-            builder.Entity<Survey>().HasOne(x => x.SurveyAnswer).WithOne(x => x.Survey).HasForeignKey<SurveyAnswer>(x => x.SurveyId);
+            builder.Entity<Survey>().HasMany(x => x.SurveyAnswers).WithOne(x => x.Survey).HasForeignKey(x => x.SurveyId);
             builder.Entity<SurveyAnswer>().HasMany(x => x.QuestionAnswers).WithOne(x => x.SurveyAnswer);
             builder.Entity<Question>().HasMany(x => x.QuestionAnswers).WithOne(x => x.Question).OnDelete(DeleteBehavior.Restrict);
         }
