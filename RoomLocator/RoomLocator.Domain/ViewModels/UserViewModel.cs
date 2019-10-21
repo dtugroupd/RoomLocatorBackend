@@ -20,5 +20,6 @@ namespace RoomLocator.Domain.ViewModels
 //            get { return $"{FirstName} {LastName}"; }
 //        }
         public string FullName => $"{FirstName} {LastName}";
+        public string UserType { get; set; }
     }
 }

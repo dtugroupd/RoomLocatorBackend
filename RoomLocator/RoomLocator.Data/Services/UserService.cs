@@ -48,6 +48,7 @@ namespace RoomLocator.Data.Services
         {
             var user = _mapper.Map<User>(input);
             user.StudentId = studentId;
+            user.UserType = input.UserType;
 
             var userExists = await _context.Users
                 .AnyAsync(x => x.StudentId == studentId);
@@ -61,6 +62,30 @@ namespace RoomLocator.Data.Services
             await _context.SaveChangesAsync();
 
             return _mapper.Map<UserViewModel>(user);
+        }
+
+        public async Task<UserViewModel> Update(string studentId, UserInputModel input)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.StudentId == studentId);
+
+            user.FirstName = input.FirstName;
+            user.LastName = input.LastName;
+            user.UserType = input.UserType;
+
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<UserViewModel>(user);
+        }
+
+        public async Task Delete(string studentId)
+        {
+            var user = await _context.Users
+                .FirstOrDefaultAsync(x => x.StudentId == studentId);
+
+            if (user == null) return;
+
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
         }
     }
 }
