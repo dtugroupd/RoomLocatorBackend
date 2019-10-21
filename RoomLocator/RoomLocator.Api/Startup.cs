@@ -18,8 +18,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using RoomLocator.Api.Helpers;
 using RoomLocator.Api.Middlewares;
-using RoomLocator.Data;
 using RoomLocator.Data.Config;
 using RoomLocator.Data.Services;
 using RoomLocator.Domain.Config;
@@ -71,6 +71,10 @@ namespace RoomLocator.Api
             services.AddScoped<ValueService, ValueService>();
             services.AddScoped<UserService, UserService>();
             services.AddScoped<TokenService, TokenService>();
+
+            services.AddScoped<MazeMapService, MazeMapService>();
+            services.AddScoped<SurveyService, SurveyService>();
+
             
             services.Configure<ApiBehaviorOptions>(options => {
                 options.InvalidModelStateResponseFactory = InvalidModelHandler.HandleInvalidModelAggregate;
@@ -116,6 +120,8 @@ namespace RoomLocator.Api
                     builder.AllowAnyHeader();
                     builder.AllowAnyMethod();
                 });
+
+                DatabaseSeedHelper.SeedDatabase(context);
             }
             else
             {
@@ -128,6 +134,9 @@ namespace RoomLocator.Api
                     builder.AllowAnyHeader();
                     builder.AllowAnyMethod();
                 });
+
+                // TODO: Remove seed before app is actually put in production
+                DatabaseSeedHelper.SeedDatabase(context);
             }
 
             app.UseMiddleware<ExceptionHandlingMiddleware>();

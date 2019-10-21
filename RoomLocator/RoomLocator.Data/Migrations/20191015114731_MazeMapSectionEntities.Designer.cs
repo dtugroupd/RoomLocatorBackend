@@ -3,44 +3,23 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RoomLocator.Data.Config;
 
 namespace RoomLocator.Data.Migrations
 {
     [DbContext(typeof(RoomLocatorContext))]
-    partial class RoomLocatorContextModelSnapshot : ModelSnapshot
+    [Migration("20191015114731_MazeMapSectionEntities")]
+    partial class MazeMapSectionEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("RoomLocator.Domain.User", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("FirstName");
-
-                    b.Property<string>("LastName");
-
-                    b.Property<string>("StudentId")
-                        .IsRequired();
-
-                    b.Property<string>("UserType")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StudentId")
-                        .IsUnique();
-
-                    b.ToTable("Users");
-                  });
 
             modelBuilder.Entity("RoomLocator.Domain.Models.Coordinates", b =>
                 {
@@ -124,6 +103,8 @@ namespace RoomLocator.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("SectionId");
+
                     b.HasKey("Id");
 
                     b.ToTable("Surveys");
@@ -139,10 +120,10 @@ namespace RoomLocator.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SurveyId");
+                    b.HasIndex("SurveyId")
+                        .IsUnique();
 
                     b.ToTable("SurveyAnswers");
-
                 });
 
             modelBuilder.Entity("RoomLocator.Domain.Value", b =>
@@ -196,8 +177,8 @@ namespace RoomLocator.Data.Migrations
             modelBuilder.Entity("RoomLocator.Domain.Models.SurveyAnswer", b =>
                 {
                     b.HasOne("RoomLocator.Domain.Models.Survey", "Survey")
-                        .WithMany("SurveyAnswers")
-                        .HasForeignKey("SurveyId")
+                        .WithOne("SurveyAnswer")
+                        .HasForeignKey("RoomLocator.Domain.Models.SurveyAnswer", "SurveyId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
