@@ -12,6 +12,7 @@ namespace RoomLocator.Domain.Config.AutoMapperConfigs
         public SurveyMapping()
         {
             CreateMap<SurveyViewModel, Survey>().ReverseMap();
+            CreateMap<SurveyCreateViewModel, Survey>().ReverseMap();
         }
     }
 }
