@@ -34,7 +34,7 @@ namespace RoomLocator.Data.Services
             if (survey == null)
                 throw new InvalidRequestException("Invalid request", "Can not create survey as survey is null.");
 
-            var questions = _mapper.Map<IEnumerable<Question>>(survey.Questions);
+            var questions = _mapper.Map<IEnumerable<Question>>(survey.Questions.Where(q => !string.IsNullOrWhiteSpace(q.Text)));
 
             if (!questions.Any())
                 throw new InvalidRequestException("Invalid request", "The survey must contain one or more questions.");
