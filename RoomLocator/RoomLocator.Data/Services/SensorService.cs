@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using RoomLocator.Data.Config;
 using RoomLocator.Domain;
@@ -23,6 +24,11 @@ namespace RoomLocator.Data.Services
 
         public async Task<SensorViewModel> Create(SensorInputModel input)
         {
+            if (input == null)
+            {
+                throw new InvalidCastException("Input should not be null");
+            }
+
             var sensors = _mapper.Map<Sensor>(input);
             await _context.Sensors.AddAsync(sensors);
             await _context.SaveChangesAsync();
@@ -32,10 +38,7 @@ namespace RoomLocator.Data.Services
         public async Task<SensorViewModel> Update(string id, SensorInputModel input)
         {
             var sensors = await _context.Sensors.FirstOrDefaultAsync(x => x.Id == id);
-
-            //var sensors = _mapper.Map<Sensor>(input);
-            // await _context.Sensors.UpdateRange(sensors);
-
+            
             sensors.Name = input.Name;
             sensors.Type = input.Type;
             sensors.Longitude = input.Longitude;
@@ -44,6 +47,7 @@ namespace RoomLocator.Data.Services
             sensors.Value = input.Value;
             sensors.Status = input.Status;
 
+         
             await _context.SaveChangesAsync();
 
             return _mapper.Map<SensorViewModel>(sensors);

@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using RoomLocator.Data.Services;
 using RoomLocator.Domain.InputModels;
 using RoomLocator.Domain.ViewModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Shared;
 
 namespace RoomLocator.Api.Controllers
 {
@@ -30,15 +32,37 @@ namespace RoomLocator.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<SensorViewModel>> Create(SensorInputModel input)
         {
-            var createdSensor = await _sensorService.Create(input);
-            return createdSensor;
+            if (!ModelState.IsValid) return BadRequest();
+            
+            try
+            {
+                 var createdSensor= await _sensorService.Create(input);
+                 return createdSensor;
+            }
+            catch (InvalidRequestException e)
+            {
+                return BadRequest(e.Message);
+            }
+           
+            
+            
         }
 
         [HttpPut("id")]
         public async Task<ActionResult<SensorViewModel>> Put(string id, [FromBody]SensorInputModel sensor)
         {
-            var updateSensor = await _sensorService.Update(id, sensor);
-            return Ok(updateSensor);
+            if (!ModelState.IsValid) return BadRequest();
+
+            try
+            {
+                 var updateSensor = await _sensorService.Update(id, sensor); 
+                 return Ok(updateSensor);
+            }
+            catch (InvalidRequestException e)
+            {
+                return BadRequest(e.Message);
+            }
+               
         }
 
         [HttpDelete("id")]
