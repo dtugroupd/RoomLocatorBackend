@@ -14,8 +14,11 @@ namespace RoomLocator.Data.Config
         public DbSet<Question> Questions { get; set; }
         public DbSet<QuestionAnswer> QuestionAnswers { get; set; }
         public DbSet<Value> Values { get; set; }
+
+        public DbSet<Sensor> Sensors { get; set; }
+
         public DbSet<Coordinates> Coordinates { get; set; }
-        
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
