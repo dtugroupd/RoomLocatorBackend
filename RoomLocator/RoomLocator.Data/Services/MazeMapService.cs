@@ -18,6 +18,10 @@ namespace RoomLocator.Data.Services
         public async Task<IEnumerable<MazeMapSectionViewModel>> GetSections()
         {
             var sections = await _context.MazeMapSections.ProjectTo<MazeMapSectionViewModel>(_mapper.ConfigurationProvider).ToListAsync();
+            foreach(var s in sections)
+            {
+                s.Coordinates = s.Coordinates.OrderBy(c => c.Index);
+            }
             return sections;
         }
     }
