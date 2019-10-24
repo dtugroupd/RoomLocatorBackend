@@ -1,4 +1,5 @@
 ﻿using RoomLocator.Data.Config;
+using RoomLocator.Domain.Enums;
 using RoomLocator.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,13 @@ namespace RoomLocator.Api.Helpers
     public static class DatabaseSeedHelper
     {
         public static void SeedDatabase(RoomLocatorContext context)
-        {
+        {   
+            if (context.MazeMapSections.Count() < 5)
+            {
+                var sections = context.MazeMapSections;
+                context.RemoveRange(sections);
+                context.SaveChanges();
+            }
 
             if (!context.MazeMapSections.Any())
             {
@@ -33,8 +40,72 @@ namespace RoomLocator.Api.Helpers
                     SurveyId = survey2.Id
                 };
 
+                var mazeMapSection3 = new MazeMapSection
+                {
+                    ZLevel = 2,
+                    SurveyId = survey2.Id,
+                    Type = LibrarySectionType.LOUNGE
+                };
+
+                var mazeMapSection4 = new MazeMapSection
+                {
+                    ZLevel = 2,
+                    SurveyId = survey2.Id,
+                    Type = LibrarySectionType.DATABAR
+                };
+
+                var mazeMapSection5 = new MazeMapSection
+                {
+                    ZLevel = 2,
+                    SurveyId = survey2.Id,
+                    Type = LibrarySectionType.GROUP_STUDY
+                };
+
+                var mazeMapSection6 = new MazeMapSection
+                {
+                    ZLevel = 2,
+                    SurveyId = survey2.Id,
+                    Type = LibrarySectionType.DATABAR
+                };
+
+                var mazeMapSection7 = new MazeMapSection
+                {
+                    ZLevel = 2,
+                    SurveyId = survey2.Id,
+                    Type = LibrarySectionType.GROUP_STUDY
+                };
+
+                var mazeMapSection8 = new MazeMapSection
+                {
+                    ZLevel = 2,
+                    SurveyId = survey2.Id,
+                    Type = LibrarySectionType.GROUP_STUDY
+                };
+
+                var mazeMapSection9 = new MazeMapSection
+                {
+                    ZLevel = 2,
+                    SurveyId = survey2.Id,
+                    Type = LibrarySectionType.GROUP_STUDY
+                    
+                };
+
+                //var mazeMapSection10 = new MazeMapSection
+                //{
+                //    ZLevel = 2,
+                //    SurveyId = survey2.Id
+                //};
+
                 context.Add(mazeMapSection1);
                 context.Add(mazeMapSection2);
+                context.Add(mazeMapSection3);
+                context.Add(mazeMapSection4);
+                context.Add(mazeMapSection5);
+                context.Add(mazeMapSection6);
+                context.Add(mazeMapSection7);
+                context.Add(mazeMapSection8);
+                context.Add(mazeMapSection9);
+                //context.Add(mazeMapSection10);
                 context.SaveChanges();
 
                 var questions = new List<Question>
@@ -77,62 +148,403 @@ namespace RoomLocator.Api.Helpers
                     {
                         MazeMapSectionId = mazeMapSection1.Id,
                         Longitude = 12.523394936706552,
-                        Latitude = 55.787009187536114
+                        Latitude = 55.787009187536114,
+                        Index = 0
                     },
                     new Coordinates
                     {
                         MazeMapSectionId = mazeMapSection1.Id,
                         Longitude = 12.52317152962101,
-                        Latitude = 55.78704845759867
+                        Latitude = 55.78704845759867,
+                        Index = 1
                     },
                     new Coordinates
                     {
                         MazeMapSectionId = mazeMapSection1.Id,
                         Longitude = 12.523106783718134,
-                        Latitude = 55.78693157515275
+                        Latitude = 55.78693157515275,
+                        Index = 2
+
                     },
                     new Coordinates
                     {
                         MazeMapSectionId = mazeMapSection1.Id,
                         Longitude = 12.523328398202466,
-                        Latitude = 55.78689276418302
+                        Latitude = 55.78689276418302,
+                        Index = 3
                     },
                     new Coordinates
                     {
                         MazeMapSectionId = mazeMapSection1.Id,
                         Longitude = 12.523394936706552,
-                        Latitude = 55.787009187536114
+                        Latitude = 55.787009187536114,
+                        Index = 4
                     },
                     new Coordinates
                     {
                         MazeMapSectionId = mazeMapSection2.Id,
                         Longitude = 12.523259637399121,
-                        Latitude = 55.786766267668895
+                        Latitude = 55.786766267668895,
+                        Index = 0
                     },
                     new Coordinates
                     {
                         MazeMapSectionId = mazeMapSection2.Id,
                         Longitude = 12.523328398202466,
-                        Latitude = 55.78689276418302
+                        Latitude = 55.78689276418302,
+                        Index = 1
                     },
                     new Coordinates
                     {
                         MazeMapSectionId = mazeMapSection2.Id,
                         Longitude = 12.523106783718134,
-                        Latitude = 55.78693157515275
+                        Latitude = 55.78693157515275,
+                        Index = 2
                     },
                     new Coordinates
                     {
                         MazeMapSectionId = mazeMapSection2.Id,
                         Longitude = 12.523038473405279,
-                        Latitude = 55.78680352605781
+                        Latitude = 55.78680352605781,
+                        Index = 3
                     },
                     new Coordinates
                     {
                         MazeMapSectionId = mazeMapSection2.Id,
                         Longitude = 12.523259637399121,
-                        Latitude = 55.786766267668895
-                    }
+                        Latitude = 55.786766267668895,
+                        Index = 4
+                    },
+
+                    // 1st floor corner lounge
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection3.Id,
+                        Longitude = 12.522992396101245,
+                        Latitude = 55.78708067483939,
+                        Index = 0
+                    },
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection3.Id,
+                        Longitude = 12.52296211062415,
+                        Latitude = 55.787025664233454,
+                        Index = 1
+                    },
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection3.Id,
+                        Longitude = 12.523103078712865,
+                        Latitude = 55.78700090057603,
+                        Index = 2
+                    },
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection3.Id,
+                        Longitude = 12.523133512544206,
+                        Latitude = 55.787056448768766,
+                        Index = 3
+                    },
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection3.Id,
+                        Longitude = 12.522992396101245,
+                        Latitude = 55.78708067483939,
+                        Index = 4
+                    },
+
+                    // 1st floor databar 1
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection4.Id,
+                        Longitude = 12.523070611196516,
+                        Latitude = 55.78688036166568,
+                        Index = 0
+                    },
+
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection4.Id,
+                        Longitude = 12.523035424992003,
+                        Latitude = 55.7868150048902,
+                        Index = 1
+                    },
+
+
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection4.Id,
+                        Longitude = 12.523057303704121,
+                        Latitude = 55.786811200586556,
+                        Index = 2
+                    },
+
+
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection4.Id,
+                        Longitude = 12.523052804076087,
+                        Latitude = 55.78680270866491,
+                        Index = 3
+                    },
+
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection4.Id,
+                        Longitude = 12.523442220398778,
+                        Latitude = 55.78673536458402,
+                        Index = 4
+                    },
+
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection4.Id,
+                        Longitude = 12.523482255351013,
+                        Latitude = 55.78680885135134,
+                        Index = 5
+                    },
+
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection4.Id,
+                        Longitude = 12.523070611196516,
+                        Latitude = 55.78688036166568,
+                        Index = 6
+                    },
+
+                    // 1st floor group study 1
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection5.Id,
+                        Longitude = 12.523482255351013,
+                        Latitude = 55.78680885135134,
+                        Index = 0
+                    },
+
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection5.Id,
+                        Longitude = 12.523447000092318,
+                        Latitude = 55.786743509263715,
+                        Index = 1
+                    },
+
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection5.Id,
+                        Longitude = 12.523641059141397,
+                        Latitude = 55.78670979806952,
+                        Index = 2
+                    },
+
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection5.Id,
+                        Longitude = 12.52374629327332,
+                        Latitude = 55.786901383480824,
+                        Index = 3
+                    },
+
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection5.Id,
+                        Longitude = 12.523572349344818,
+                        Latitude = 55.78693143358913,
+                        Index = 4
+                    },
+
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection5.Id,
+                        Longitude = 12.523502485736486,
+                        Latitude = 55.78680528200479,
+                        Index = 5
+                    },
+
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection5.Id,
+                        Longitude = 12.523482255351013,
+                        Latitude = 55.78680885135134,
+                        Index = 6
+                    },
+
+                    // 1st floor databar 2
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection6.Id,
+                        Longitude = 12.523381586623486,
+                        Latitude = 55.787013378777004,
+                        Index = 0
+                    },
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection6.Id,
+                        Longitude = 12.523356818522757,
+                        Latitude = 55.78696882184383,
+                        Index = 1
+                    },
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection6.Id,
+                        Longitude = 12.523572349344818,
+                        Latitude = 55.78693143358913,
+                        Index = 2
+                    },
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection6.Id,
+                        Longitude = 12.52374629327332,
+                        Latitude = 55.786901383480824,
+                        Index = 3
+                    },
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection6.Id,
+                        Longitude = 12.52377028372436,
+                        Latitude = 55.78694572525518,
+                        Index = 4
+                    },
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection6.Id,
+                        Longitude = 12.523381586623486,
+                        Latitude = 55.787013378777004,
+                        Index = 5
+                    },
+
+                    // 1st floor group study 2
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection7.Id,
+                        Longitude = 12.523356818522757,
+                        Latitude = 55.78696882184383,
+                        Index = 0
+                    },
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection7.Id,
+                        Longitude = 12.523339474902428,
+                        Latitude = 55.78693753051286,
+                        Index = 1
+                    },
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection7.Id,
+                        Longitude = 12.5235550453948,
+                        Latitude = 55.78689997276197,
+                        Index = 2
+                    },
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection7.Id,
+                        Longitude = 12.5235550453948,
+                        Latitude = 55.78689997276197,
+                        Index = 3
+                    },
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection7.Id,
+                        Longitude = 12.523572349344818,
+                        Latitude = 55.78693143358913,
+                        Index = 4
+                    },
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection7.Id,
+                        Longitude = 12.523356818522757,
+                        Latitude = 55.78696882184383,
+                        Index = 5
+                    },
+
+                    // 1st floor group study 3
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection8.Id,
+                        Longitude = 12.523133512544206,
+                        Latitude = 55.787056448768766,
+                        Index = 0
+                    },
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection8.Id,
+                        Longitude = 12.523091692964897,
+                        Latitude = 55.78698056999656,
+                        Index = 1
+                    },
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection8.Id,
+                        Longitude = 12.523339474902428,
+                        Latitude = 55.78693753051286,
+                        Index = 2
+                    },
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection8.Id,
+                        Longitude = 12.523381586623486,
+                        Latitude = 55.787013378777004,
+                        Index = 3
+                    },
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection8.Id,
+                        Longitude = 12.523133512544206,
+                        Latitude = 55.787056448768766,
+                        Index = 4
+                    },
+
+                    // 1st floor group study 4
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection9.Id,
+                        Longitude = 12.52296211062415,
+                        Latitude = 55.787025664233454,
+                        Index = 0
+                    },
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection9.Id,
+                        Longitude = 12.522862484572613,
+                        Latitude = 55.786844942921476,
+                        Index = 1
+                    },
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection9.Id,
+                        Longitude = 12.523035424992003,
+                        Latitude = 55.7868150048902,
+                        Index = 2
+                    },
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection9.Id,
+                        Longitude = 12.523122460328437,
+                        Latitude = 55.786975109109136,
+                        Index = 3
+                    },
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection9.Id,
+                        Longitude = 12.523091692964897,
+                        Latitude = 55.78698056999656,
+                        Index = 4
+                    },
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection9.Id,
+                        Longitude = 12.523103078712865,
+                        Latitude = 55.78700090057603,
+                        Index = 5
+                    },
+                    new Coordinates
+                    {
+                        MazeMapSectionId = mazeMapSection9.Id,
+                        Longitude = 12.52296211062415,
+                        Latitude = 55.787025664233454,
+                        Index = 6
+                    },
+
                 };
 
                 context.AddRange(coordinates);
