@@ -11,7 +11,13 @@ namespace RoomLocator.Api.Helpers
     public static class DatabaseSeedHelper
     {
         public static void SeedDatabase(RoomLocatorContext context)
-        {
+        {   
+            if (context.MazeMapSections.Count() < 5)
+            {
+                var sections = context.MazeMapSections;
+                context.RemoveRange(sections);
+                context.SaveChanges();
+            }
 
             if (!context.MazeMapSections.Any())
             {
