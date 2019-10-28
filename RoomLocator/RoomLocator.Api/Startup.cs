@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +17,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RoomLocator.Api.Helpers;
 using RoomLocator.Api.Middlewares;
@@ -36,6 +40,39 @@ namespace RoomLocator.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<RoomLocatorContext>(option => option.UseSqlServer(Configuration.GetConnectionString("RoomLocator")));
+            services.AddIdentity<IdentityUser, IdentityRole>(
+                option =>
+                {
+                    option.Password.RequireDigit = false;
+                    option.Password.RequireNonAlphanumeric = false;
+                    option.Password.RequireUppercase = false;
+                    option.Password.RequireLowercase = false;
+                }
+                ).AddEntityFrameworkStores<RoomLocatorContext>().AddDefaultTokenProviders();
+
+            services.AddAuthentication(k =>
+            {
+                k.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                k.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                k.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(o =>
+            {
+                o.SaveToken = true;
+                o.RequireHttpsMetadata = true;
+                o.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidAudience = Configuration["Jwtsettings:Site"],
+                    ValidIssuer = Configuration["Jwtsettings:Site"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwtsettings:Secret"]))
+                };
+
+            });
+
+
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddDbContext<RoomLocatorContext>(opt =>
                 opt.UseSqlServer(Configuration.GetConnectionString("RoomLocator")));
@@ -54,7 +91,7 @@ namespace RoomLocator.Api
 
             services.AddScoped<MazeMapService, MazeMapService>();
             services.AddScoped<SurveyService, SurveyService>();
-            
+
 
             services.Configure<ApiBehaviorOptions>(options => {
                 options.InvalidModelStateResponseFactory = InvalidModelHandler.HandleInvalidModelAggregate;
@@ -121,6 +158,10 @@ namespace RoomLocator.Api
 
             app.UseMiddleware<ExceptionHandlingMiddleware>();
             app.UseHttpsRedirection();
+
+            app.UseAuthentication();
+
+
             app.UseMvc();
 
             context.Database.Migrate();
@@ -129,7 +170,7 @@ namespace RoomLocator.Api
             app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Room Locator API V1"); });
         }
     }
-    
+
     class LowercaseDocumentFilter : IDocumentFilter
     {
         public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
