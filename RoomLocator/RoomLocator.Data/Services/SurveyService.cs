@@ -33,6 +33,8 @@ namespace RoomLocator.Data.Services
         {
             if (survey == null)
                 throw new InvalidRequestException("Invalid request", "Can not create survey as survey is null.");
+            if (survey.Title == null)
+                throw new InvalidRequestException("Invalid request", "Can not create survey without a title.");
 
             var questions = _mapper.Map<IEnumerable<Question>>(survey.Questions.Where(q => !string.IsNullOrWhiteSpace(q.Text)));
 
