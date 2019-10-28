@@ -29,24 +29,29 @@ namespace RoomLocator.Data.Services
             return await _context.Surveys.ProjectTo<SurveyViewModel>(_mapper.ConfigurationProvider).ToListAsync();
         }
 
-        public async Task<SurveyViewModel> CreateSurvey(SurveyCreateViewModel survey)
+        public async Task<SurveyViewModel> CreateSurvey(SurveyCreateViewModel viewModel)
         {
-            if (survey == null)
+            if (viewModel == null)
                 throw new InvalidRequestException("Invalid request", "Can not create survey as survey is null.");
-            //if (survey.Title == null)
-            //    throw new InvalidRequestException("Invalid request", "Can not create survey without a title.");
 
-            var questions = _mapper.Map<IEnumerable<Question>>(survey.Questions.Where(q => !string.IsNullOrWhiteSpace(q.Text)));
+            if (viewModel.Title == null)
+                throw new InvalidRequestException("Invalid request", "Can not create survey without a title.");
+
+            var questions = _mapper.Map<IEnumerable<Question>>(viewModel.Questions.Where(q => !string.IsNullOrWhiteSpace(q.Text)));
 
             if (!questions.Any())
                 throw new InvalidRequestException("Invalid request", "The survey must contain one or more questions.");
 
-            var surveyToCreate = new Survey();
-            //survey.Title = surveyToCreate.Title;
+            var surveyToCreate = new Survey
+            {
+                Title = viewModel.Title,
+                CreatedDate = DateTime.Now
+            };
+
             await _context.AddAsync(surveyToCreate);
             await _context.SaveChangesAsync();
 
-            var section = _context.MazeMapSections.FirstOrDefault(x => x.Id == survey.SectionId);
+            var section = _context.MazeMapSections.FirstOrDefault(x => x.Id == viewModel.SectionId);
             section.SurveyId = surveyToCreate.Id;
             _context.Update(section);
 
@@ -54,7 +59,7 @@ namespace RoomLocator.Data.Services
             {
                 q.SurveyId = surveyToCreate.Id;
             }
-            //survey.DateTimeOfSurveyCreation = DateTime.Now;
+
             await _context.AddRangeAsync(questions);
             await _context.SaveChangesAsync();
 
@@ -81,7 +86,11 @@ namespace RoomLocator.Data.Services
                     throw new InvalidRequestException("Invalid request", "All question answers must reference an existing question.");
             }
 
-            var surveyAnswerToCreate = new SurveyAnswer { SurveyId = viewModel.SurveyId };
+            var surveyAnswerToCreate = new SurveyAnswer {
+                SurveyId = viewModel.SurveyId,
+                TimeStamp = DateTime.Now
+            };
+
             await _context.AddAsync(surveyAnswerToCreate);
             await _context.SaveChangesAsync();
 
@@ -92,7 +101,7 @@ namespace RoomLocator.Data.Services
                 Text = x.Text,
                 Score = x.Score
             });
-            //viewModel.DateTimeOfAnswers = DateTime.Now;
+            
             await _context.AddRangeAsync(questionAnswersToCreate);
             await _context.SaveChangesAsync();
 
