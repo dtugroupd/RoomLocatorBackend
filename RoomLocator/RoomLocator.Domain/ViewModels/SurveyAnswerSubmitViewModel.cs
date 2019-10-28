@@ -8,6 +8,5 @@ namespace RoomLocator.Domain.ViewModels
     {
         public int SurveyId { get; set; }
         public IEnumerable<QuestionAnswerSubmitViewModel> QuestionAnswers { get; set; }
-        public DateTime DateTimeOfAnswers { get; set; }
     }
 }

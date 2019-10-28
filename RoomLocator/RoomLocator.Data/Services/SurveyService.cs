@@ -33,8 +33,8 @@ namespace RoomLocator.Data.Services
         {
             if (survey == null)
                 throw new InvalidRequestException("Invalid request", "Can not create survey as survey is null.");
-            if (survey.Title == null)
-                throw new InvalidRequestException("Invalid request", "Can not create survey without a title.");
+            //if (survey.Title == null)
+            //    throw new InvalidRequestException("Invalid request", "Can not create survey without a title.");
 
             var questions = _mapper.Map<IEnumerable<Question>>(survey.Questions.Where(q => !string.IsNullOrWhiteSpace(q.Text)));
 
@@ -42,7 +42,7 @@ namespace RoomLocator.Data.Services
                 throw new InvalidRequestException("Invalid request", "The survey must contain one or more questions.");
 
             var surveyToCreate = new Survey();
-            survey.Title = surveyToCreate.Title;
+            //survey.Title = surveyToCreate.Title;
             await _context.AddAsync(surveyToCreate);
             await _context.SaveChangesAsync();
 
@@ -54,7 +54,7 @@ namespace RoomLocator.Data.Services
             {
                 q.SurveyId = surveyToCreate.Id;
             }
-            survey.DateTimeOfSurveyCreation = DateTime.Now;
+            //survey.DateTimeOfSurveyCreation = DateTime.Now;
             await _context.AddRangeAsync(questions);
             await _context.SaveChangesAsync();
 
@@ -92,7 +92,7 @@ namespace RoomLocator.Data.Services
                 Text = x.Text,
                 Score = x.Score
             });
-            viewModel.DateTimeOfAnswers = DateTime.Now;
+            //viewModel.DateTimeOfAnswers = DateTime.Now;
             await _context.AddRangeAsync(questionAnswersToCreate);
             await _context.SaveChangesAsync();
 
