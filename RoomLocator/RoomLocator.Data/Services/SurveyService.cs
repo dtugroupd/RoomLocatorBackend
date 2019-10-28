@@ -45,6 +45,7 @@ namespace RoomLocator.Data.Services
             var surveyToCreate = new Survey
             {
                 Title = viewModel.Title,
+                Description = viewModel.Description,
                 CreatedDate = DateTime.Now
             };
 
