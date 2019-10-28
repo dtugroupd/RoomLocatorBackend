@@ -21,8 +21,9 @@ namespace RoomLocator.Api.Helpers
 
             if (!context.MazeMapSections.Any())
             {
-                var survey1 = new Survey { };
-                var survey2 = new Survey { };
+                var loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Duis ut diam quam nulla porttitor massa id neque aliquam.";
+                var survey1 = new Survey { Title = "Lorem ipsum dolor sit amet", Description = loremIpsum, CreatedDate = DateTime.Now };
+                var survey2 = new Survey { Title = "Dolor purus non enim praesent elementum", Description = loremIpsum, CreatedDate = DateTime.Now };
 
                 context.Add(survey1);
                 context.Add(survey2);
