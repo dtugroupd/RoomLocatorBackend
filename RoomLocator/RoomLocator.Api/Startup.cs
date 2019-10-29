@@ -68,20 +68,13 @@ namespace RoomLocator.Api
             {
                 options.AddPolicy("RegisterUser", policy => policy.RequireClaim("RegisterUser"));
             });
+
             services.AddScoped<ValueService, ValueService>();
             services.AddScoped<UserService, UserService>();
             services.AddScoped<TokenService, TokenService>();
-
-
-
-            // Adding the dependency injection (DI) for Sensor
             services.AddScoped<SensorService, SensorService>();
-
-
             services.AddScoped<MazeMapService, MazeMapService>();
             services.AddScoped<SurveyService, SurveyService>();
-
-            
 
             services.Configure<ApiBehaviorOptions>(options => {
                 options.InvalidModelStateResponseFactory = InvalidModelHandler.HandleInvalidModelAggregate;

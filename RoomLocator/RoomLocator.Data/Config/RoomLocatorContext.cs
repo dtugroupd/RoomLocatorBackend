@@ -18,12 +18,9 @@ namespace RoomLocator.Data.Config
         public DbSet<User> Users { get; set; }
         public DbSet<Coordinates> Coordinates { get; set; }
 
-
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new UserFluentConfig());
-
 
             base.OnModelCreating(builder);
 
@@ -33,7 +30,6 @@ namespace RoomLocator.Data.Config
             builder.Entity<Survey>().HasMany(x => x.SurveyAnswers).WithOne(x => x.Survey).HasForeignKey(x => x.SurveyId);
             builder.Entity<SurveyAnswer>().HasMany(x => x.QuestionAnswers).WithOne(x => x.SurveyAnswer);
             builder.Entity<Question>().HasMany(x => x.QuestionAnswers).WithOne(x => x.Question).OnDelete(DeleteBehavior.Restrict);
-
         }
     }
 }
