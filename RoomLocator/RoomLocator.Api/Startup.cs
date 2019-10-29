@@ -100,8 +100,6 @@ namespace RoomLocator.Api
                     builder.AllowAnyHeader();
                     builder.AllowAnyMethod();
                 });
-
-                DatabaseSeedHelper.SeedDatabase(context);
             }
             else
             {
@@ -114,16 +112,17 @@ namespace RoomLocator.Api
                     builder.AllowAnyHeader();
                     builder.AllowAnyMethod();
                 });
-
-                // TODO: Remove seed before app is actually put in production
-                DatabaseSeedHelper.SeedDatabase(context);
             }
 
             app.UseMiddleware<ExceptionHandlingMiddleware>();
             app.UseHttpsRedirection();
             app.UseMvc();
-
+            
             context.Database.Migrate();
+            if (env.IsDevelopment())
+            {
+                DatabaseSeedHelper.SeedDatabase(context);
+            }
 
             app.UseSwagger();
             app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Room Locator API V1"); });
