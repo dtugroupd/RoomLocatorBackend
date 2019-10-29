@@ -72,10 +72,17 @@ namespace RoomLocator.Api
             services.AddScoped<UserService, UserService>();
             services.AddScoped<TokenService, TokenService>();
 
+
+
+            // Adding the dependency injection (DI) for Sensor
+            services.AddScoped<SensorService, SensorService>();
+
+
             services.AddScoped<MazeMapService, MazeMapService>();
             services.AddScoped<SurveyService, SurveyService>();
 
             
+
             services.Configure<ApiBehaviorOptions>(options => {
                 options.InvalidModelStateResponseFactory = InvalidModelHandler.HandleInvalidModelAggregate;
             });
@@ -120,8 +127,6 @@ namespace RoomLocator.Api
                     builder.AllowAnyHeader();
                     builder.AllowAnyMethod();
                 });
-
-                DatabaseSeedHelper.SeedDatabase(context);
             }
             else
             {
@@ -134,17 +139,18 @@ namespace RoomLocator.Api
                     builder.AllowAnyHeader();
                     builder.AllowAnyMethod();
                 });
-
-                // TODO: Remove seed before app is actually put in production
-                DatabaseSeedHelper.SeedDatabase(context);
             }
 
             app.UseMiddleware<ExceptionHandlingMiddleware>();
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseMvc();
-
+            
             context.Database.Migrate();
+            if (env.IsDevelopment())
+            {
+                DatabaseSeedHelper.SeedDatabase(context);
+            }
 
             app.UseSwagger();
             app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Room Locator API V1"); });
