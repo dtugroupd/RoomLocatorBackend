@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RoomLocator.Data.Config;
 
 namespace RoomLocator.Data.Migrations
 {
     [DbContext(typeof(RoomLocatorContext))]
-    partial class RoomLocatorContextModelSnapshot : ModelSnapshot
+    [Migration("20191020143738_SurveyWithManySurveyAnswers")]
+    partial class SurveyWithManySurveyAnswers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,8 +26,6 @@ namespace RoomLocator.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Index");
 
                     b.Property<double>("Latitude");
 
@@ -47,8 +47,6 @@ namespace RoomLocator.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("SurveyId");
-
-                    b.Property<int>("Type");
 
                     b.Property<int>("ZLevel");
 
@@ -105,12 +103,6 @@ namespace RoomLocator.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<string>("Description");
-
-                    b.Property<string>("Title");
-
                     b.HasKey("Id");
 
                     b.ToTable("Surveys");
@@ -124,39 +116,11 @@ namespace RoomLocator.Data.Migrations
 
                     b.Property<int>("SurveyId");
 
-                    b.Property<DateTime>("TimeStamp");
-
                     b.HasKey("Id");
 
                     b.HasIndex("SurveyId");
 
                     b.ToTable("SurveyAnswers");
-                });
-
-            modelBuilder.Entity("RoomLocator.Domain.Sensor", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<double>("Latitude");
-
-                    b.Property<double>("Longitude");
-
-                    b.Property<string>("Name");
-
-                    b.Property<string>("Status");
-
-                    b.Property<DateTime>("TimeStamp");
-
-                    b.Property<string>("Type");
-
-                    b.Property<string>("Unit");
-
-                    b.Property<double>("Value");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Sensors");
                 });
 
             modelBuilder.Entity("RoomLocator.Domain.Value", b =>
