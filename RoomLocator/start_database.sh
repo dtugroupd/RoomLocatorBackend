@@ -3,7 +3,7 @@
 CURR_DIR="$(dirname $0)"
 IMAGE="mcr.microsoft.com/mssql/server:2017-latest"
 PORT="1433"
-PASSWORD="mySecure(!)Password"
+PASSWORD="myStrong()Password"
 DB_CONTAINER_NAME="db"
 
 source ${CURR_DIR}/ensure_network.sh
