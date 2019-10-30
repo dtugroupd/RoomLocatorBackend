@@ -8,10 +8,7 @@ namespace RoomLocator.Domain.Config.AutoMapperConfigs
     {
         public UserMapping()
         {
-//            CreateMap<UserViewModel, User>();
-//            CreateMap<User, UserViewModel>();
             CreateMap<User, UserViewModel>().ReverseMap();
-            CreateMap<User, UserInputModel>().ReverseMap();
         }
     }
 }

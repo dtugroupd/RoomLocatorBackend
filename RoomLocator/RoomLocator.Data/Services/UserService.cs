@@ -44,11 +44,9 @@ namespace RoomLocator.Data.Services
             return user;
         }
 
-        public async Task<UserViewModel> Create(string studentId, UserInputModel input)
+        public async Task<UserViewModel> Create(string studentId)
         {
-            var user = _mapper.Map<User>(input);
-            user.StudentId = studentId;
-            user.UserType = input.UserType;
+            var user = new User {StudentId = studentId};
 
             var userExists = await _context.Users
                 .AnyAsync(x => x.StudentId == studentId);
@@ -59,19 +57,6 @@ namespace RoomLocator.Data.Services
             }
 
             await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
-
-            return _mapper.Map<UserViewModel>(user);
-        }
-
-        public async Task<UserViewModel> Update(string studentId, UserInputModel input)
-        {
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.StudentId == studentId);
-
-            user.FirstName = input.FirstName;
-            user.LastName = input.LastName;
-            user.UserType = input.UserType;
-
             await _context.SaveChangesAsync();
 
             return _mapper.Map<UserViewModel>(user);

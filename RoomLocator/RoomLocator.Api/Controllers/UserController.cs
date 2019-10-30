@@ -36,28 +36,6 @@ namespace RoomLocator.Api.Controllers
             return Ok(await _userService.Get(studentId));
         }
 
-        [HttpPost]
-        [Authorize(Policy = "RegisterUser")]
-        public async Task<ActionResult<UserViewModel>> Create(UserInputModel input)
-        {
-            var userToRegister = User.Claims.FirstOrDefault(x => x.Type == "RegisterUser")?.Value;
-
-            if (userToRegister == null)
-            {
-                return Forbid("Claim 'RegisterUser' is required to register new users");
-            }
-
-            var createdUser = await _userService.Create(userToRegister, input);
-            return createdUser;
-        }
-
-        [HttpPut("id")]
-        public async Task<ActionResult<UserViewModel>> Put(string studentId, [FromBody]UserInputModel input)
-        {
-            var updateUser = await _userService.Update(studentId, input);
-            return Ok(updateUser);
-        }
-
         [HttpDelete("id")]
         public async Task<ActionResult> Delete(string studentId)
         {

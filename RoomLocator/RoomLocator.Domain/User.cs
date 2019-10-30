@@ -6,8 +6,5 @@ namespace RoomLocator.Domain
     {
         public string Id { get; set; }
         [Required] public string StudentId { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        [Required] public string UserType { get; set; }
     }
 }
