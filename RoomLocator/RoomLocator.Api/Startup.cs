@@ -64,10 +64,7 @@ namespace RoomLocator.Api
                     ValidateAudience = false
                 };
             });
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("RegisterUser", policy => policy.RequireClaim("RegisterUser"));
-            });
+            services.AddAuthorization(options => { });
 
             services.AddScoped<ValueService, ValueService>();
             services.AddScoped<UserService, UserService>();

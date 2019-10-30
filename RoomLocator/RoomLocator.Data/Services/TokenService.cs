@@ -21,29 +21,6 @@ namespace RoomLocator.Data.Services
             _userService = userService;
         }
 
-        public void GenerateToken()
-        {
-            var claims = new[]
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, "UserId"),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            };
-        }
-
-        public string GenerateRegisterUserToken(string studentId)
-        {
-            var claims = new[]
-            {
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Sub, studentId),
-                new Claim("RegisterUser", studentId), 
-            };
-
-            var token = CreateToken(claims, DateTime.Now.AddMinutes(5));
-            
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-
         public async Task<string> GenerateUserTokenAsync(string studentId)
         {
             var user = await _userService.GetByStudentId(studentId);

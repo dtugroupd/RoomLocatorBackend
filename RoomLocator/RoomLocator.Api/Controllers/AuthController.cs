@@ -50,20 +50,11 @@ namespace RoomLocator.Api.Controllers
             }
 
             var studentId = responseMessage.Split("\n")[1];
-            var existingUser = await _userService.GetByStudentId(studentId);
+            var existingUser = await _userService.GetByStudentId(studentId) ?? await _userService.Create(studentId);
 
-            string token = null;
+            var token = await _tokenService.GenerateUserTokenAsync(existingUser.StudentId);
 
-            if (existingUser == null)
-            {
-                token = _tokenService.GenerateRegisterUserToken(studentId);
-            }
-            else
-            {
-                token = await _tokenService.GenerateUserTokenAsync(studentId);
-            }
-
-            return Redirect($"{_config["frontendUrl"]}/validate?token={token ?? studentId}");
+            return Redirect($"{_config["frontendUrl"]}/validate?token={token}");
         }
     }
 }

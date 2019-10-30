@@ -6,20 +6,5 @@ namespace RoomLocator.Domain.ViewModels
     {
         public string Id { get; set; }
         public string StudentId { get; set; }
-        [NotMapped]
-        public string FirstName { get; set; }
-        [NotMapped]
-        public string LastName { get; set; }
-
-//        public string FullName
-//        {
-//            get { return FirstName + " " + LastName; }
-//        }
-//        public string FullName
-//        {
-//            get { return $"{FirstName} {LastName}"; }
-//        }
-        public string FullName => $"{FirstName} {LastName}";
-        public string UserType { get; set; }
     }
 }
