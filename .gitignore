@@ -27,6 +27,7 @@ Obj/
 
 # Visual Studio 2015 cache/options directory
 .vs/
+.RoomLocator/RoomLocator.Api/api_credentials.json
 
 .vscode/
 .idea/
