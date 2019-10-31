@@ -1,13 +1,12 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using RoomLocator.Domain.Models;
 
-namespace RoomLocator.Domain
+namespace RoomLocator.Domain.Models
 {
-    public class User
+    public class Role
     {
         public string Id { get; set; }
-        [Required] public string StudentId { get; set; }
+        [Required] public string Name { get; set; }
         public virtual IList<UserRole> UserRoles { get; set; }
     }
 }
