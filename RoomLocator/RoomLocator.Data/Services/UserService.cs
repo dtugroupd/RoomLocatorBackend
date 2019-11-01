@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using RoomLocator.Data.Config;
 using RoomLocator.Domain;
 using RoomLocator.Domain.InputModels;
+using RoomLocator.Domain.Models;
 using RoomLocator.Domain.ViewModels;
 using Shared;
 
@@ -57,6 +58,19 @@ namespace RoomLocator.Data.Services
             }
 
             await _context.Users.AddAsync(user);
+
+            var studentRoleId = await _context.Roles
+                .Where(x => x.Name == "student")
+                .Select(x => x.Id)
+                .FirstOrDefaultAsync();
+
+            var studentUserRole = new UserRole
+            {
+                UserId = user.Id,
+                RoleId = studentRoleId
+            };
+
+            await _context.UserRoles.AddAsync(studentUserRole);
             await _context.SaveChangesAsync();
 
             return _mapper.Map<UserViewModel>(user);
