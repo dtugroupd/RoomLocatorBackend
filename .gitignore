@@ -10,6 +10,9 @@
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
+##ignor Jason file
+/RoomLocator.Api/api_credentials.json
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
@@ -27,8 +30,6 @@ Obj/
 
 # Visual Studio 2015 cache/options directory
 .vs/
-RoomLocator/RoomLocator.Api/api_credentials.json
-
 .vscode/
 .idea/
 /.idea/**/workspace.xml

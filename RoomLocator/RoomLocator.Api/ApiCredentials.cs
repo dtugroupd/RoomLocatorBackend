@@ -10,6 +10,7 @@ namespace RoomLocator.Api.Controllers
    
     public class ApiCredentials 
     {
+        
         private static string path = "RoomLocator/RoomLocator.Api/api_credentials.json";
 
 
