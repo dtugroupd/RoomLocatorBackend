@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace RoomLocator.Domain.Models
 {
+    /// <summary>
+    ///     <author>Thomas Lien Christensen, s165242</author>
+    /// </summary>
     public class MazeMapSection
     {
         public int Id { get; set; }

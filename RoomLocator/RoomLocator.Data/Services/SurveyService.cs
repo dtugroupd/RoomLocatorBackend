@@ -7,12 +7,16 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using RoomLocator.Data.Config;
+using RoomLocator.Domain.InputModels;
 using RoomLocator.Domain.Models;
 using RoomLocator.Domain.ViewModels;
 using Shared;
 
 namespace RoomLocator.Data.Services
 {
+    /// <summary>
+    ///     <author>Thomas Lien Christensen, s165242</author>
+    /// </summary>
     public class SurveyService : BaseService
     {
         public SurveyService(RoomLocatorContext context, IMapper mapper) : base(context, mapper)
@@ -29,7 +33,7 @@ namespace RoomLocator.Data.Services
             return await _context.Surveys.ProjectTo<SurveyViewModel>(_mapper.ConfigurationProvider).ToListAsync();
         }
 
-        public async Task<SurveyViewModel> CreateSurvey(SurveyCreateViewModel viewModel)
+        public async Task<SurveyViewModel> CreateSurvey(SurveyInputModel viewModel)
         {
             if (viewModel == null)
                 throw new InvalidRequestException("Invalid request", "Can not create survey as survey is null.");
@@ -67,7 +71,7 @@ namespace RoomLocator.Data.Services
             return _mapper.Map<SurveyViewModel>(surveyToCreate);
         }
 
-        public async Task<SurveyAnswerViewModel> SubmitAnswer(SurveyAnswerSubmitViewModel viewModel)
+        public async Task<SurveyAnswerViewModel> SubmitAnswer(SurveyAnswerInputModel viewModel)
         {
             var survey = await _context.Surveys.FirstOrDefaultAsync(x => x.Id == viewModel.SurveyId);
 

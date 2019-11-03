@@ -11,6 +11,9 @@ using RoomLocator.Domain.ViewModels;
 
 namespace RoomLocator.Data.Services
 {
+    /// <summary>
+    ///     <author>Thomas Lien Christensen, s165242</author>
+    /// </summary>
     public class MazeMapService : BaseService
     {
         public MazeMapService(RoomLocatorContext context, IMapper mapper) : base(context, mapper) { }
