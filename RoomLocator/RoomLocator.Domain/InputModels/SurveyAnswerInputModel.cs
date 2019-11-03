@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
-namespace RoomLocator.Domain.ViewModels
+namespace RoomLocator.Domain.InputModels
 {
     /// <summary>
     ///     <author>Thomas Lien Christensen, s165242</author>
     /// </summary>
-    public class SurveyAnswerViewModel
+    public class SurveyAnswerInputModel
     {
-        public int Id { get; set; }
         public int SurveyId { get; set; }
         public string Comment { get; set; }
-        public DateTime TimeStamp { get; set; }
-        public IEnumerable<QuestionAnswerViewModel> QuestionAnswers { get; set; }
+        public IEnumerable<QuestionAnswerInputModel> QuestionAnswers { get; set; }
     }
 }

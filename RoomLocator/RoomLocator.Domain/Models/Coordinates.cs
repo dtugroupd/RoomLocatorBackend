@@ -1,5 +1,8 @@
 ﻿namespace RoomLocator.Domain.Models
 {
+    /// <summary>
+    ///     <author>Thomas Lien Christensen, s165242</author>
+    /// </summary>
     public class Coordinates
     {
         public int Id { get; set; }

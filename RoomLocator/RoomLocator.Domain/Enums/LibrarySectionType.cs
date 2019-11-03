@@ -4,6 +4,9 @@ using System.Text;
 
 namespace RoomLocator.Domain.Enums
 {
+    /// <summary>
+    ///     <author>Thomas Lien Christensen, s165242</author>
+    /// </summary>
     public enum LibrarySectionType
     {
         DATABAR = 0,

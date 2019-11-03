@@ -7,12 +7,16 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using RoomLocator.Data.Config;
+using RoomLocator.Domain.InputModels;
 using RoomLocator.Domain.Models;
 using RoomLocator.Domain.ViewModels;
 using Shared;
 
 namespace RoomLocator.Data.Services
 {
+    /// <summary>
+    ///     <author>Thomas Lien Christensen, s165242</author>
+    /// </summary>
     public class SurveyService : BaseService
     {
         public SurveyService(RoomLocatorContext context, IMapper mapper) : base(context, mapper)
@@ -29,7 +33,7 @@ namespace RoomLocator.Data.Services
             return await _context.Surveys.ProjectTo<SurveyViewModel>(_mapper.ConfigurationProvider).ToListAsync();
         }
 
-        public async Task<SurveyViewModel> CreateSurvey(SurveyCreateViewModel viewModel)
+        public async Task<SurveyViewModel> CreateSurvey(SurveyInputModel viewModel)
         {
             if (viewModel == null)
                 throw new InvalidRequestException("Invalid request", "Can not create survey as survey is null.");
@@ -67,20 +71,20 @@ namespace RoomLocator.Data.Services
             return _mapper.Map<SurveyViewModel>(surveyToCreate);
         }
 
-        public async Task<SurveyAnswerViewModel> SubmitAnswer(SurveyAnswerSubmitViewModel viewModel)
+        public async Task<SurveyAnswerViewModel> SubmitAnswer(SurveyAnswerInputModel inputModel)
         {
-            var survey = await _context.Surveys.FirstOrDefaultAsync(x => x.Id == viewModel.SurveyId);
+            var survey = await _context.Surveys.FirstOrDefaultAsync(x => x.Id == inputModel.SurveyId);
 
             if (survey == null)
                 throw new InvalidRequestException("Invalid request", "Can not submit answer as survey doesn't exist.");
 
-            if (viewModel == null)
+            if (inputModel == null)
                 throw new InvalidRequestException("Invalid request", "Can not submit answer as answer is null.");
 
-            if (!viewModel.QuestionAnswers.Any())
+            if (!inputModel.QuestionAnswers.Any())
                 throw new InvalidRequestException("Invalid request", "The answer must contain one or more question answers.");
 
-            foreach(var qa in viewModel.QuestionAnswers)
+            foreach(var qa in inputModel.QuestionAnswers)
             {
                 var question = await _context.Questions.FirstOrDefaultAsync(q => q.Id == qa.QuestionId);
                 if(question == null)
@@ -88,14 +92,15 @@ namespace RoomLocator.Data.Services
             }
 
             var surveyAnswerToCreate = new SurveyAnswer {
-                SurveyId = viewModel.SurveyId,
+                SurveyId = inputModel.SurveyId,
+                Comment = inputModel.Comment,
                 TimeStamp = DateTime.Now
             };
 
             await _context.AddAsync(surveyAnswerToCreate);
             await _context.SaveChangesAsync();
 
-            var questionAnswersToCreate = viewModel.QuestionAnswers.Select(x => new QuestionAnswer
+            var questionAnswersToCreate = inputModel.QuestionAnswers.Select(x => new QuestionAnswer
             {
                 QuestionId = x.QuestionId,
                 SurveyAnswerId = surveyAnswerToCreate.Id,
