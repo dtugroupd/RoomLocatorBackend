@@ -2,13 +2,13 @@
 
 namespace RoomLocator.Data.Migrations
 {
-    public partial class SurveyComment : Migration
+    public partial class SurveyAnswerComment : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
                 name: "Comment",
-                table: "Surveys",
+                table: "SurveyAnswers",
                 nullable: true);
         }
 
@@ -16,7 +16,7 @@ namespace RoomLocator.Data.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "Comment",
-                table: "Surveys");
+                table: "SurveyAnswers");
         }
     }
 }

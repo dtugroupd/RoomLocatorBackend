@@ -10,6 +10,7 @@ namespace RoomLocator.Domain.ViewModels
     {
         public int Id { get; set; }
         public int SurveyId { get; set; }
+        public string Comment { get; set; }
         public DateTime TimeStamp { get; set; }
         public IEnumerable<QuestionAnswerViewModel> QuestionAnswers { get; set; }
     }

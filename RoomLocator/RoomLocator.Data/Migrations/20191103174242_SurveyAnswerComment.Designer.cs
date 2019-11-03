@@ -10,8 +10,8 @@ using RoomLocator.Data.Config;
 namespace RoomLocator.Data.Migrations
 {
     [DbContext(typeof(RoomLocatorContext))]
-    [Migration("20191101151116_SurveyComment")]
-    partial class SurveyComment
+    [Migration("20191103174242_SurveyAnswerComment")]
+    partial class SurveyAnswerComment
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -107,8 +107,6 @@ namespace RoomLocator.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Comment");
-
                     b.Property<DateTime>("CreatedDate");
 
                     b.Property<string>("Description");
@@ -125,6 +123,8 @@ namespace RoomLocator.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Comment");
 
                     b.Property<int>("SurveyId");
 

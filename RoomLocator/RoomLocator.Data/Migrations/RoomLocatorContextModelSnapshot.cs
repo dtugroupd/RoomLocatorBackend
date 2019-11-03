@@ -105,8 +105,6 @@ namespace RoomLocator.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Comment");
-
                     b.Property<DateTime>("CreatedDate");
 
                     b.Property<string>("Description");
@@ -123,6 +121,8 @@ namespace RoomLocator.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Comment");
 
                     b.Property<int>("SurveyId");
 

@@ -10,6 +10,7 @@ namespace RoomLocator.Domain.InputModels
     public class SurveyAnswerInputModel
     {
         public int SurveyId { get; set; }
+        public string Comment { get; set; }
         public IEnumerable<QuestionAnswerInputModel> QuestionAnswers { get; set; }
     }
 }
