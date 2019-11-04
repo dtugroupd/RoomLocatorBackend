@@ -6,6 +6,7 @@ namespace RoomLocator.Domain.Models
 {
     /// <summary>
     ///     <author>Thomas Lien Christensen, s165242</author>
+    ///     <author>Hadi Horani, s144885</author>
     /// </summary>
     public class Survey
     {

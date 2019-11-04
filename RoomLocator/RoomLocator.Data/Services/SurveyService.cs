@@ -32,7 +32,9 @@ namespace RoomLocator.Data.Services
         {
             return await _context.Surveys.ProjectTo<SurveyViewModel>(_mapper.ConfigurationProvider).ToListAsync();
         }
-
+        /// <summary>
+        ///     <author>Hadi Horani, s144885</author>
+        /// </summary>
         public async Task<SurveyViewModel> CreateSurvey(SurveyInputModel viewModel)
         {
             if (viewModel == null)
