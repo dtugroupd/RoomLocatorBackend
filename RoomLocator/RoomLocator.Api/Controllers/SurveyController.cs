@@ -77,10 +77,8 @@ namespace RoomLocator.Api.Controllers
         {
             try
             {
-                //var stream = _service.GetSurveyAnswerCsvMemoryStream(id);
-                //return File(stream, "application/octet-stream", "SurveyAnswers.csv");
                 var stream = await _service.GetSurveyAnswersCsvMemoryStream(id);
-                return File(stream, "text/csv", $"SurveyAnswers_{DateTime.Now}.csv");
+                return File(stream, "text/csv", $"Survey_{id}_answers_{DateTime.Now.ToShortDateString()}.csv");
             } catch(Exception e)
             {
                 return BadRequest(e.Message);

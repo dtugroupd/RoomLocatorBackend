@@ -99,6 +99,7 @@ namespace RoomLocator.Api
                     builder.WithOrigins("http://localhost:4200");
                     builder.AllowAnyHeader();
                     builder.AllowAnyMethod();
+                    builder.WithExposedHeaders("Content-Disposition");
                 });
             }
             else
@@ -111,6 +112,7 @@ namespace RoomLocator.Api
                     builder.WithOrigins("https://se2-webapp04.compute.dtu.dk");
                     builder.AllowAnyHeader();
                     builder.AllowAnyMethod();
+                    builder.WithExposedHeaders("Content-Disposition");
                 });
             }
 
