@@ -3,19 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RoomLocator.Api.Helpers;
@@ -62,6 +60,28 @@ namespace RoomLocator.Api
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Auth:SigningKey"])),
                     ValidateIssuer = false,
                     ValidateAudience = false
+                };
+                options.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = context =>
+                    {
+                        var userService = context.HttpContext.RequestServices.GetRequiredService<UserService>();
+                        var userId = context.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+
+                        var user = userService.GetByStudentId(userId).GetAwaiter().GetResult();
+
+                        if (user == null)
+                        {
+                            context.Fail($"User {userId} does not exist.");
+                        }
+
+                        foreach (var role in user.Roles)
+                        {
+                            context.Principal.Claims.Append(new Claim(ClaimTypes.Role, role));
+                        }
+
+                        return Task.CompletedTask;
+                    }
                 };
             });
             services.AddAuthorization(options => { });
