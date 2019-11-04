@@ -35,6 +35,9 @@ namespace RoomLocator.Data.Services
             var user = await _context.Users
                 .ProjectTo<UserViewModel>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(x => x.Id == id);
+
+            if (user == null) return null;
+                
             user.Roles = await _context.UserRoles
                 .Include(x => x.Role)
                 .Where(x => x.UserId == id)
@@ -51,6 +54,9 @@ namespace RoomLocator.Data.Services
                     .ThenInclude(x => x.Role)
                 .ProjectTo<UserViewModel>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(x => x.StudentId == studentId);
+
+            if (user == null) return null;
+
             user.Roles = await _context.UserRoles
                 .Include(x => x.Role)
                 .Where(x => x.UserId == user.Id)
