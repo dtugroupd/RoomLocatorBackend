@@ -33,7 +33,7 @@ namespace RoomLocator.Api.Controllers
             _tokenService = tokenService;
         }
 
-        [HttpPut("validate")]
+        [HttpPost("validate")]
         public async Task<IActionResult> ValidateSsoTicket(string ticket)
         {
             var service = new Uri(Request.GetDisplayUrl()).GetLeftPart(UriPartial.Path);
