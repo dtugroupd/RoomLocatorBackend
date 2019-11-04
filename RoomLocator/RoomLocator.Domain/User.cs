@@ -4,6 +4,9 @@ using RoomLocator.Domain.Models;
 
 namespace RoomLocator.Domain
 {
+    /// <summary>
+    /// <author>Anders Wiberg Olsen, s165241</author>
+    /// </summary>
     public class User
     {
         public string Id { get; set; }

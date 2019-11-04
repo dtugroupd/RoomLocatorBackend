@@ -14,6 +14,9 @@ using Shared;
 
 namespace RoomLocator.Data.Services
 {
+    /// <summary>
+    /// <author>Anders Wiberg Olsen, s165241</author>
+    /// </summary>
     public class UserService : BaseService
     {
         public UserService(RoomLocatorContext context, IMapper mapper) : base(context, mapper) { }

@@ -1,15 +1,16 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RoomLocator.Data.Services;
-using RoomLocator.Domain.InputModels;
 using RoomLocator.Domain.ViewModels;
 
 namespace RoomLocator.Api.Controllers
 {
+    /// <summary>
+    /// <author>Anders Wiberg Olsen, s165241</author>
+    /// </summary>
     [ApiVersion("1.0")]
     [Authorize]
     [Route("api/v{version:apiVersion}/[controller]")]

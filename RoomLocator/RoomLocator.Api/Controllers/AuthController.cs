@@ -1,14 +1,20 @@
 using System;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using RoomLocator.Data.Services;
 using RoomLocator.Domain.ViewModels;
 
 namespace RoomLocator.Api.Controllers
 {
+    /// <summary>
+    /// <author>Anders Wiberg Olsen, s165241</author>
+    /// </summary>
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
@@ -28,7 +34,7 @@ namespace RoomLocator.Api.Controllers
         }
 
         [HttpPut("validate")]
-        public async Task<ActionResult<TokenViewModel>> ValidateSsoTicket(string ticket)
+        public async Task<IActionResult> ValidateSsoTicket(string ticket)
         {
             var service = new Uri(Request.GetDisplayUrl()).GetLeftPart(UriPartial.Path);
             var validateUrl = $"https://auth.dtu.dk/dtu/validate?service={service}&ticket={ticket}";
@@ -39,22 +45,54 @@ namespace RoomLocator.Api.Controllers
 
             if (!response.IsSuccessStatusCode)
             {
-                return Unauthorized();
+                return RedirectWithError("Failed to validate DTU Ticket", 500);
             }
 
             var responseMessage = await response.Content.ReadAsStringAsync();
 
             if (responseMessage.Trim().ToLower() == "no")
             {
-                return Unauthorized();
+                return RedirectWithError("You are not authorized to sign in", 401);
             }
 
             var studentId = responseMessage.Split("\n")[1];
             var existingUser = await _userService.GetByStudentId(studentId) ?? await _userService.Create(studentId);
 
             var token = await _tokenService.GenerateUserTokenAsync(existingUser.StudentId);
+            var tokenObject = new TokenViewModel
+            {
+                Token = token,
+                User = existingUser,
+                Roles = new[] {"admin", "student", "researcher"}
+            };
+            var json = JsonConvert.SerializeObject(tokenObject);
+            var base64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(json));
 
-            return Redirect($"{_config["frontendUrl"]}/validate?token={token}");
+            var uriBuilder = new UriBuilder($"{_config["frontendUrl"]}/validate");
+            var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+            query["token"] = base64;
+
+            uriBuilder.Query = query.ToString();
+
+            return Redirect(uriBuilder.Uri.AbsoluteUri);
+        }
+        
+        private IActionResult RedirectWithError(string error, int statusCode) {
+            var errorObject = new {
+                statusCode,
+                error
+            };
+
+            var json = JsonConvert.SerializeObject(errorObject);
+            var base64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(json));
+
+            var uriBuilder = new UriBuilder(_config["frontendUrl"]);
+            var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+
+            query["error"] = base64;
+            uriBuilder.Query = query.ToString();
+
+            return Redirect(uriBuilder.Uri.AbsoluteUri);
         }
     }
 }
