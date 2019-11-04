@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -137,6 +137,7 @@ namespace RoomLocator.Api
             app.UseMvc();
             
             context.Database.Migrate();
+            DatabaseSeedHelper.SeedRoles(context);
             if (env.IsDevelopment())
             {
                 DatabaseSeedHelper.SeedDatabase(context);
