@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
 
 namespace RoomLocator.Domain.ViewModels
 {
@@ -6,5 +6,6 @@ namespace RoomLocator.Domain.ViewModels
     {
         public string Id { get; set; }
         public string StudentId { get; set; }
+        public IEnumerable<string> Roles { get; set; }
     }
 }

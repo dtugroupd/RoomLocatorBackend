@@ -35,6 +35,11 @@ namespace RoomLocator.Data.Services
             var user = await _context.Users
                 .ProjectTo<UserViewModel>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(x => x.Id == id);
+            user.Roles = await _context.UserRoles
+                .Include(x => x.Role)
+                .Where(x => x.UserId == id)
+                .Select(x => x.Role.Name)
+                .ToListAsync();
 
             return user;
         }
@@ -42,8 +47,15 @@ namespace RoomLocator.Data.Services
         public async Task<UserViewModel> GetByStudentId(string studentId)
         {
             var user = await _context.Users
+                .Include(x => x.UserRoles)
+                    .ThenInclude(x => x.Role)
                 .ProjectTo<UserViewModel>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(x => x.StudentId == studentId);
+            user.Roles = await _context.UserRoles
+                .Include(x => x.Role)
+                .Where(x => x.UserId == user.Id)
+                .Select(x => x.Role.Name)
+                .ToListAsync();
 
             return user;
         }
@@ -76,7 +88,7 @@ namespace RoomLocator.Data.Services
             await _context.UserRoles.AddAsync(studentUserRole);
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<UserViewModel>(user);
+            return await Get(user.Id);
         }
 
         public async Task Delete(string studentId)

@@ -33,7 +33,7 @@ namespace RoomLocator.Api.Controllers
             _tokenService = tokenService;
         }
 
-        [HttpPost("validate")]
+        [HttpGet("validate")]
         public async Task<IActionResult> ValidateSsoTicket(string ticket)
         {
             var service = new Uri(Request.GetDisplayUrl()).GetLeftPart(UriPartial.Path);
@@ -62,9 +62,9 @@ namespace RoomLocator.Api.Controllers
             var tokenObject = new TokenViewModel
             {
                 Token = token,
-                User = existingUser,
-                Roles = new[] {"admin", "student", "researcher"}
+                User = existingUser
             };
+
             var json = JsonConvert.SerializeObject(tokenObject);
             var base64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(json));
 
