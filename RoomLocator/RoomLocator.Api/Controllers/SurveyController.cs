@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RoomLocator.Data.Services;
 using RoomLocator.Domain.InputModels;
+using RoomLocator.Domain.Models;
 using RoomLocator.Domain.ViewModels;
 using Shared;
 using System;
@@ -66,6 +67,21 @@ namespace RoomLocator.Api.Controllers
                 return NoContent();
             }
             catch (InvalidRequestException e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet("[action]/{id}")]
+        public async Task<ActionResult> DownloadSurveyAnswers(int id)
+        {
+            try
+            {
+                //var stream = _service.GetSurveyAnswerCsvMemoryStream(id);
+                //return File(stream, "application/octet-stream", "SurveyAnswers.csv");
+                var stream = await _service.GetSurveyAnswersCsvMemoryStream(id);
+                return File(stream, "text/csv", $"SurveyAnswers_{DateTime.Now}.csv");
+            } catch(Exception e)
             {
                 return BadRequest(e.Message);
             }
