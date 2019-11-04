@@ -11,7 +11,7 @@
 *.userprefs
 
 ##ignor Jason file
-/RoomLocator.Api/api_credentials.json
+api_credentials.json
 
 # Build results
 [Dd]ebug/
