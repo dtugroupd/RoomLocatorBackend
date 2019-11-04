@@ -4,6 +4,10 @@ using System.Text;
 
 namespace RoomLocator.Domain
 {
+    /// <summary>
+    ///     <author>Amal Qasim, s132957</author>
+    ///     <author>Hadi Horani, s144885</author>
+    /// </summary>
     public class Sensor
     {
         public string Id { get; set; }
