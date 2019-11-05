@@ -7,6 +7,9 @@ using System.Text;
 
 namespace RoomLocator.Domain.Config.AutoMapperConfigs
 {
+    /// <summary>
+    ///     <author>Thomas Lien Christensen, s165242</author>
+    /// </summary>
     public class CoordinateMapping : Profile
     {
         public CoordinateMapping()

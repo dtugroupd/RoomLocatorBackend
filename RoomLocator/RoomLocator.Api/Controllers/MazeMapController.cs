@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace RoomLocator.Api.Controllers
 {
+    /// <summary>
+    ///     <author>Thomas Lien Christensen, s165242</author>
+    /// </summary>
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]

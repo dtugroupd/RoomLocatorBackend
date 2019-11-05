@@ -12,6 +12,7 @@ using RoomLocator.Domain.ViewModels;
 namespace RoomLocator.Api.Controllers
 {
     /// <summary>
+    /// <author>My Full Name, s123456</author>
     /// Demo Controller - can be used as inspiration
     /// </summary>
     [ApiVersion("1.0")]

@@ -3,6 +3,10 @@ using System.Collections.Generic;
 
 namespace RoomLocator.Domain.ViewModels
 {
+    /// <summary>
+    ///     <author>Thomas Lien Christensen, s165242</author>
+    ///     <author>Hadi Horani, s144885</author>
+    /// </summary>
     public class SurveyViewModel
     {
         public int Id { get; set; }

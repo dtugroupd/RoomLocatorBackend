@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace RoomLocator.Domain.ViewModels
+namespace RoomLocator.Domain.InputModels
 {
-    public class QuestionAnswerSubmitViewModel
+    /// <summary>
+    ///     <author>Thomas Lien Christensen, s165242</author>
+    /// </summary>
+    public class QuestionAnswerInputModel
     {
         public int QuestionId { get; set; }
         public int Score { get; set; }
