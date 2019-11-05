@@ -10,6 +10,9 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace RoomLocator.Data.Services
 {
+    /// <summary>
+    ///     <author>Anders Wiberg Olsen, s165241</author>
+    /// </summary>
     public class TokenService
     {
         private readonly IConfiguration _configuration;

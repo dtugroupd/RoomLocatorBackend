@@ -2,12 +2,8 @@
 using RoomLocator.Domain.Enums;
 using RoomLocator.Domain.Models;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 
 namespace RoomLocator.Api.Helpers
 {
@@ -16,9 +12,13 @@ namespace RoomLocator.Api.Helpers
     /// </summary>
     public static class DatabaseSeedHelper
     {
+        /// <summary>
+        ///     <author>Anders Wiberg Olsen, s165241</author>
+        /// </summary>
+        /// <param name="context"></param>
         public static void SeedRoles(RoomLocatorContext context)
         {
-            var roles = new string[] {"admin", "researcher", "student"};
+            var roles = new[] {"admin", "researcher", "student"};
             var existingRoles = context.Roles.Select(x => x.Name.ToLower()).ToList();
             var missingRoleNames = new List<string>();
 

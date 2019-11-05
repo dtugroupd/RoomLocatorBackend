@@ -4,6 +4,11 @@ using RoomLocator.Domain.Models;
 
 namespace RoomLocator.Data.Config
 {
+    /// <summary>
+    ///     This is the database integration
+    ///     <author>Anders Wiberg Olsen, s165241, main structure</author>
+    ///     <author>Most members working on backend have contributed</author>
+    /// </summary>
     public class RoomLocatorContext : DbContext
     {
         public RoomLocatorContext(DbContextOptions options) : base(options) { }

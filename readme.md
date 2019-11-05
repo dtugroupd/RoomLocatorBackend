@@ -6,7 +6,8 @@ Add author tags in XML comments. Add it to the class if you are the one responsi
 
 ```csharp
 /// <summary>
-/// <author>John Doe, s123456</author>
+///	Description of what this does...
+/// 	<author>John Doe, s123456</author>
 /// </summary>
 public class MyClass
 {
@@ -16,7 +17,8 @@ public class MyClass
 	}
 
 	/// <summary>
-	/// <author>Another Author Here, s654321</author>
+	///	Description of what this does...
+	/// 	<author>Another Author Here, s654321</author>
 	/// </summary>
 	public void AnotherFuncionality(string myStuff)
 	{

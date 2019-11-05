@@ -4,6 +4,9 @@ using RoomLocator.Domain.Models;
 
 namespace RoomLocator.Data.Config
 {
+    /// <summary>
+    ///     <author>Anders Wiberg Olsen, s165241</author>
+    /// </summary>
     public class UserRoleFluentConfig : IEntityTypeConfiguration<UserRole>
     {
         public void Configure(EntityTypeBuilder<UserRole> builder)
