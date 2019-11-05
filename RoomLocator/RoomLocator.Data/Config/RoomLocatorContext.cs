@@ -4,6 +4,11 @@ using RoomLocator.Domain.Models;
 
 namespace RoomLocator.Data.Config
 {
+    /// <summary>
+    ///     This is the database integration
+    ///     <author>Anders Wiberg Olsen, s165241, main structure</author>
+    ///     <author>Most members working on backend have contributed</author>
+    /// </summary>
     public class RoomLocatorContext : DbContext
     {
         public RoomLocatorContext(DbContextOptions options) : base(options) { }
@@ -14,14 +19,18 @@ namespace RoomLocator.Data.Config
         public DbSet<Question> Questions { get; set; }
         public DbSet<QuestionAnswer> QuestionAnswers { get; set; }
         public DbSet<Value> Values { get; set; }
-
         public DbSet<Sensor> Sensors { get; set; }
-
+        public DbSet<User> Users { get; set; }
         public DbSet<Coordinates> Coordinates { get; set; }
-
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<UserRole> UserRoles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.ApplyConfiguration(new UserFluentConfig());
+            builder.ApplyConfiguration(new RoleFluentConfig());
+            builder.ApplyConfiguration(new UserRoleFluentConfig());
+
             base.OnModelCreating(builder);
 
             builder.Entity<MazeMapSection>().HasMany(x => x.Coordinates).WithOne(x => x.MazeMapSection).HasForeignKey(x => x.MazeMapSectionId);

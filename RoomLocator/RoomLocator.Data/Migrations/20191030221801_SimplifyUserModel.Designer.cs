@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RoomLocator.Data.Config;
 
 namespace RoomLocator.Data.Migrations
 {
     [DbContext(typeof(RoomLocatorContext))]
-    partial class RoomLocatorContextModelSnapshot : ModelSnapshot
+    [Migration("20191030221801_SimplifyUserModel")]
+    partial class SimplifyUserModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -99,22 +101,6 @@ namespace RoomLocator.Data.Migrations
                     b.ToTable("QuestionAnswers");
                 });
 
-            modelBuilder.Entity("RoomLocator.Domain.Models.Role", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Name")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("Roles");
-                });
-
             modelBuilder.Entity("RoomLocator.Domain.Models.Survey", b =>
                 {
                     b.Property<int>("Id")
@@ -138,8 +124,6 @@ namespace RoomLocator.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Comment");
-
                     b.Property<int>("SurveyId");
 
                     b.Property<DateTime>("TimeStamp");
@@ -149,19 +133,6 @@ namespace RoomLocator.Data.Migrations
                     b.HasIndex("SurveyId");
 
                     b.ToTable("SurveyAnswers");
-                });
-
-            modelBuilder.Entity("RoomLocator.Domain.Models.UserRole", b =>
-                {
-                    b.Property<string>("UserId");
-
-                    b.Property<string>("RoleId");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("UserRoles");
                 });
 
             modelBuilder.Entity("RoomLocator.Domain.Sensor", b =>
@@ -259,19 +230,6 @@ namespace RoomLocator.Data.Migrations
                     b.HasOne("RoomLocator.Domain.Models.Survey", "Survey")
                         .WithMany("SurveyAnswers")
                         .HasForeignKey("SurveyId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("RoomLocator.Domain.Models.UserRole", b =>
-                {
-                    b.HasOne("RoomLocator.Domain.Models.Role", "Role")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("RoomLocator.Domain.User", "User")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
