@@ -30,8 +30,7 @@ namespace RoomLocator.Data.Services
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Sub, user.StudentId),
-                new Claim(ClaimTypes.Role, "User"),
+                new Claim(JwtRegisteredClaimNames.Sub, user.StudentId)
             };
 
             var token = CreateToken(claims, DateTime.Now.AddHours(6));
