@@ -11,6 +11,9 @@ using Microsoft.EntityFrameworkCore.Internal;
 
 namespace RoomLocator.Api.Helpers
 {
+    /// <summary>
+    ///     <author>Thomas Lien Christensen, s165242</author>
+    /// </summary>
     public static class DatabaseSeedHelper
     {
         public static void SeedRoles(RoomLocatorContext context)
@@ -114,12 +117,6 @@ namespace RoomLocator.Api.Helpers
                     
                 };
 
-                //var mazeMapSection10 = new MazeMapSection
-                //{
-                //    ZLevel = 2,
-                //    SurveyId = survey2.Id
-                //};
-
                 context.Add(mazeMapSection1);
                 context.Add(mazeMapSection2);
                 context.Add(mazeMapSection3);
@@ -129,7 +126,6 @@ namespace RoomLocator.Api.Helpers
                 context.Add(mazeMapSection7);
                 context.Add(mazeMapSection8);
                 context.Add(mazeMapSection9);
-                //context.Add(mazeMapSection10);
                 context.SaveChanges();
 
                 var questions = new List<Question>

@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace RoomLocator.Domain.ViewModels
+namespace RoomLocator.Domain.InputModels
 {
     /// <summary>
     ///     <author>Thomas Lien Christensen, s165242</author>
     /// </summary>
-    public class QuestionViewModel
+    public class QuestionInputModel
     {
-        public int Id { get; set; }
         public string Text { get; set; }
     }
 }

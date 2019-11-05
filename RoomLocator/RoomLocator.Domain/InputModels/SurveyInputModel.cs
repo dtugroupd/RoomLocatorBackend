@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Text;
 
-namespace RoomLocator.Domain.ViewModels
+namespace RoomLocator.Domain.InputModels
 {
     /// <summary>
     ///     <author>Thomas Lien Christensen, s165242</author>
     ///     <author>Hadi Horani, s144885</author>
     /// </summary>
-    public class SurveyViewModel
+    public class SurveyInputModel
     {
-        public int Id { get; set; }
+        public int SectionId { get; set; }
+
+        [Required]
         public string Title { get; set; }
         public string Description { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public IEnumerable<QuestionViewModel> Questions { get; set; }
-        public IEnumerable<SurveyAnswerViewModel> SurveyAnswers { get; set; }
+        public IEnumerable<QuestionInputModel> Questions { get; set; }
     }
 }
