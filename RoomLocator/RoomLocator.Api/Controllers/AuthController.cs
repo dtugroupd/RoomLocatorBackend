@@ -77,8 +77,10 @@ namespace RoomLocator.Api.Controllers
             return Redirect(uriBuilder.Uri.AbsoluteUri);
         }
         
-        private IActionResult RedirectWithError(string error, int statusCode) {
-            var errorObject = new {
+        private IActionResult RedirectWithError(string error, int statusCode)
+        {
+            var errorObject = new
+            {
                 statusCode,
                 error
             };

@@ -66,7 +66,8 @@ namespace RoomLocator.Api
                     OnTokenValidated = context =>
                     {
                         var userService = context.HttpContext.RequestServices.GetRequiredService<UserService>();
-                        var userId = context.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+                        var userId = context.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)
+                            ?.Value;
 
                         var user = userService.GetByStudentId(userId).GetAwaiter().GetResult();
 
@@ -75,10 +76,11 @@ namespace RoomLocator.Api
                             context.Fail($"User {userId} does not exist.");
                         }
 
-                        foreach (var role in user.Roles)
-                        {
-                            context.Principal.Claims.Append(new Claim(ClaimTypes.Role, role));
-                        }
+                        if (user?.Roles == null) return Task.CompletedTask;
+
+                        var appClaims = user.Roles.Select(x => new Claim(ClaimTypes.Role, x));
+                        var appIdentity = new ClaimsIdentity(appClaims);
+                        context.Principal.AddIdentity(appIdentity);
 
                         return Task.CompletedTask;
                     }
