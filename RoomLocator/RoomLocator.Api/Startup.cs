@@ -74,14 +74,13 @@ namespace RoomLocator.Api
                     OnTokenValidated = context =>
                     {
                         var userService = context.HttpContext.RequestServices.GetRequiredService<UserService>();
-                        var userId = context.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)
-                            ?.Value;
+                        var studentId = context.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 
-                        var user = userService.GetByStudentId(userId).GetAwaiter().GetResult();
+                        var user = userService.GetByStudentId(studentId).GetAwaiter().GetResult();
 
                         if (user == null)
                         {
-                            context.Fail($"User {userId} does not exist.");
+                            context.Fail($"User {studentId} does not exist.");
                         }
 
                         if (user?.Roles == null) return Task.CompletedTask;

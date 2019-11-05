@@ -36,15 +36,7 @@ namespace RoomLocator.Data.Services
                 .ProjectTo<UserViewModel>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
-            if (user == null) return null;
-                
-            user.Roles = await _context.UserRoles
-                .Include(x => x.Role)
-                .Where(x => x.UserId == id)
-                .Select(x => x.Role.Name)
-                .ToListAsync();
-
-            return user;
+            return await AssignRoles(user);
         }
 
         public async Task<UserViewModel> GetByStudentId(string studentId)
@@ -57,11 +49,21 @@ namespace RoomLocator.Data.Services
 
             if (user == null) return null;
 
+            return await AssignRoles(user);
+        }
+
+        private async Task<UserViewModel> AssignRoles(UserViewModel user)
+        {
             user.Roles = await _context.UserRoles
                 .Include(x => x.Role)
                 .Where(x => x.UserId == user.Id)
                 .Select(x => x.Role.Name)
                 .ToListAsync();
+
+            if (user.Roles.Contains("admin"))
+            {
+                user.Roles = await _context.Roles.Select(x => x.Name).ToListAsync();
+            }
 
             return user;
         }
