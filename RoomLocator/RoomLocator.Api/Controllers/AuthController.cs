@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using RoomLocator.Data.Services;
 using RoomLocator.Domain.ViewModels;
 
@@ -65,7 +66,8 @@ namespace RoomLocator.Api.Controllers
                 User = existingUser
             };
 
-            var json = JsonConvert.SerializeObject(tokenObject);
+            var contractResolver = new DefaultContractResolver { NamingStrategy = new CamelCaseNamingStrategy() };
+            var json = JsonConvert.SerializeObject(tokenObject, new JsonSerializerSettings { ContractResolver = contractResolver });
             var base64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(json));
 
             var uriBuilder = new UriBuilder($"{_config["frontendUrl"]}/validate");
