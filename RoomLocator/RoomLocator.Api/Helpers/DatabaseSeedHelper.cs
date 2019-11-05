@@ -4,12 +4,38 @@ using RoomLocator.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace RoomLocator.Api.Helpers
 {
+    /// <summary>
+    ///     <author>Thomas Lien Christensen, s165242</author>
+    /// </summary>
     public static class DatabaseSeedHelper
     {
+        /// <summary>
+        ///     <author>Anders Wiberg Olsen, s165241</author>
+        /// </summary>
+        /// <param name="context"></param>
+        public static void SeedRoles(RoomLocatorContext context)
+        {
+            var roles = new[] {"admin", "researcher", "student"};
+            var existingRoles = context.Roles.Select(x => x.Name.ToLower()).ToList();
+            var missingRoleNames = new List<string>();
+
+            foreach (var role in roles)
+            {
+                if (!existingRoles.Contains(role))
+                {
+                    missingRoleNames.Add(role);
+                }
+            }
+
+            var missingRoles = missingRoleNames.Select(x => new Role {Name = x.ToLower()});
+
+            context.Roles.AddRange(missingRoles);
+            context.SaveChanges();
+        }
+        
         public static void SeedDatabase(RoomLocatorContext context)
         {   
             if (context.MazeMapSections.Count() < 5)
@@ -91,12 +117,6 @@ namespace RoomLocator.Api.Helpers
                     
                 };
 
-                //var mazeMapSection10 = new MazeMapSection
-                //{
-                //    ZLevel = 2,
-                //    SurveyId = survey2.Id
-                //};
-
                 context.Add(mazeMapSection1);
                 context.Add(mazeMapSection2);
                 context.Add(mazeMapSection3);
@@ -106,7 +126,6 @@ namespace RoomLocator.Api.Helpers
                 context.Add(mazeMapSection7);
                 context.Add(mazeMapSection8);
                 context.Add(mazeMapSection9);
-                //context.Add(mazeMapSection10);
                 context.SaveChanges();
 
                 var questions = new List<Question>

@@ -4,6 +4,6 @@ namespace Shared
     {
         public DuplicateException(string message) : base("Duplicate entry", message) { }
         
-        public static DuplicateException DuplicateEntry<T>() => new DuplicateException($"There already exist a similar {nameof(T)}"); 
+        public static DuplicateException DuplicateEntry<T>() => new DuplicateException($"There already exist a similar {typeof(T).Name}"); 
     }
 }

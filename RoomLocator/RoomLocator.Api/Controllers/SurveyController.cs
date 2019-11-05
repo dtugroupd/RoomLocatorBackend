@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RoomLocator.Data.Services;
+using RoomLocator.Domain.InputModels;
 using RoomLocator.Domain.ViewModels;
 using Shared;
 using System;
@@ -9,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace RoomLocator.Api.Controllers
 {
+    /// <summary>
+    ///     <author>Thomas Lien Christensen, s165242</author>
+    /// </summary>
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
@@ -33,7 +37,7 @@ namespace RoomLocator.Api.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<ActionResult<SurveyViewModel>> Create([FromBody] SurveyCreateViewModel survey)
+        public async Task<ActionResult<SurveyViewModel>> Create([FromBody] SurveyInputModel survey)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
@@ -51,7 +55,7 @@ namespace RoomLocator.Api.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<ActionResult<SurveyAnswerViewModel>> SubmitAnswer([FromBody] SurveyAnswerSubmitViewModel survey)
+        public async Task<ActionResult<SurveyAnswerViewModel>> SubmitAnswer([FromBody] SurveyAnswerInputModel survey)
         {
             if (!ModelState.IsValid)
                 return BadRequest();

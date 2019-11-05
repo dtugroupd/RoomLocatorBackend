@@ -61,7 +61,7 @@ public class ExceptionHandlingMiddleware
             }
             var title = "Unexpected Error";
             var message =
-                "Oops! Sorry! Something went wrong. Please context support@consensus.dk so we can try to fix it.";
+                "Oops! Sorry! Something went wrong.";
             var statusCode = HttpStatusCode.InternalServerError;
 
             ErrorViewModel error = null;
