@@ -40,11 +40,11 @@ namespace RoomLocator.Api.Controllers
         [HttpGet("validate")]
         public async Task<IActionResult> ValidateSsoTicket(string ticket)
         {
-            #if DEBUG
             var service = new Uri(Request.GetDisplayUrl()).GetLeftPart(UriPartial.Path);
-            #else
-            var service = new Uri(Request.GetDisplayUrl()).GetLeftPart(UriPartial.Path).Replace("localhost:5001", "se2-webapp04.compute.dtu.dk");
-            #endif
+            if (_config["ASPNETCORE_ENVIRONMENT"].ToLower().Trim() == "release")
+            {
+                service = service.Replace("localhost:5001", "se2-webapp04.compute.dtu.dk");
+            }
 
             _logger.LogInformation($"Validating DTU CAS Ticket. Service = '{service}', Ticket = '{ticket}'");
             var validateUrl = $"https://auth.dtu.dk/dtu/validate?service={service}&ticket={ticket}";
