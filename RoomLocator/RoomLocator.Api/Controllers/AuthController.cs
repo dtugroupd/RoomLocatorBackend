@@ -46,6 +46,11 @@ namespace RoomLocator.Api.Controllers
                 service = service.Replace("://api", "://se2-webapp04.compute.dtu.dk");
             }
 
+            if (service.Contains("http://"))
+            {
+                service = service.Replace("http://", "https://");
+            }
+
             _logger.LogInformation($"Validating DTU CAS Ticket. Service = '{service}', Ticket = '{ticket}'");
             var validateUrl = $"https://auth.dtu.dk/dtu/validate?service={service}&ticket={ticket}";
             _logger.LogInformation($"Validation URL: {validateUrl}");
