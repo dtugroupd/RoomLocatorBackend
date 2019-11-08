@@ -8,6 +8,10 @@ using RoomLocator.Domain.ViewModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+/// <summary>
+/// 	<author>Amal Qasim - s132957, Gaurav Dang s134692</author>
+/// </summary>
+
 namespace RoomLocator.Data.Services
 {
     public class SensorService : BaseService

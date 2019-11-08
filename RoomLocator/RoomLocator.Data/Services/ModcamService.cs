@@ -11,6 +11,9 @@ using Newtonsoft.Json.Linq;
 using RoomLocator.Data.Config;
 using RoomLocator.Domain.ViewModels;
 
+/// <summary>
+/// 	<author>Amal Qasim, s132957</author>
+/// </summary>
 namespace RoomLocator.Data.Services
 {
     public class ModcamService

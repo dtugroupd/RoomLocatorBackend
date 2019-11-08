@@ -8,6 +8,10 @@ using Newtonsoft.Json;
 using RoomLocator.Data.Services;
 using RoomLocator.Domain.ViewModels;
 
+/// <summary>
+/// 	<author>Amal Qasim, s132957</author>
+/// </summary>
+
 namespace RoomLocator.Api.Controllers
 {
     [ApiVersion("1.0")]
