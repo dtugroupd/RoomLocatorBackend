@@ -41,9 +41,9 @@ namespace RoomLocator.Api.Controllers
         public async Task<IActionResult> ValidateSsoTicket(string ticket)
         {
             var service = new Uri(Request.GetDisplayUrl()).GetLeftPart(UriPartial.Path);
-            if (_config["ASPNETCORE_ENVIRONMENT"].ToLower().Trim() == "release")
+            if (service.Contains("://api"))
             {
-                service = service.Replace("localhost:5001", "se2-webapp04.compute.dtu.dk");
+                service = service.Replace("://api", "://se2-webapp04.compute.dtu.dk");
             }
 
             _logger.LogInformation($"Validating DTU CAS Ticket. Service = '{service}', Ticket = '{ticket}'");
