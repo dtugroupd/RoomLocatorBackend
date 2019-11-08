@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -14,6 +17,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RoomLocator.Api.Helpers;
 using RoomLocator.Api.Middlewares;
@@ -55,6 +59,65 @@ namespace RoomLocator.Api
             services.AddScoped<MazeMapService, MazeMapService>();
             services.AddScoped<SurveyService, SurveyService>();
             
+            #region JWT Setup, Anders Wiberg Olsen, s165241
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = true;
+                options.SaveToken = false;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Auth:SigningKey"])),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+
+            // Adding the dependency injection (DI) for Sensor
+            services.AddScoped<SensorService, SensorService>();
+            services.AddScoped<MazeMapService, MazeMapService>();
+            services.AddScoped<SurveyService, SurveyService>();
+            services.AddScoped<ModcamCredentialsService, ModcamCredentialsService>();
+            services.AddScoped<ModcamService,ModcamService>();
+            
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = context =>
+                    {
+                        var userService = context.HttpContext.RequestServices.GetRequiredService<UserService>();
+                        var studentId = context.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+
+                        var user = userService.GetByStudentId(studentId).GetAwaiter().GetResult();
+
+                        if (user == null)
+                        {
+                            context.Fail($"User {studentId} does not exist.");
+                        }
+
+                        if (user?.Roles == null) return Task.CompletedTask;
+
+                        var appClaims = user.Roles.Select(x => new Claim(ClaimTypes.Role, x));
+                        var appIdentity = new ClaimsIdentity(appClaims);
+                        context.Principal.AddIdentity(appIdentity);
+
+                        return Task.CompletedTask;
+                    }
+                };
+            });
+            services.AddAuthorization();
+#endregion
+
+            services.AddScoped<ValueService, ValueService>();
+            services.AddScoped<UserService, UserService>();
+            services.AddScoped<TokenService, TokenService>();
+            services.AddScoped<SensorService, SensorService>();
+            services.AddScoped<MazeMapService, MazeMapService>();
+            services.AddScoped<SurveyService, SurveyService>();
+
 
             services.Configure<ApiBehaviorOptions>(options => {
                 options.InvalidModelStateResponseFactory = InvalidModelHandler.HandleInvalidModelAggregate;
