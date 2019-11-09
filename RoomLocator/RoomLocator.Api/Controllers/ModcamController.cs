@@ -43,8 +43,8 @@ namespace RoomLocator.Api.Controllers
             
             if (!response.IsSuccessStatusCode)return Unauthorized();
             
-            return JsonConvert.DeserializeObject < List<ModcamInstallationsViewModel>>(await response.Content.ReadAsStringAsync());
-            ;
+            var modcamInstallations = JsonConvert.DeserializeObject < List<ModcamInstallationsViewModel>>(await response.Content.ReadAsStringAsync());
+            return modcamInstallations;
         }
         
     }
