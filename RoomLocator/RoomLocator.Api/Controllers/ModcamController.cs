@@ -31,19 +31,18 @@ namespace RoomLocator.Api.Controllers
         {
             var url = "https://eds.modcam.io/v1/peoplecounter/installations";
             var request = new HttpRequestMessage(HttpMethod.Get, url);
-            ModcamCredentialsService mc = new  ModcamCredentialsService();
+            var modcamCredentialsService = new  ModcamCredentialsService();
             
-            request.Headers.Add("x-client-id", mc.LoadFile().ClientId);
-            request.Headers.Add("x-api-key", mc.LoadFile().Key);
+            request.Headers.Add("x-client-id", modcamCredentialsService.LoadFile().ClientId);
+            request.Headers.Add("x-api-key", modcamCredentialsService.LoadFile().Key);
             
             var client = _clientFactory.CreateClient("dtu-cas");
             var response = await client.SendAsync(request);
             
             if (!response.IsSuccessStatusCode)return Unauthorized();
             
-            var modcamVM = JsonConvert.DeserializeObject < List<ModcamInstallationsViewModel>>(await response.Content.ReadAsStringAsync());
-
-            return modcamVM;
+            return JsonConvert.DeserializeObject < List<ModcamInstallationsViewModel>>(await response.Content.ReadAsStringAsync());
+            ;
         }
         
     }
