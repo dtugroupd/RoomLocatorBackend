@@ -20,6 +20,7 @@ namespace RoomLocator.Api.Controllers
     [Authorize]
     public class SensorController : ControllerBase
     {
+
         private readonly SensorService _sensorService;
 
         public SensorController(SensorService sensorService)
