@@ -1,6 +1,6 @@
 # Room Locator
 
-## Adding Author tags
+## Adding Author tags
 
 Add author tags in XML comments. Add it to the class if you are the one responsible. If you just made a single method in another's class, add it to the class. Example:
 

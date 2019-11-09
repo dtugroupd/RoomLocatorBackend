@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using RoomLocator.Domain.CsvModels;
 using RoomLocator.Domain.Models;
 using RoomLocator.Domain.ViewModels;
 using System;
@@ -15,6 +16,7 @@ namespace RoomLocator.Domain.Config.AutoMapperConfigs
         public QuestionAnswerMapping()
         {
             CreateMap<QuestionAnswerViewModel, QuestionAnswer>().ReverseMap();
+            CreateMap<QuestionAnswerCsvModel, QuestionAnswer>().ReverseMap();
         }
     }
 }

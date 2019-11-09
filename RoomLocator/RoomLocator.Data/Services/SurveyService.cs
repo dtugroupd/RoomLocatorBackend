@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using CsvHelper;
 using Microsoft.EntityFrameworkCore;
 using RoomLocator.Data.Config;
+using RoomLocator.Domain.CsvModels;
 using RoomLocator.Domain.InputModels;
 using RoomLocator.Domain.Models;
 using RoomLocator.Domain.ViewModels;
@@ -34,6 +37,7 @@ namespace RoomLocator.Data.Services
         }
         /// <summary>
         ///     <author>Hadi Horani, s144885</author>
+        ///     <author>Thomas Lien Christensen, s165242</author>
         /// </summary>
         public async Task<SurveyViewModel> CreateSurvey(SurveyInputModel viewModel)
         {
@@ -117,5 +121,50 @@ namespace RoomLocator.Data.Services
 
             return _mapper.Map<SurveyAnswerViewModel>(surveyAnswerToCreate);
         }
+
+        public async Task<MemoryStream> GetSurveyAnswersCsvMemoryStream(int surveyId)
+        {
+            var survey = _context.Surveys
+                .Include(s => s.SurveyAnswers)
+                    .ThenInclude(s => s.QuestionAnswers)
+                .FirstOrDefault(s => s.Id == surveyId);
+
+            var surveyAnswers = _mapper.Map<List<SurveyAnswerCsvModel>>(survey.SurveyAnswers);
+
+            var stream = new MemoryStream();
+            var writer = new StreamWriter(stream);
+            var csvWriter = new CsvWriter(writer);
+            csvWriter.Configuration.HasHeaderRecord = false;
+
+            csvWriter.WriteField("SurveyId");
+            csvWriter.WriteField("TimeStamp");
+            csvWriter.WriteField("Comment");
+
+            foreach(var question in surveyAnswers[0].QuestionAnswers)
+            {
+                csvWriter.WriteField($"Question {question.QuestionId} score");
+            }
+
+            await csvWriter.NextRecordAsync();
+
+            foreach (var answer in surveyAnswers)
+            {
+                csvWriter.WriteField(answer.SurveyId);
+                csvWriter.WriteField(answer.TimeStamp);
+                csvWriter.WriteField(answer.Comment);
+
+                foreach (var question in answer.QuestionAnswers)
+                {
+                    csvWriter.WriteField(question.Score);
+                }
+
+                await csvWriter.NextRecordAsync();
+            }
+
+            await writer.FlushAsync();
+            stream.Position = 0;
+            return stream;
+        }
     }
 }
+
