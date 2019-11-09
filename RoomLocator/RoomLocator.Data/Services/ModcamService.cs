@@ -19,6 +19,18 @@ namespace RoomLocator.Data.Services
     public class ModcamService
     {
 
+        public HttpRequestMessage  RequestsForHttp()
+        {
+            var url = "https://eds.modcam.io/v1/peoplecounter/installations";
+            var request = new HttpRequestMessage(HttpMethod.Get, url);
+            var modcamCredentialsService = new  ModcamCredentialsService();
+            
+            request.Headers.Add("x-client-id", modcamCredentialsService.LoadFile().ClientId);
+            request.Headers.Add("x-api-key", modcamCredentialsService.LoadFile().Key);
+
+            return request;
+        }
+
 
     }
 }

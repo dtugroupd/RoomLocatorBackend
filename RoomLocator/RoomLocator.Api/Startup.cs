@@ -76,15 +76,13 @@ namespace RoomLocator.Api
                     ValidateAudience = false
                 };
 
-            // Adding the dependency injection (DI) for Sensor
             services.AddScoped<SensorService, SensorService>();
             services.AddScoped<MazeMapService, MazeMapService>();
             services.AddScoped<SurveyService, SurveyService>();
             services.AddScoped<ModcamCredentialsService, ModcamCredentialsService>();
             services.AddScoped<ModcamService,ModcamService>();
-            
 
-                options.Events = new JwtBearerEvents
+            options.Events = new JwtBearerEvents
                 {
                     OnTokenValidated = context =>
                     {

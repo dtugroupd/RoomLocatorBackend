@@ -31,13 +31,9 @@ namespace RoomLocator.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ModcamInstallationsViewModel>>> GetPeopleCounterInstallations()
         {
-            var url = "https://eds.modcam.io/v1/peoplecounter/installations";
-            var request = new HttpRequestMessage(HttpMethod.Get, url);
-            var modcamCredentialsService = new  ModcamCredentialsService();
-            
-            request.Headers.Add("x-client-id", modcamCredentialsService.LoadFile().ClientId);
-            request.Headers.Add("x-api-key", modcamCredentialsService.LoadFile().Key);
-            
+         
+            var request = new ModcamService().RequestsForHttp();
+
             var client = _clientFactory.CreateClient("dtu-cas");
             var response = await client.SendAsync(request);
             

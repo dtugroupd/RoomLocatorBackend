@@ -16,12 +16,11 @@ namespace RoomLocator.Data.Services
     {
         public ApiCredentialsViewModel LoadFile() 
         {
-            string stringJson = File.ReadAllText(@"api_credentials.json");
-            var convJson = JsonConvert.DeserializeObject<ApiCredentialsViewModel>(stringJson);
+            var stringJson = File.ReadAllText(@"api_credentials.json");
+            var convertJson = JsonConvert.DeserializeObject<ApiCredentialsViewModel>(stringJson);
          
-            return convJson;
-
-
+            return convertJson;
+            
         }
 
     }
