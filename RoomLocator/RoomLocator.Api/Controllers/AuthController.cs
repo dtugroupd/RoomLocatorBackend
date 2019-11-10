@@ -6,6 +6,7 @@ using System.Web;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using RoomLocator.Data.Services;
@@ -25,20 +26,34 @@ namespace RoomLocator.Api.Controllers
         private readonly IConfiguration _config;
         private readonly UserService _userService;
         private readonly TokenService _tokenService;
+        private readonly ILogger<AuthController> _logger;
 
-        public AuthController(IHttpClientFactory clientFactory, IConfiguration config, UserService userService, TokenService tokenService)
+        public AuthController(IHttpClientFactory clientFactory, IConfiguration config, UserService userService, TokenService tokenService, ILogger<AuthController> logger)
         {
             _clientFactory = clientFactory;
             _config = config;
             _userService = userService;
             _tokenService = tokenService;
+            _logger = logger;
         }
 
         [HttpGet("validate")]
         public async Task<IActionResult> ValidateSsoTicket(string ticket)
         {
             var service = new Uri(Request.GetDisplayUrl()).GetLeftPart(UriPartial.Path);
+            if (service.Contains("://api"))
+            {
+                service = service.Replace("://api", "://se2-webapp04.compute.dtu.dk");
+            }
+
+            if (service.Contains("http://"))
+            {
+                service = service.Replace("http://", "https://");
+            }
+
+            _logger.LogInformation($"Validating DTU CAS Ticket. Service = '{service}', Ticket = '{ticket}'");
             var validateUrl = $"https://auth.dtu.dk/dtu/validate?service={service}&ticket={ticket}";
+            _logger.LogInformation($"Validation URL: {validateUrl}");
 
             var request = new HttpRequestMessage(HttpMethod.Get, validateUrl);
             var client = _clientFactory.CreateClient("dtu-cas");
@@ -57,7 +72,9 @@ namespace RoomLocator.Api.Controllers
             }
 
             var studentId = responseMessage.Split("\n")[1];
+            _logger.LogInformation($"Validating user '{studentId}'");
             var existingUser = await _userService.GetByStudentId(studentId) ?? await _userService.Create(studentId);
+            _logger.LogInformation($"Found user, user id '{existingUser.Id}' with roles '{existingUser.Roles}'");
 
             var token = await _tokenService.GenerateUserTokenAsync(existingUser.StudentId);
             var tokenObject = new TokenViewModel
@@ -90,11 +107,15 @@ namespace RoomLocator.Api.Controllers
             var json = JsonConvert.SerializeObject(errorObject);
             var base64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(json));
 
-            var uriBuilder = new UriBuilder(_config["frontendUrl"]);
+            var uriBuilder = new UriBuilder(
+            
+            _config["frontendUrl"]);
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
 
             query["error"] = base64;
             uriBuilder.Query = query.ToString();
+            
+            _logger.LogError($"Failed login with error: '{error}'");
 
             return Redirect(uriBuilder.Uri.AbsoluteUri);
         }
