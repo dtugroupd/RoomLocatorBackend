@@ -15,29 +15,28 @@ namespace RoomLocator.Api.Controllers
     [ApiController]
     public class ScadadataController :Controller
     {
-        private readonly IHttpClientFactory _clientFactory;
-
-        public ScadadataController(IHttpClientFactory clientFactory)
+        private readonly ScadadataService _service;
+        public ScadadataController(ScadadataService service)
         {
-            _clientFactory = clientFactory;
+            _service = service;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ScadadataViewModel>>> GetSensorData()
         {
-            var url = "https://scadadataapi.azurewebsites.net/api/values";
-            var request = new HttpRequestMessage(HttpMethod.Get, url);
-            ScadadataService mc = new  ScadadataService();
-            
-            
-            var client = _clientFactory.CreateClient("dtu-cas");
-            var response = await client.SendAsync(request);
-            
-            if (!response.IsSuccessStatusCode)return Unauthorized();
-            
-            var scadadataVM = JsonConvert.DeserializeObject < List<ScadadataViewModel>>(await response.Content.ReadAsStringAsync());
-
-            return scadadataVM;
+            return Ok(await _service.GetSensorData());
+        }
+        
+        [HttpGet("[action]")]
+        public async Task<ActionResult<IEnumerable<ScadadataScoresModel>>> GetListOfScores()
+        {
+            return Ok(await _service.GetListOfScores());
+        }
+        
+        [HttpGet("[action]")]
+        public async Task<ActionResult<double>> GetWeightedScore()
+        {
+            return Ok(await _service.GetWeightedScore());
         }
     }
 }
