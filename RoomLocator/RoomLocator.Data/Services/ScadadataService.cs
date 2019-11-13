@@ -19,15 +19,15 @@ namespace RoomLocator.Data.Services
 {
     public class ScadadataService
     {
-        private const double SeatsWeight = 0.55; 
-        private const double TemperatureWeight = 0.25; 
-        private const double SoundWeight = 0.1; 
+        private const double SeatsWeight = 0.6; 
+        private const double TemperatureWeight = 0.15; 
+        private const double SoundWeight = 0.15; 
         private const double LightWeight = 0.1;
         private const double TemperatureOptimal = 22; //22 C
         private const double SoundOptimal = 150; //25 Db
         private const double LightOptimal = 360; //360 ??
         private const double TemperatureMaxVariance = 18; //+-18C
-        private const double SoundMaxVariance = 300; //+-35 Db
+        private const double SoundMaxVariance = 300; //+-50 Db
         private const double LightMaxVariance = 300; //+-300 ??
 
 
@@ -76,7 +76,7 @@ namespace RoomLocator.Data.Services
                     1-FindAverageDeviation(lights, LightOptimal, LightMaxVariance)),
                 new ScadadataScoresModel("Seats Available",
                     1-FindAverageDeviation(availableSeats, maxAvailableSeats[0].Value, 
-                        maxAvailableSeats[0].Value))
+                        maxAvailableSeats[0].Value-40))
             };
             return list;
 
