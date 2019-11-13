@@ -49,7 +49,8 @@ namespace RoomLocator.Data.Services
             var client = _clientFactory.CreateClient("dtu-cas");
             var response = await client.SendAsync(request);
 
-            return !response.IsSuccessStatusCode ? null : JsonConvert.DeserializeObject<List<ScadadataViewModel>>(await response.Content.ReadAsStringAsync());
+            return !response.IsSuccessStatusCode ? null : JsonConvert.DeserializeObject<List<ScadadataViewModel>>(await
+                response.Content.ReadAsStringAsync());
         }
         
         public async Task<IEnumerable<ScadadataScoresModel>> GetListOfScores()
