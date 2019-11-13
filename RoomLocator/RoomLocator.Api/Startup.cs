@@ -102,7 +102,7 @@ namespace RoomLocator.Api
             services.AddScoped<SensorService, SensorService>();
             services.AddScoped<MazeMapService, MazeMapService>();
             services.AddScoped<SurveyService, SurveyService>();
-            services.AddScoped<ScadadataService, ScadadataService>();
+            services.AddScoped<PeoplecounterService, PeoplecounterService>();
 
             services.Configure<ApiBehaviorOptions>(options => {
                 options.InvalidModelStateResponseFactory = InvalidModelHandler.HandleInvalidModelAggregate;
