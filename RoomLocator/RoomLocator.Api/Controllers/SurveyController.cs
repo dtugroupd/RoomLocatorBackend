@@ -25,10 +25,16 @@ namespace RoomLocator.Api.Controllers
             _service = service;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = nameof(Get))]
         public async Task<ActionResult<SurveyViewModel>> Get(int id)
         {
             return Ok(await _service.Get(id));
+        }
+
+        [HttpGet("SurveyAnswer/{id}", Name = nameof(GetSurveyAnswer))]
+        public async Task<ActionResult<SurveyAnswerViewModel>> GetSurveyAnswer(int id)
+        {
+            return Ok(await _service.GetSurveyAnswer(id));
         }
 
         [HttpGet]
@@ -46,10 +52,7 @@ namespace RoomLocator.Api.Controllers
             try
             {
                 var createdSurvey = await _service.CreateSurvey(survey);
-                return NoContent();
-
-                // Doesn't work right now. Why?
-                //return CreatedAtAction(nameof(Get), new { id = createdSurvey.Id }, createdSurvey);
+                return CreatedAtRoute(nameof(Get), new { id = createdSurvey.Id }, createdSurvey);
             } catch(InvalidRequestException e) {
                 return BadRequest(e.Message);
             }
@@ -63,8 +66,8 @@ namespace RoomLocator.Api.Controllers
 
             try
             {
-                await _service.SubmitAnswer(survey);
-                return NoContent();
+                var createdSurveyAnswer = await _service.SubmitAnswer(survey);
+                return CreatedAtRoute(nameof(GetSurveyAnswer), new { id = createdSurveyAnswer.Id }, createdSurveyAnswer);
             }
             catch (InvalidRequestException e)
             {

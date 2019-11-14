@@ -9,14 +9,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RoomLocator.Api.Helpers;
@@ -182,9 +179,11 @@ namespace RoomLocator.Api
             app.UseMvc();
             
             context.Database.Migrate();
+            DatabaseSeedHelper.SeedRoles(context);
+            DatabaseSeedHelper.SeedMazeMapSections(context);
             if (env.IsDevelopment())
             {
-                DatabaseSeedHelper.SeedDatabase(context);
+                DatabaseSeedHelper.SeedDemoSurveys(context);
             }
 
             app.UseSwagger();

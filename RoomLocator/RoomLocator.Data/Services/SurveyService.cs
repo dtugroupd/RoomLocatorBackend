@@ -31,6 +31,11 @@ namespace RoomLocator.Data.Services
             return await _context.Surveys.ProjectTo<SurveyViewModel>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<SurveyAnswerViewModel> GetSurveyAnswer(int id)
+        {
+            return await _context.SurveyAnswers.ProjectTo<SurveyAnswerViewModel>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(x => x.Id == id);
+        }
+
         public async Task<IEnumerable<SurveyViewModel>> GetAll()
         {
             return await _context.Surveys.ProjectTo<SurveyViewModel>(_mapper.ConfigurationProvider).ToListAsync();
@@ -136,6 +141,11 @@ namespace RoomLocator.Data.Services
             var csvWriter = new CsvWriter(writer);
             csvWriter.Configuration.HasHeaderRecord = false;
 
+            // Explicitly define comma separator
+            csvWriter.WriteField("SEP=,");
+            await csvWriter.NextRecordAsync();
+
+            // Write header fields
             csvWriter.WriteField("SurveyId");
             csvWriter.WriteField("TimeStamp");
             csvWriter.WriteField("Comment");
@@ -147,6 +157,7 @@ namespace RoomLocator.Data.Services
 
             await csvWriter.NextRecordAsync();
 
+            // Write data entries
             foreach (var answer in surveyAnswers)
             {
                 csvWriter.WriteField(answer.SurveyId);
