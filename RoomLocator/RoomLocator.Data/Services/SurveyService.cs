@@ -136,6 +136,11 @@ namespace RoomLocator.Data.Services
             var csvWriter = new CsvWriter(writer);
             csvWriter.Configuration.HasHeaderRecord = false;
 
+            // Explicitly define comma separator
+            csvWriter.WriteField("SEP=,");
+            await csvWriter.NextRecordAsync();
+
+            // Write header fields
             csvWriter.WriteField("SurveyId");
             csvWriter.WriteField("TimeStamp");
             csvWriter.WriteField("Comment");
@@ -147,6 +152,7 @@ namespace RoomLocator.Data.Services
 
             await csvWriter.NextRecordAsync();
 
+            // Write data entries
             foreach (var answer in surveyAnswers)
             {
                 csvWriter.WriteField(answer.SurveyId);
