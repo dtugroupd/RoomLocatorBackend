@@ -1,5 +1,8 @@
 ﻿namespace RoomLocator.Domain.ViewModels
 {
+    /// <summary>
+    ///    <author>Andreas Gøricke, s153804</author>
+    /// </summary>
     public class ScadadataViewModel
     {
         public string PointId { get; set; }

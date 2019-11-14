@@ -10,9 +10,13 @@ using Newtonsoft.Json;
 
 namespace RoomLocator.Api.Controllers
 {
+    /// <summary>
+    ///    <author>Andreas Gøricke, s153804</author>
+    /// </summary>
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
+    [Authorize]
     public class ScadadataController :Controller
     {
         private readonly ScadadataService _service;
@@ -21,22 +25,10 @@ namespace RoomLocator.Api.Controllers
             _service = service;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ScadadataViewModel>>> GetSensorData()
-        {
-            return Ok(await _service.GetSensorData());
-        }
-        
         [HttpGet("[action]")]
-        public async Task<ActionResult<IEnumerable<ScadadataScoresModel>>> GetListOfScores()
+        public async Task<ActionResult<IEnumerable<ScadadataScoresModel>>> GetStatus()
         {
             return Ok(await _service.GetListOfScores());
-        }
-        
-        [HttpGet("[action]")]
-        public async Task<ActionResult<double>> GetWeightedScore()
-        {
-            return Ok(await _service.GetWeightedScore());
         }
     }
 }
