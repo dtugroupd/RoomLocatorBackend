@@ -172,9 +172,10 @@ namespace RoomLocator.Api
             
             context.Database.Migrate();
             DatabaseSeedHelper.SeedRoles(context);
+            DatabaseSeedHelper.SeedMazeMapSections(context);
             if (env.IsDevelopment())
             {
-                DatabaseSeedHelper.SeedDatabase(context);
+                DatabaseSeedHelper.SeedDemoSurveys(context);
             }
 
             app.UseSwagger();

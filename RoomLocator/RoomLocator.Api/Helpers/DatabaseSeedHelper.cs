@@ -36,9 +36,10 @@ namespace RoomLocator.Api.Helpers
             context.SaveChanges();
         }
         
-        public static void SeedDatabase(RoomLocatorContext context)
-        {   
-            if (context.MazeMapSections.Count() < 5)
+        public static void SeedMazeMapSections(RoomLocatorContext context)
+        {
+            // Should be removed when all sections are defined and created
+            if (context.MazeMapSections.Count() < 9)
             {
                 var sections = context.MazeMapSections;
                 context.RemoveRange(sections);
@@ -47,74 +48,59 @@ namespace RoomLocator.Api.Helpers
 
             if (!context.MazeMapSections.Any())
             {
-                var loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Duis ut diam quam nulla porttitor massa id neque aliquam.";
-                var survey1 = new Survey { Title = "Lorem ipsum dolor sit amet", Description = loremIpsum, CreatedDate = DateTime.Now };
-                var survey2 = new Survey { Title = "Dolor purus non enim praesent elementum", Description = loremIpsum, CreatedDate = DateTime.Now };
-
-                context.Add(survey1);
-                context.Add(survey2);
-                context.SaveChanges();
-
+                // Test sections on ground floor
                 var mazeMapSection1 = new MazeMapSection
                 {
                     ZLevel = 1,
-                    SurveyId = survey1.Id
                 };
 
                 var mazeMapSection2 = new MazeMapSection
                 {
                     ZLevel = 1,
-                    SurveyId = survey2.Id
                 };
 
+                // All sections on first floor
                 var mazeMapSection3 = new MazeMapSection
                 {
                     ZLevel = 2,
-                    SurveyId = survey2.Id,
                     Type = LibrarySectionType.LOUNGE
                 };
 
                 var mazeMapSection4 = new MazeMapSection
                 {
                     ZLevel = 2,
-                    SurveyId = survey2.Id,
                     Type = LibrarySectionType.DATABAR
                 };
 
                 var mazeMapSection5 = new MazeMapSection
                 {
                     ZLevel = 2,
-                    SurveyId = survey2.Id,
                     Type = LibrarySectionType.GROUP_STUDY
                 };
 
                 var mazeMapSection6 = new MazeMapSection
                 {
                     ZLevel = 2,
-                    SurveyId = survey2.Id,
                     Type = LibrarySectionType.DATABAR
                 };
 
                 var mazeMapSection7 = new MazeMapSection
                 {
                     ZLevel = 2,
-                    SurveyId = survey2.Id,
                     Type = LibrarySectionType.GROUP_STUDY
                 };
 
                 var mazeMapSection8 = new MazeMapSection
                 {
                     ZLevel = 2,
-                    SurveyId = survey2.Id,
                     Type = LibrarySectionType.GROUP_STUDY
                 };
 
                 var mazeMapSection9 = new MazeMapSection
                 {
                     ZLevel = 2,
-                    SurveyId = survey2.Id,
                     Type = LibrarySectionType.GROUP_STUDY
-                    
+
                 };
 
                 context.Add(mazeMapSection1);
@@ -128,42 +114,9 @@ namespace RoomLocator.Api.Helpers
                 context.Add(mazeMapSection9);
                 context.SaveChanges();
 
-                var questions = new List<Question>
-                {
-                    new Question
-                    {
-                        SurveyId = survey1.Id,
-                        Text = "How did you like the coffee machine?"
-                    },
-                    new Question
-                    {
-                        SurveyId = survey1.Id,
-                        Text = "Is the temperature alright?"
-                    },
-                    new Question
-                    {
-                        SurveyId = survey1.Id,
-                        Text = "Are the chairs comfortable?"
-                    },
-                    new Question
-                    {
-                        SurveyId = survey2.Id,
-                        Text = "How do you like the chairs?"
-                    },
-                    new Question
-                    {
-                        SurveyId = survey2.Id,
-                        Text = "We recently installed new printers. If you have gotten a chance to use them, how did you like them?"
-                    },
-                    new Question
-                    {
-                        SurveyId = survey2.Id,
-                        Text = "Do you frequently use the bonfire screen saver?"
-                    }
-                };
-
                 var coordinates = new List<Coordinates>
                 {
+                    // Test section 1
                     new Coordinates
                     {
                         MazeMapSectionId = mazeMapSection1.Id,
@@ -200,6 +153,8 @@ namespace RoomLocator.Api.Helpers
                         Latitude = 55.787009187536114,
                         Index = 4
                     },
+
+                    // Test section 2
                     new Coordinates
                     {
                         MazeMapSectionId = mazeMapSection2.Id,
@@ -567,10 +522,77 @@ namespace RoomLocator.Api.Helpers
 
                 };
 
-                context.AddRange(coordinates);
-                context.AddRange(questions);
-                context.SaveChanges();
+            context.AddRange(coordinates);
+            context.SaveChanges();
             }
+        }
+
+        public static void SeedDemoSurveys(RoomLocatorContext context)
+        {   
+            var loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Duis ut diam quam nulla porttitor massa id neque aliquam.";
+            var survey1 = new Survey { Title = "Lorem ipsum dolor sit amet", Description = loremIpsum, CreatedDate = DateTime.Now };
+            var survey2 = new Survey { Title = "Dolor purus non enim praesent elementum", Description = loremIpsum, CreatedDate = DateTime.Now };
+
+            context.Add(survey1);
+            context.Add(survey2);
+            context.SaveChanges();
+
+            var questions = new List<Question>
+            {
+                new Question
+                {
+                    SurveyId = survey1.Id,
+                    Text = "How did you like the coffee machine?"
+                },
+                new Question
+                {
+                    SurveyId = survey1.Id,
+                    Text = "Is the temperature alright?"
+                },
+                new Question
+                {
+                    SurveyId = survey1.Id,
+                    Text = "Are the chairs comfortable?"
+                },
+                new Question
+                {
+                    SurveyId = survey2.Id,
+                    Text = "How do you like the chairs?"
+                },
+                new Question
+                {
+                    SurveyId = survey2.Id,
+                    Text = "We recently installed new printers. If you have gotten a chance to use them, how did you like them?"
+                },
+                new Question
+                {
+                    SurveyId = survey2.Id,
+                    Text = "Do you frequently use the bonfire screen saver?"
+                }
+            };
+
+            var mazeMapSections = context.MazeMapSections.ToList();
+
+            // Even distribution between the two test surveys
+            var i = 0;
+            foreach(var section in mazeMapSections)
+            {
+                if (i < mazeMapSections.Count() / 2)
+                {
+                    section.SurveyId = survey1.Id;
+                }
+                else
+                {
+                    section.SurveyId = survey2.Id;
+                }
+
+                i++;
+            }
+
+            context.AddRange(questions);
+            context.UpdateRange(mazeMapSections);
+            context.SaveChanges();
+
         }
     }
 }
