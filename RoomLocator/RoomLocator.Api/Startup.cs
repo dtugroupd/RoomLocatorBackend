@@ -192,6 +192,9 @@ namespace RoomLocator.Api
         }
     }
     
+    /// <summary>
+    /// Use to lowercase some of the swagger documentation automatically
+    /// </summary>
     class LowercaseDocumentFilter : IDocumentFilter
     {
         public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)

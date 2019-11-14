@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using RoomLocator.Data.Services;
 using RoomLocator.Domain.InputModels;
 using RoomLocator.Domain.ViewModels;
@@ -8,12 +7,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Shared;
 
-/// <summary>
-/// 	<author>Amal Qasim, s132957</author>
-/// </summary>
-
 namespace RoomLocator.Api.Controllers
 {
+    /// <summary>
+    /// 	<author>Amal Qasim, s132957</author>
+    /// </summary>
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
