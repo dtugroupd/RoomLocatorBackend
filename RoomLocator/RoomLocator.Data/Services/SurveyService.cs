@@ -31,6 +31,11 @@ namespace RoomLocator.Data.Services
             return await _context.Surveys.ProjectTo<SurveyViewModel>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<SurveyAnswerViewModel> GetSurveyAnswer(int id)
+        {
+            return await _context.SurveyAnswers.ProjectTo<SurveyAnswerViewModel>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(x => x.Id == id);
+        }
+
         public async Task<IEnumerable<SurveyViewModel>> GetAll()
         {
             return await _context.Surveys.ProjectTo<SurveyViewModel>(_mapper.ConfigurationProvider).ToListAsync();
