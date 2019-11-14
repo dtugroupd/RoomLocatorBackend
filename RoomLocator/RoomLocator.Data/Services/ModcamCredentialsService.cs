@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -13,13 +12,10 @@ namespace RoomLocator.Data.Services
     {
         public async Task<ApiCredentialsViewModel> LoadFile() 
         {
-            var stringJson = File.ReadAllText(@"api_credentials.json");
+            var stringJson = await File.ReadAllTextAsync(@"api_credentials.json");
             var convertJson = JsonConvert.DeserializeObject<ApiCredentialsViewModel>(stringJson);
          
             return convertJson;
-            
         }
-
     }
-    
 }

@@ -1,36 +1,49 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
-using AutoMapper;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using RoomLocator.Data.Config;
 using RoomLocator.Domain.ViewModels;
+using Shared;
 
-/// <summary>
-/// 	<author>Amal Qasim, s132957</author>
-/// </summary>
 namespace RoomLocator.Data.Services
 {
+    /// <summary>
+    /// 	<author>Amal Qasim, s132957</author>
+    /// </summary>
     public class ModcamService
     {
+        private readonly HttpClient _httpClient;
 
-        public HttpRequestMessage  RequestsForHttp()
+        public ModcamService(HttpClient httpClient)
         {
-            var url = "https://eds.modcam.io/v1/peoplecounter/installations";
+            _httpClient = httpClient;
+        }
+
+        private async Task<HttpRequestMessage> MakeModcamHttpRequest(string url)
+        {
             var request = new HttpRequestMessage(HttpMethod.Get, url);
             var modcamCredentialsService = new  ModcamCredentialsService();
+
+            var modcamCredentials = await modcamCredentialsService.LoadFile();
             
-            request.Headers.Add("x-client-id", modcamCredentialsService.LoadFile().ClientId);
-            request.Headers.Add("x-api-key", modcamCredentialsService.LoadFile().Key);
+            request.Headers.Add("x-client-id", modcamCredentials.ClientId);
+            request.Headers.Add("x-api-key", modcamCredentials.Key);
 
             return request;
         }
 
+        public async Task<IEnumerable<ModcamInstallationsViewModel>> GetPeopleCounterInstallations()
+        {
+            var request = await MakeModcamHttpRequest("https://eds.modcam.io/v1/peoplecounter/installations");
 
+            var response = await _httpClient.SendAsync(request);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new InvalidRequestException("Failed to fetch people counter", response.ReasonPhrase);
+            }
+            
+            return JsonConvert.DeserializeObject<ModcamInstallationsViewModel[]>(await response.Content.ReadAsStringAsync());
+        }
     }
 }
