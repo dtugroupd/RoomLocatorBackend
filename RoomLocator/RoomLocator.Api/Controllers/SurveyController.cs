@@ -25,7 +25,7 @@ namespace RoomLocator.Api.Controllers
             _service = service;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = nameof(Get))]
         public async Task<ActionResult<SurveyViewModel>> Get(int id)
         {
             return Ok(await _service.Get(id));
@@ -46,10 +46,7 @@ namespace RoomLocator.Api.Controllers
             try
             {
                 var createdSurvey = await _service.CreateSurvey(survey);
-                return NoContent();
-
-                // Doesn't work right now. Why?
-                //return CreatedAtAction(nameof(Get), new { id = createdSurvey.Id }, createdSurvey);
+                return CreatedAtRoute(nameof(Get), new { id = createdSurvey.Id }, createdSurvey);
             } catch(InvalidRequestException e) {
                 return BadRequest(e.Message);
             }
