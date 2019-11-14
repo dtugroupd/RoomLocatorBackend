@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,16 +20,18 @@ namespace RoomLocator.Data.Services
     /// 
     public class FeedbackService : BaseService
     {
-        public async Task<FeedbackViewModel> GetByUpvote(bool upvote)  
+        public FeedbackService(RoomLocatorContext context, IMapper mapper) : base(context, mapper) { }
+
+        public async Task<FeedbackViewModel> GetByDownvote(bool downvote)
         {
-            var upvote = await _context.Feedbacks
-                .Include(x => x.Users)
-                .ProjectTo<UserViewModel>(_mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync(x => x.StudentId == studentId);
+            var downvotes = await _context.Feedbacks
+                .Include(x => x.Downvote)
+                .ProjectTo<FeedbackViewModel>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync(x => x.downvote == downvote);
 
-            if (user == null) return null;
+            if (downvotes == null) return null;
 
-            return await AssignRoles(user);
+            return downvotes;
         }
     }
 
