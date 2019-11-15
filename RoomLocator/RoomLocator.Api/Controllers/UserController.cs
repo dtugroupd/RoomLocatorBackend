@@ -16,6 +16,7 @@ namespace RoomLocator.Api.Controllers
     [Authorize]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly UserService _userService;
