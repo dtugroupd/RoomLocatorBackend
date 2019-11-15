@@ -14,6 +14,7 @@ using RoomLocator.Domain.ViewModels;
 
 namespace RoomLocator.Api.Controllers
 {
+    
     /// <summary>
     /// <author>Anders Wiberg Olsen, s165241</author>
     /// </summary>
