@@ -45,6 +45,5 @@ namespace RoomLocator.Api.Controllers
 
         }
 
-
     }
 

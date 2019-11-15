@@ -6,7 +6,8 @@ namespace RoomLocator.Domain.Models
 {
     public class Feedback
     {
-        public Boolean Upvote { get; set; }
-        public Boolean Downvote { get; set; }
+        public string Id { get; set; }
+        public bool Upvote { get; set; }
+        public bool Downvote { get; set; }
     }
 }

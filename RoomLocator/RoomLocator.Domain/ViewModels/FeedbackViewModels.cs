@@ -8,8 +8,8 @@ namespace RoomLocator.Domain.ViewModels
     /// </summary>
     public class FeedbackViewModel
     {
-        public Boolean upvote { get; set; }
-        public Boolean downvote { get; set; }
+        public bool upvote { get; set; }
+        public bool downvote { get; set; }
   
     }
 }
