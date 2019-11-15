@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -14,6 +15,7 @@ using RoomLocator.Domain.ViewModels;
 
 namespace RoomLocator.Api.Controllers
 {
+    
     /// <summary>
     /// <author>Anders Wiberg Olsen, s165241</author>
     /// </summary>

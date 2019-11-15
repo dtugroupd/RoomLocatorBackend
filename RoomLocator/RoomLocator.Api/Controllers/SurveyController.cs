@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RoomLocator.Api.Controllers
 {
@@ -17,6 +18,7 @@ namespace RoomLocator.Api.Controllers
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
+    [Authorize]
     public class SurveyController : ControllerBase
     {
         private readonly SurveyService _service;
@@ -44,6 +46,7 @@ namespace RoomLocator.Api.Controllers
         }
 
         [HttpPost("[action]")]
+        [Authorize(Roles = "researcher,library")]
         public async Task<ActionResult<SurveyViewModel>> Create([FromBody] SurveyInputModel survey)
         {
             if (!ModelState.IsValid)
