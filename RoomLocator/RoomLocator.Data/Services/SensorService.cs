@@ -10,9 +10,6 @@ using System.Threading.Tasks;
 
 namespace RoomLocator.Data.Services
 {
-    /// <summary>
-    /// 	<author>Amal Qasim - s132957, Gaurav Dang s134692</author>
-    /// </summary>
     public class SensorService : BaseService
     {
         public SensorService(RoomLocatorContext context, IMapper mapper) : base(context, mapper) { }
