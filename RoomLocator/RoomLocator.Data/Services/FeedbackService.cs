@@ -33,6 +33,18 @@ namespace RoomLocator.Data.Services
 
             return downvotes;
         }
+
+        public async Task<FeedbackViewModel> GetByUpvote(bool upvote)
+        {
+            var upvotes = await _context.Feedbacks
+                .Include(x => x.Upvote)
+                .ProjectTo<FeedbackViewModel>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync(x => x.upvote == upvote);
+
+            if (upvotes == null) return null;
+
+            return upvotes;
+        }
     }
 
 }
