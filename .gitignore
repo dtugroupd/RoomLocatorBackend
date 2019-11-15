@@ -10,6 +10,9 @@
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
+##ignor Jason file
+api_credentials.json
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
@@ -27,7 +30,6 @@ Obj/
 
 # Visual Studio 2015 cache/options directory
 .vs/
-
 .vscode/
 .idea/
 /.idea/**/workspace.xml
