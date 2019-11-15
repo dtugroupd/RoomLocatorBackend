@@ -37,7 +37,7 @@ namespace RoomLocator.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddViewComponentsAsServices();
             services.AddDbContext<RoomLocatorContext>(opt =>
                 opt.UseSqlServer(Configuration.GetConnectionString("RoomLocator")));
             services.AddSingleton(AutoMapperConfig.CreateMapper());
@@ -46,6 +46,8 @@ namespace RoomLocator.Api
                 {
                     AllowAutoRedirect = true
                 });
+            services.AddHttpClient<AuthService>();
+            services.AddHttpClient<ModcamService>();
 
             services.AddScoped<ValueService, ValueService>();
             services.AddScoped<UserService, UserService>();
@@ -54,7 +56,8 @@ namespace RoomLocator.Api
             services.AddScoped<MazeMapService, MazeMapService>();
             services.AddScoped<SurveyService, SurveyService>();
             services.AddScoped<ModcamCredentialsService, ModcamCredentialsService>();
-            services.AddScoped<ModcamService,ModcamService>();
+            services.AddScoped<ModcamService, ModcamService>();
+            services.AddScoped<AuthService, AuthService>();
             
             #region JWT Setup, Anders Wiberg Olsen, s165241
             services.AddAuthentication(options =>
