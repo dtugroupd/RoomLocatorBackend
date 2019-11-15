@@ -13,7 +13,7 @@ namespace RoomLocator.Api.Controllers
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    [Authorize (Roles = "admin, researcher,library")]
+    [Authorize (Roles = "researcher,library")]
     public class ModcamController :Controller
     {
         private readonly ModcamService _modcamService;

@@ -18,7 +18,7 @@ namespace RoomLocator.Api.Controllers
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    [Authorize(Roles = "researcher")]
+    [Authorize]
     public class SurveyController : ControllerBase
     {
         private readonly SurveyService _service;
@@ -46,7 +46,7 @@ namespace RoomLocator.Api.Controllers
         }
 
         [HttpPost("[action]")]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "researcher,library")]
         public async Task<ActionResult<SurveyViewModel>> Create([FromBody] SurveyInputModel survey)
         {
             if (!ModelState.IsValid)
@@ -62,7 +62,6 @@ namespace RoomLocator.Api.Controllers
         }
 
         [HttpPost("[action]")]
-        [Authorize(Roles = "admin")]
         public async Task<ActionResult<SurveyAnswerViewModel>> SubmitAnswer([FromBody] SurveyAnswerInputModel survey)
         {
             if (!ModelState.IsValid)
