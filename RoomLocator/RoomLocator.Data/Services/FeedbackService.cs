@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -45,6 +46,21 @@ namespace RoomLocator.Data.Services
 
             return upvotes;
         }
+
+
+        public async Task<FeedbackViewModel> Create(FeedbackInputModel input)
+        {
+            if (input == null)
+            {
+                throw new InvalidCastException("Input should not be null");
+            }
+
+            var feedbacks = _mapper.Map<Feedback>(input);
+            await _context.Feedbacks.AddAsync(feedbacks);
+            await _context.SaveChangesAsync();
+            return _mapper.Map<FeedbackViewModel>(feedbacks);
+        }
+
     }
 
 }
