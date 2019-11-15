@@ -46,15 +46,15 @@ namespace RoomLocator.Api
                 {
                     AllowAutoRedirect = true
                 });
+
             services.AddScoped<ValueService, ValueService>();
-
-
-            // Adding the dependency injection (DI) for Sensor
+            services.AddScoped<UserService, UserService>();
+            services.AddScoped<TokenService, TokenService>();
             services.AddScoped<SensorService, SensorService>();
-
-
             services.AddScoped<MazeMapService, MazeMapService>();
             services.AddScoped<SurveyService, SurveyService>();
+            services.AddScoped<ModcamCredentialsService, ModcamCredentialsService>();
+            services.AddScoped<ModcamService,ModcamService>();
             
             #region JWT Setup, Anders Wiberg Olsen, s165241
             services.AddAuthentication(options =>
@@ -73,13 +73,7 @@ namespace RoomLocator.Api
                     ValidateAudience = false
                 };
 
-            services.AddScoped<SensorService, SensorService>();
-            services.AddScoped<MazeMapService, MazeMapService>();
-            services.AddScoped<SurveyService, SurveyService>();
-            services.AddScoped<ModcamCredentialsService, ModcamCredentialsService>();
-            services.AddScoped<ModcamService,ModcamService>();
-
-            options.Events = new JwtBearerEvents
+                options.Events = new JwtBearerEvents
                 {
                     OnTokenValidated = context =>
                     {
@@ -104,15 +98,7 @@ namespace RoomLocator.Api
                 };
             });
             services.AddAuthorization();
-#endregion
-
-            services.AddScoped<ValueService, ValueService>();
-            services.AddScoped<UserService, UserService>();
-            services.AddScoped<TokenService, TokenService>();
-            services.AddScoped<SensorService, SensorService>();
-            services.AddScoped<MazeMapService, MazeMapService>();
-            services.AddScoped<SurveyService, SurveyService>();
-
+            #endregion
 
             services.Configure<ApiBehaviorOptions>(options => {
                 options.InvalidModelStateResponseFactory = InvalidModelHandler.HandleInvalidModelAggregate;
@@ -176,6 +162,7 @@ namespace RoomLocator.Api
 
             app.UseMiddleware<ExceptionHandlingMiddleware>();
             app.UseHttpsRedirection();
+            app.UseAuthentication();
             app.UseMvc();
             
             context.Database.Migrate();
