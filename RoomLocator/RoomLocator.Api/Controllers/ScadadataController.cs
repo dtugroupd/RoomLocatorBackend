@@ -30,5 +30,7 @@ namespace RoomLocator.Api.Controllers
         {
             return Ok(await _service.GetListOfScores());
         }
+        
+     
     }
 }

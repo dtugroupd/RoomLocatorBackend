@@ -70,7 +70,7 @@ namespace RoomLocator.Data.Services
             _clientFactory = clientFactory;
         }
 
-        public async Task<List<ScadadataViewModel>> GetSensorData()
+        private async Task<List<ScadadataViewModel>> GetSensorData()
         {
             const string url = "https://scadadataapi.azurewebsites.net/api/values";
             var request = new HttpRequestMessage(HttpMethod.Get, url);
@@ -109,7 +109,7 @@ namespace RoomLocator.Data.Services
 
 
         }
-        public async Task<double> GetWeightedScore()
+        private async Task<double> GetWeightedScore()
         {
             var scadadataViewModels = await GetSensorData();
             return (1-FindAverageDeviation(scadadataViewModels.Where(item => item.Type == "Temperature").ToList(), 
