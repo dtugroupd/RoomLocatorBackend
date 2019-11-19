@@ -19,16 +19,16 @@ namespace RoomLocator.Api.Controllers
     [Authorize]
     public class ScadadataController :Controller
     {
-        private readonly ScadadataService _service;
+        private readonly ScadadataService _scadadataservice;
         public ScadadataController(ScadadataService service)
         {
-            _service = service;
+            _scadadataservice = service;
         }
 
         [HttpGet("[action]")]
         public async Task<ActionResult<IEnumerable<ScadadataScoresModel>>> GetStatus()
         {
-            return Ok(await _service.GetListOfScores());
+            return Ok(await _scadadataservice.GetListOfScores());
         }
         
      
