@@ -99,6 +99,27 @@ namespace RoomLocator.Data.Services
             return await Get(user.Id);
         }
 
+        public async Task<UserViewModel> UpdateRole(string studentId, string roleName)
+        {
+            var user = GetByStudentId(studentId);
+
+            var studentRoleId = await _context.Roles
+                .Where(x => x.Name == roleName)
+                .Select(x => x.Id)
+                .FirstOrDefaultAsync();
+
+            var studentUserRole = new UserRole
+            {
+                UserId = studentId,
+                RoleId = studentRoleId
+            };
+
+            await _context.UserRoles.AddAsync(studentUserRole);
+            await _context.SaveChangesAsync();
+
+            return await Get(studentId);
+        }
+
         public async Task Delete(string studentId)
         {
             var user = await _context.Users

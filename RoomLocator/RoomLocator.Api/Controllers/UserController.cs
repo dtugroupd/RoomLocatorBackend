@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RoomLocator.Data.Services;
+using RoomLocator.Domain.Models;
 using RoomLocator.Domain.ViewModels;
 
 namespace RoomLocator.Api.Controllers
@@ -56,6 +57,13 @@ namespace RoomLocator.Api.Controllers
         {
             await _userService.Delete(studentId);
             return NoContent();
+        }
+
+        [HttpPut("id")]
+        [Authorize(Roles = "admin")]
+        public async Task<ActionResult> UpdateRole(string studentId, string roleName)
+        {
+            return Ok(await _userService.UpdateRole(studentId, roleName));
         }
     }
 }
