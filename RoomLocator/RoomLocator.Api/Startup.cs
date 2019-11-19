@@ -51,6 +51,7 @@ namespace RoomLocator.Api
             services.AddScoped<UserService, UserService>();
             services.AddScoped<TokenService, TokenService>();
             services.AddScoped<SensorService, SensorService>();
+            services.AddScoped<ScadadataService, ScadadataService>();
             services.AddScoped<MazeMapService, MazeMapService>();
             services.AddScoped<SurveyService, SurveyService>();
             services.AddScoped<ModcamCredentialsService, ModcamCredentialsService>();

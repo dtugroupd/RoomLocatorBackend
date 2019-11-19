@@ -17,10 +17,10 @@ namespace RoomLocator.Api.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [Authorize]
-    public class ScadadataController :Controller
+    public class StatusController :Controller
     {
         private readonly ScadadataService _scadadataservice;
-        public ScadadataController(ScadadataService service)
+        public StatusController(ScadadataService service)
         {
             _scadadataservice = service;
         }
