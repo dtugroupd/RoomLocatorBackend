@@ -10,6 +10,9 @@ using Xunit;
 
 namespace RoomLocator.UnitTest.Services
 {
+    /// <summary>
+    ///     <author>Anders Wiberg Olsen, s165241</author>
+    /// </summary>
     public class UserServiceTests : BaseTest
     {
         [Fact]

@@ -1,6 +1,5 @@
 using System.Linq;
 using AutoMapper;
-using RoomLocator.Domain.InputModels;
 using RoomLocator.Domain.ViewModels;
 
 namespace RoomLocator.Domain.Config.AutoMapperConfigs

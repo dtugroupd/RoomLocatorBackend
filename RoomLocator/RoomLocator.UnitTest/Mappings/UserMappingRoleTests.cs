@@ -8,6 +8,9 @@ using Xunit;
 
 namespace RoomLocator.UnitTest.Mappings
 {
+    /// <summary>
+    ///     <author>Anders Wiberg Olsen, s165241</author>
+    /// </summary>
     public class UserMappingRoleTests : BaseTest
     {
         [Fact]
