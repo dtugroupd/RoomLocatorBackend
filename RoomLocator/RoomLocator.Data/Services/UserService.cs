@@ -101,7 +101,7 @@ namespace RoomLocator.Data.Services
 
         public async Task<UserViewModel> UpdateRole(string studentId, string roleName)
         {
-            var user = GetByStudentId(studentId);
+            var user = await GetByStudentId(studentId);
 
             var studentRoleId = await _context.Roles
                 .Where(x => x.Name == roleName)
@@ -110,14 +110,14 @@ namespace RoomLocator.Data.Services
 
             var studentUserRole = new UserRole
             {
-                UserId = studentId,
+                UserId = user.Id,
                 RoleId = studentRoleId
             };
 
             await _context.UserRoles.AddAsync(studentUserRole);
             await _context.SaveChangesAsync();
 
-            return await Get(studentId);
+            return await Get(user.Id);
         }
 
         public async Task Delete(string studentId)

@@ -14,10 +14,10 @@ namespace RoomLocator.Api.Controllers
     /// <author>Anders Wiberg Olsen, s165241</author>
     /// </summary>
     [ApiVersion("1.0")]
-    [Authorize]
+  //  [Authorize]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    [Authorize]
+  //  [Authorize]
     public class UserController : ControllerBase
     {
         private readonly UserService _userService;
@@ -37,7 +37,7 @@ namespace RoomLocator.Api.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "admin")]
+//        [Authorize(Roles = "admin")]
         public async Task<ActionResult<IEnumerable<UserViewModel>>> Get()
         {
             var users = await _userService.Get();
@@ -60,7 +60,7 @@ namespace RoomLocator.Api.Controllers
         }
 
         [HttpPut("id")]
-        [Authorize(Roles = "admin")]
+     //   [Authorize(Roles = "admin")]
         public async Task<ActionResult> UpdateRole(string studentId, string roleName)
         {
             return Ok(await _userService.UpdateRole(studentId, roleName));
