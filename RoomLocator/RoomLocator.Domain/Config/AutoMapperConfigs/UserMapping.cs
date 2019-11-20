@@ -1,5 +1,5 @@
+using System.Linq;
 using AutoMapper;
-using RoomLocator.Domain.InputModels;
 using RoomLocator.Domain.ViewModels;
 
 namespace RoomLocator.Domain.Config.AutoMapperConfigs
@@ -8,7 +8,13 @@ namespace RoomLocator.Domain.Config.AutoMapperConfigs
     {
         public UserMapping()
         {
-            CreateMap<User, UserViewModel>().ReverseMap();
+            CreateMap<User, UserViewModel>()
+                .ForMember(
+                    dest => dest.Roles, 
+                    opt => opt.MapFrom(
+                        from => from.UserRoles.Select(ur => ur.Role.Name)
+                        )
+                    );
         }
     }
 }
