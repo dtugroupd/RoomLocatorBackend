@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,7 +6,6 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using RoomLocator.Data.Config;
 using RoomLocator.Domain;
-using RoomLocator.Domain.InputModels;
 using RoomLocator.Domain.Models;
 using RoomLocator.Domain.ViewModels;
 using Shared;
@@ -24,6 +22,8 @@ namespace RoomLocator.Data.Services
         public async Task<IEnumerable<UserViewModel>> Get()
         {
             var users = await _context.Users
+                .Include(x => x.UserRoles)
+                    .ThenInclude(x => x.Role)
                 .ProjectTo<UserViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
@@ -33,10 +33,12 @@ namespace RoomLocator.Data.Services
         public async Task<UserViewModel> Get(string id)
         {
             var user = await _context.Users
+                .Include(x => x.UserRoles)
+                    .ThenInclude(x => x.Role)
                 .ProjectTo<UserViewModel>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
-            return await AssignRoles(user);
+            return user;
         }
 
         public async Task<UserViewModel> GetByStudentId(string studentId)
@@ -48,22 +50,6 @@ namespace RoomLocator.Data.Services
                 .FirstOrDefaultAsync(x => x.StudentId == studentId);
 
             if (user == null) return null;
-
-            return await AssignRoles(user);
-        }
-
-        private async Task<UserViewModel> AssignRoles(UserViewModel user)
-        {
-            user.Roles = await _context.UserRoles
-                .Include(x => x.Role)
-                .Where(x => x.UserId == user.Id)
-                .Select(x => x.Role.Name)
-                .ToListAsync();
-
-            if (user.Roles.Contains("admin"))
-            {
-                user.Roles = await _context.Roles.Select(x => x.Name).ToListAsync();
-            }
 
             return user;
         }
