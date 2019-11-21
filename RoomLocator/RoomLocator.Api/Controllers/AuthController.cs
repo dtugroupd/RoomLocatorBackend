@@ -27,16 +27,16 @@ namespace RoomLocator.Api.Controllers
         private readonly IHttpClientFactory _clientFactory;
         private readonly IConfiguration _config;
         private readonly UserService _userService;
-        private readonly AuthService _authService;
+        private readonly CampusNetAuthService _campusNetAuthService;
         private readonly TokenService _tokenService;
         private readonly ILogger<AuthController> _logger;
 
-        public AuthController(IHttpClientFactory clientFactory, IConfiguration config, UserService userService, AuthService authService, TokenService tokenService, ILogger<AuthController> logger)
+        public AuthController(IHttpClientFactory clientFactory, IConfiguration config, UserService userService, CampusNetAuthService campusNetAuthService, TokenService tokenService, ILogger<AuthController> logger)
         {
             _clientFactory = clientFactory;
             _config = config;
             _userService = userService;
-            _authService = authService;
+            _campusNetAuthService = campusNetAuthService;
             _tokenService = tokenService;
             _logger = logger;
         }
@@ -44,9 +44,12 @@ namespace RoomLocator.Api.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<CnUserViewModel>> CampusnetLogin(CnAuthInputModel authenticationModel)
         {
-            var user = await _authService.Authenticate(authenticationModel);
-            
-            // Todo: Create user in database
+            var user = await _campusNetAuthService.Authenticate(authenticationModel);
+
+            if (user == null) return Unauthorized(@"Incorrect DTU Credentials");
+
+            // Todo: Create user in database or update existing user
+                // Todo: Extend user with firtsname, lastname, email and profile image
             // Todo: Issue a new JWT Token
 
             return user;

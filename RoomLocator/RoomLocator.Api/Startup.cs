@@ -46,7 +46,7 @@ namespace RoomLocator.Api
                 {
                     AllowAutoRedirect = true
                 });
-            services.AddHttpClient<AuthService>();
+            services.AddHttpClient<CampusNetAuthService>();
             services.AddHttpClient<ModcamService>();
 
             services.AddScoped<ValueService, ValueService>();
@@ -57,7 +57,7 @@ namespace RoomLocator.Api
             services.AddScoped<SurveyService, SurveyService>();
             services.AddScoped<ModcamCredentialsService, ModcamCredentialsService>();
             services.AddScoped<ModcamService, ModcamService>();
-            services.AddScoped<AuthService, AuthService>();
+            services.AddScoped<CampusNetAuthService, CampusNetAuthService>();
             
             #region JWT Setup, Anders Wiberg Olsen, s165241
             services.AddAuthentication(options =>
