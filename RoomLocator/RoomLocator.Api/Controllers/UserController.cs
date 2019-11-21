@@ -14,10 +14,10 @@ namespace RoomLocator.Api.Controllers
     /// <author>Anders Wiberg Olsen, s165241</author>
     /// </summary>
     [ApiVersion("1.0")]
-  //  [Authorize]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-  //  [Authorize]
+
+    //  [Authorize]
     public class UserController : ControllerBase
     {
         private readonly UserService _userService;
@@ -59,6 +59,9 @@ namespace RoomLocator.Api.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        ///     <author>Hadi Horani, s144885</author>
+        /// </summary>
         [HttpPut("id")]
      //   [Authorize(Roles = "admin")]
         public async Task<ActionResult> UpdateRole(string studentId, string roleName)
