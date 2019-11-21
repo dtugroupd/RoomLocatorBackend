@@ -9,7 +9,7 @@ namespace RoomLocator.Data.Config
     ///     <author>Anders Wiberg Olsen, s165241, main structure</author>
     ///     <author>Most members working on backend have contributed</author>
     /// </summary>
-    public class RoomLocatorContext : DbContext
+    public class  RoomLocatorContext : DbContext
     {
         public RoomLocatorContext(DbContextOptions options) : base(options) { }
         
@@ -24,15 +24,18 @@ namespace RoomLocator.Data.Config
         public DbSet<Coordinates> Coordinates { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
+        
+        public DbSet<Event> Events { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new UserFluentConfig());
             builder.ApplyConfiguration(new RoleFluentConfig());
             builder.ApplyConfiguration(new UserRoleFluentConfig());
-
+            builder.ApplyConfiguration(new EventFluentConfig());
+            
             base.OnModelCreating(builder);
-
+            
             builder.Entity<MazeMapSection>().HasMany(x => x.Coordinates).WithOne(x => x.MazeMapSection).HasForeignKey(x => x.MazeMapSectionId);
             builder.Entity<Survey>().HasMany(x => x.MazeMapSections).WithOne(x => x.Survey).IsRequired(required: false);
             builder.Entity<Survey>().HasMany(x => x.Questions).WithOne(x => x.Survey).HasForeignKey(x => x.SurveyId);
