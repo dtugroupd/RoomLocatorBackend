@@ -9,8 +9,7 @@ namespace RoomLocator.Domain.InputModels
     /// </summary>
     public class FeedbackInputModel
     {
-        public bool upvote { get; set; }
-        public bool downvote { get; set; }
-        
+        public bool? Vote { get; set; }
+        public string UserId { get; set; }
     }
 }

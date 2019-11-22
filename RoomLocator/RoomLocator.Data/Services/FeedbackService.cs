@@ -26,11 +26,9 @@ namespace RoomLocator.Data.Services
         public async Task<FeedbackViewModel> GetByDownvote(bool downvote)
         {
             var downvotes = await _context.Feedbacks
-                .Include(x => x.Downvote)
+                .Include(x => x.Vote == true)
                 .ProjectTo<FeedbackViewModel>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(x => x.downvote == downvote);
-
-            if (downvotes == null) return null;
 
             return downvotes;
         }
@@ -38,11 +36,9 @@ namespace RoomLocator.Data.Services
         public async Task<FeedbackViewModel> GetByUpvote(bool upvote)
         {
             var upvotes = await _context.Feedbacks
-                .Include(x => x.Upvote)
+                .Include(x => x.Vote == false)
                 .ProjectTo<FeedbackViewModel>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(x => x.upvote == upvote);
-
-            if (upvotes == null) return null;
 
             return upvotes;
         }
