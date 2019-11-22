@@ -13,16 +13,14 @@ namespace RoomLocator.Data.Services
     /// </summary>
     public class LocalCredentialsService 
     {
-        private readonly IOptions<CampusNetApiCredentials> _cnCredentialsOptionsOptions;
         private readonly CampusNetApiCredentials _cnCredentials;
 
         public LocalCredentialsService(IOptions<CampusNetApiCredentials> cnCredentialsOptions)
         {
-            _cnCredentialsOptionsOptions = cnCredentialsOptions;
+            var cnCredentialsOptionsOptions = cnCredentialsOptions;
+            if (cnCredentialsOptionsOptions?.Value == null) return;
 
-            if (_cnCredentialsOptionsOptions?.Value == null) return;
-
-            _cnCredentials = _cnCredentialsOptionsOptions.Value;
+            _cnCredentials = cnCredentialsOptionsOptions.Value;
 
             if (_cnCredentials.ApiToken == null || _cnCredentials.AppName == null)
             {
