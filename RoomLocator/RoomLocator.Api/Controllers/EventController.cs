@@ -31,7 +31,7 @@ namespace RoomLocator.Api.Controllers
             return Ok(await _service.Get(id));
         }
         
-        [HttpGet]
+        [HttpGet("[action]")]
         public async Task<ActionResult<IEnumerable<EventViewModel>>> GetAll()
         {
             return Ok(await _service.GetAll());
