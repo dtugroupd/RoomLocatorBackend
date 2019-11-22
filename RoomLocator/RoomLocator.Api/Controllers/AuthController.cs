@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using AutoMapper;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -30,8 +31,9 @@ namespace RoomLocator.Api.Controllers
         private readonly CampusNetAuthService _campusNetAuthService;
         private readonly TokenService _tokenService;
         private readonly ILogger<AuthController> _logger;
+        private readonly IMapper _mapper;
 
-        public AuthController(IHttpClientFactory clientFactory, IConfiguration config, UserService userService, CampusNetAuthService campusNetAuthService, TokenService tokenService, ILogger<AuthController> logger)
+        public AuthController(IHttpClientFactory clientFactory, IConfiguration config, UserService userService, CampusNetAuthService campusNetAuthService, TokenService tokenService, ILogger<AuthController> logger, IMapper mapper)
         {
             _clientFactory = clientFactory;
             _config = config;
@@ -39,10 +41,11 @@ namespace RoomLocator.Api.Controllers
             _campusNetAuthService = campusNetAuthService;
             _tokenService = tokenService;
             _logger = logger;
+            _mapper = mapper;
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<CnUserViewModel>> CampusnetLogin(CnAuthInputModel authenticationModel)
+        public async Task<ActionResult<TokenViewModel>> CampusnetLogin(CnAuthInputModel authenticationModel)
         {
             var user = await _campusNetAuthService.Authenticate(authenticationModel);
 
@@ -51,8 +54,15 @@ namespace RoomLocator.Api.Controllers
             // Todo: Create user in database or update existing user
                 // Todo: Extend user with firtsname, lastname, email and profile image
             // Todo: Issue a new JWT Token
+            
+            var token = new TokenViewModel
+            {
+                User = _mapper.Map<UserViewModel>(user),
+                Token = await _tokenService.GenerateUserTokenAsync(user.UserName)
+            };
+            token.User.Roles = new[] {"student"};
 
-            return user;
+            return token;
         }
 
         [HttpGet("validate")]
