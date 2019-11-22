@@ -13,6 +13,10 @@ using Shared;
 
 namespace RoomLocator.Data.Services
 {
+    /// <summary>
+    /// Authenticating with old CampusNet API
+    /// <author>Anders Wiberg Olsen, s165241</author>
+    /// </summary>
     public class CampusNetAuthService
     {
         private readonly ILogger<CampusNetAuthService> _logger;
@@ -57,10 +61,9 @@ namespace RoomLocator.Data.Services
         /// <exception cref="Exception"></exception>
         public async Task<CnUserViewModel> Authenticate(CnAuthInputModel authenticationModel)
         {
-            // Todo: Should throw an exception if DTU Servers could not be contacted (i.e. no internet, or CampusNet is down)
             var limitedPassword = await FetchLimitedPassword(authenticationModel);
 
-            if (limitedPassword == null) throw new InvalidRequestException("Invalid credentials", "Username or password was incorrect"); // Todo: Throw a proper unauthorized exception
+            if (limitedPassword == null) throw ExceptionFactory.Unauthorized();
             
             var user = await FetchUserInformation(authenticationModel.LoginModel.Username, limitedPassword);
             user.ProfileImage = await GetProfilePicture(user.UserId, authenticationModel.LoginModel.Password, limitedPassword);
@@ -89,15 +92,17 @@ namespace RoomLocator.Data.Services
 
             _logger.LogInformation("Trying to sign in using CampusNet as user {Username}", authenticationModel.LoginModel.Username);
             var authenticationResponse = await SendRequest(authenticationRequest);
-            
-            // Todo: See if there was an error
-            // Todo: Tell the user the timeout
-            // Todo: Store password attempts? Idk yet
 
             return
                 ParseAuthenticationRequest(XElement.Parse(await authenticationResponse.Content.ReadAsStringAsync()));
         }
 
+        /// <summary>
+        /// Send a HTTP Request and handle errors
+        /// </summary>
+        /// <param name="request">The request to send</param>
+        /// <returns>The response form the server</returns>
+        /// <exception cref="InvalidRequestException">Thrown if the server is down or there is no access to the given URI</exception>
         private async Task<HttpResponseMessage> SendRequest(HttpRequestMessage request)
         {
             HttpResponseMessage response;

@@ -1,5 +1,9 @@
-﻿namespace Shared
+namespace Shared
 {
+    /// <summary>
+    /// For creating new exceptions with standard text
+    /// <author>Anders Wiberg Olsen, s165241</author>
+    /// </summary>
     public static class ExceptionFactory
     {
         public static InvalidRequestException Create_FailedHttpRequest(string name)
