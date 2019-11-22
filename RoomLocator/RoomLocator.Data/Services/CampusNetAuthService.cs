@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -62,8 +62,8 @@ namespace RoomLocator.Data.Services
 
             if (limitedPassword == null) throw new InvalidRequestException("Invalid credentials", "Username or password was incorrect"); // Todo: Throw a proper unauthorized exception
             
-            var user = await FetchUserInformation(authenticationModel.Username, limitedPassword);
-            user.ProfileImage = await GetProfilePicture(user.UserId, authenticationModel.Username, limitedPassword);
+            var user = await FetchUserInformation(authenticationModel.LoginModel.Username, limitedPassword);
+            user.ProfileImage = await GetProfilePicture(user.UserId, authenticationModel.LoginModel.Password, limitedPassword);
             return user;
         }
 
@@ -78,8 +78,8 @@ namespace RoomLocator.Data.Services
 
             var auth = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>("Username", authenticationModel.Username),
-                new KeyValuePair<string, string>("Password", authenticationModel.Password)
+                new KeyValuePair<string, string>("Username", authenticationModel.LoginModel.Username),
+                new KeyValuePair<string, string>("Password", authenticationModel.LoginModel.Password)
             };
 
             var authenticationRequest = new HttpRequestMessage(HttpMethod.Post, authUrl)
@@ -87,7 +87,7 @@ namespace RoomLocator.Data.Services
                 Content = new FormUrlEncodedContent(auth)
             };
 
-            _logger.LogInformation("Trying to sign in using CampusNet as user {Username}", authenticationModel.Username);
+            _logger.LogInformation("Trying to sign in using CampusNet as user {Username}", authenticationModel.LoginModel.Username);
             var authenticationResponse = await SendRequest(authenticationRequest);
             
             // Todo: See if there was an error

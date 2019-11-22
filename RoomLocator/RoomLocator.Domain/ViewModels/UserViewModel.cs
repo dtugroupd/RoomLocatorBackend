@@ -6,6 +6,10 @@ namespace RoomLocator.Domain.ViewModels
     {
         public string Id { get; set; }
         public string StudentId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string FullName => $"{FirstName ?? ""} {LastName ?? ""}".Trim();
+        public string ProfileImage { get; set; }
         public IEnumerable<string> Roles { get; set; }
     }
 }
