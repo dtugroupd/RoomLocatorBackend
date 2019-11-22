@@ -21,6 +21,7 @@ using RoomLocator.Api.Middlewares;
 using RoomLocator.Data.Config;
 using RoomLocator.Data.Services;
 using RoomLocator.Domain.Config;
+using RoomLocator.Domain.Models.CredentialsModels;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace RoomLocator.Api
@@ -49,13 +50,15 @@ namespace RoomLocator.Api
             services.AddHttpClient<CampusNetAuthService>();
             services.AddHttpClient<ModcamService>();
 
+            services.Configure<CampusNetApiCredentials>(Configuration.GetSection("Auth:CampusNet"));
+
             services.AddScoped<ValueService, ValueService>();
             services.AddScoped<UserService, UserService>();
             services.AddScoped<TokenService, TokenService>();
             services.AddScoped<SensorService, SensorService>();
             services.AddScoped<MazeMapService, MazeMapService>();
             services.AddScoped<SurveyService, SurveyService>();
-            services.AddScoped<ModcamCredentialsService, ModcamCredentialsService>();
+            services.AddScoped<LocalCredentialsService, LocalCredentialsService>();
             services.AddScoped<ModcamService, ModcamService>();
             services.AddScoped<CampusNetAuthService, CampusNetAuthService>();
             

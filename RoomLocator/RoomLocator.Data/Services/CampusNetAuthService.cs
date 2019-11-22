@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -20,11 +20,13 @@ namespace RoomLocator.Data.Services
     public class CampusNetAuthService
     {
         private readonly ILogger<CampusNetAuthService> _logger;
+        private readonly LocalCredentialsService _credentialsService;
         private readonly HttpClient _http;
 
-        public CampusNetAuthService(IHttpClientFactory httpFactory, ILogger<CampusNetAuthService> logger)
+        public CampusNetAuthService(IHttpClientFactory httpFactory, ILogger<CampusNetAuthService> logger, LocalCredentialsService credentialsService)
         {
             _logger = logger;
+            _credentialsService = credentialsService;
             _http = httpFactory.CreateClient(nameof(CampusNetAuthService));
         }
 
@@ -34,10 +36,11 @@ namespace RoomLocator.Data.Services
         /// <param name="request">The HttpRequest to receive headers</param>
         /// <param name="username">CampusNet Username, i.e. Student Id</param>
         /// <param name="password">Limited password (token) can be null (in which case no auth header is set)</param>
-        private void SetHeaders(ref HttpRequestMessage request, string username, string password)
+        private async Task<HttpRequestMessage> SetHeaders(HttpRequestMessage request, string username, string password)
         {
-            var xname = "";  // Todo: Read appname from file
-            var xtoken = ""; // Todo: Read token from file
+            var crendentials = await _credentialsService.LoadCampusNetCredentials();
+            var xname = crendentials.AppName;  // Todo: Read appname from file
+            var xtoken = crendentials.ApiToken; // Todo: Read token from file
 
             _logger.LogTrace("Using CampusNet X-appname {X-appname} and X-token {X-token}", xname, xtoken);
             
@@ -45,12 +48,14 @@ namespace RoomLocator.Data.Services
             request.Headers.Add("X-appname", xname);
             request.Headers.Add("X-token", xtoken);   
 
-            if (username == null || password == null) return;
+            if (username == null || password == null) return request;
 
             _logger.LogInformation("Setting authorization header on request to {RequestUrl}", request.RequestUri);
             var authString = Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes($"{username}:{password}"));
             request.Headers.Authorization = 
                 new AuthenticationHeaderValue("Basic", authString);
+
+            return request;
         }
 
         /// <summary>
@@ -139,7 +144,7 @@ namespace RoomLocator.Data.Services
         /// <returns>Detailed user view fetched from CampusNet API</returns>
         private async Task<CnUserViewModel> FetchUserInformation(string username, string limitedPassword)
         {
-            var request = PrepareRequest(HttpMethod.Get, "/CurrentUser/UserInfo", username, limitedPassword);
+            var request = await PrepareRequest(HttpMethod.Get, "/CurrentUser/UserInfo", username, limitedPassword);
             _logger.LogInformation("Fetching user information for user {Username}", username);
             var response = await SendRequest(request);
             var userInfo =
@@ -156,7 +161,7 @@ namespace RoomLocator.Data.Services
         /// <returns>Base64 encoded profile image from CampusNet</returns>
         private async Task<string> GetProfilePicture(string userId, string username, string limitedPassword)
         {
-            var request = PrepareRequest(HttpMethod.Get, $"/CurrentUser/Users/{userId}/Picture", username, limitedPassword);
+            var request = await PrepareRequest(HttpMethod.Get, $"/CurrentUser/Users/{userId}/Picture", username, limitedPassword);
             _logger.LogInformation("Fetching profile image for user {Username}", username);
             var response = await SendRequest(request);
             return Convert.ToBase64String(await response.Content.ReadAsByteArrayAsync());
@@ -170,13 +175,13 @@ namespace RoomLocator.Data.Services
         /// <param name="username">CampusNet Username, i.e. Student Id</param>
         /// <param name="limitedPassword">Limited password (token)</param>
         /// <returns>A HttpRequest with correct authentication and headers, ready to be sent</returns>
-        private HttpRequestMessage PrepareRequest(HttpMethod method, string partialUrl, string username, string limitedPassword)
+        private async Task<HttpRequestMessage> PrepareRequest(HttpMethod method, string partialUrl, string username, string limitedPassword)
         {
             const string @base = "https://cn.inside.dtu.dk/data/";
             partialUrl = partialUrl.TrimStart('/');
 
             var request = new HttpRequestMessage(method, $"{@base}/{partialUrl}");
-            SetHeaders(ref request, username, limitedPassword);
+            request = await SetHeaders(request, username, limitedPassword);
             
             return request;
         }
