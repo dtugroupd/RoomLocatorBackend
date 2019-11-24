@@ -71,7 +71,7 @@ namespace RoomLocator.Data.Services
             if (limitedPassword == null) throw ExceptionFactory.Unauthorized();
             
             var user = await FetchUserInformation(authenticationModel.LoginModel.Username, limitedPassword);
-            user.ProfileImage = await GetProfilePicture(user.UserId, authenticationModel.LoginModel.Password, limitedPassword);
+            user.ProfileImage = await GetProfilePicture(user.UserId, authenticationModel.LoginModel.Username, limitedPassword);
             return user;
         }
 
@@ -147,8 +147,23 @@ namespace RoomLocator.Data.Services
             var request = await PrepareRequest(HttpMethod.Get, "/CurrentUser/UserInfo", username, limitedPassword);
             _logger.LogInformation("Fetching user information for user {Username}", username);
             var response = await SendRequest(request);
+            var content = await response.Content.ReadAsStringAsync();
+            
+            if (content.StartsWith("<"))
+            {
+                _logger.LogError("Something fucked up. Error: {Error}", content);
+                var elm = XElement.Parse(content);
+                if (elm.Elements("Reason").Any())
+                {
+                    var error = elm.Element("Reason").Element("Text").Value;
+                    _logger.LogError("Didn't handle error: {Error}'", error);
+                    throw new InvalidRequestException("Failed to fetch request", $"Failed with CampusNet error: {error}");
+                }
+                
+            }
+            
             var userInfo =
-                JsonConvert.DeserializeObject<CnUserViewModel>(await response.Content.ReadAsStringAsync());
+                JsonConvert.DeserializeObject<CnUserViewModel>(content);
             return userInfo;
         }
 
