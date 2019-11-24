@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -53,17 +52,12 @@ namespace RoomLocator.Api.Controllers
             if (authenticatedUser == null) return Unauthorized(@"Incorrect DTU Credentials");
 
             var user = await _userService.GetOrCreate(authenticatedUser);
-
-            // Todo: Create user in database or update existing user
-                // Todo: Extend user with firtsname, lastname, email and profile image
-            // Todo: Issue a new JWT Token
             
             var token = new TokenViewModel
             {
                 User = _mapper.Map<UserViewModel>(user),
                 Token = await _tokenService.GenerateUserTokenAsync(user.StudentId)
             };
-            token.User.Roles = new List<string>{"student"};
 
             return token;
         }
