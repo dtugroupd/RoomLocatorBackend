@@ -17,8 +17,8 @@ namespace RoomLocator.Data.Services
 {
     /// <summary>
     ///     <author>Hamed Kadkhodaie, s083485</author>
+    ///     <author>Thomas Lien Christensen, s165242</author>
     /// </summary>
-    /// 
     public class FeedbackService : BaseService
     {
         public FeedbackService(RoomLocatorContext context, IMapper mapper) : base(context, mapper) { }
@@ -36,27 +36,6 @@ namespace RoomLocator.Data.Services
 
             return feedback;
         }
-
-        //public async Task<FeedbackViewModel> GetByDownvote(bool downvote)
-        //{
-        //    var downvotes = await _context.Feedbacks
-        //        .Include(x => x.Vote == true)
-        //        .ProjectTo<FeedbackViewModel>(_mapper.ConfigurationProvider)
-        //        .FirstOrDefaultAsync(x => x.downvote == downvote);
-
-        //    return downvotes;
-        //}
-
-        //public async Task<FeedbackViewModel> GetByUpvote(bool upvote)
-        //{
-        //    var upvotes = await _context.Feedbacks
-        //        .Include(x => x.Vote == false)
-        //        .ProjectTo<FeedbackViewModel>(_mapper.ConfigurationProvider)
-        //        .FirstOrDefaultAsync(x => x.upvote == upvote);
-
-        //    return upvotes;
-        //}
-
 
         public async Task<FeedbackViewModel> Create(FeedbackInputModel input)
         {
