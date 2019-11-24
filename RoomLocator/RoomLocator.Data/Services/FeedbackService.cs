@@ -71,6 +71,42 @@ namespace RoomLocator.Data.Services
             return _mapper.Map<FeedbackViewModel>(feedback);
         }
 
+        public async Task<FeedbackViewModel> Update(FeedbackUpdateInputModel input)
+        {
+            var currentFeedback = await _context.Feedbacks.FirstOrDefaultAsync(x => x.Id == input.Id);
+            if(currentFeedback == null)
+            {
+                throw new InvalidRequestException("Invalid request", $"Feedback with id {input.Id} does not exist");
+            }
+
+            if(!input.Vote.HasValue)
+            {
+                currentFeedback.Vote = null;
+            }
+            else if(input.Vote == true)
+            {
+                currentFeedback.Vote =
+                    currentFeedback.Vote.HasValue ?
+                        currentFeedback.Vote.Value ?
+                            currentFeedback.Vote = null : currentFeedback.Vote = true :
+                        currentFeedback.Vote = true;
+                                            
+            }
+            else if(input.Vote == false)
+            {
+                currentFeedback.Vote =
+                    currentFeedback.Vote.HasValue ?
+                        currentFeedback.Vote.Value ?
+                            currentFeedback.Vote = false : currentFeedback.Vote = null :
+                        currentFeedback.Vote = false;
+            }
+
+            _context.Feedbacks.Update(currentFeedback);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<FeedbackViewModel>(currentFeedback);
+        }
+
     }
 
 }

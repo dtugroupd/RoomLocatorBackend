@@ -17,6 +17,7 @@ namespace RoomLocator.Domain.Config.AutoMapperConfigs
         {
             CreateMap<FeedbackViewModel, Feedback>().ReverseMap();
             CreateMap<FeedbackInputModel, Feedback>().ReverseMap();
+            CreateMap<FeedbackUpdateInputModel, Feedback>().ReverseMap();
         }
     }
 }

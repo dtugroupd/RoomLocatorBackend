@@ -27,12 +27,25 @@ namespace RoomLocator.Api.Controllers
             _feedbackService = service;
         }
 
-        [HttpGet("{id}", Name = nameof(GetFeedback))]
+        [HttpGet(Name = nameof(GetFeedback))]
         public async Task<ActionResult<FeedbackViewModel>> GetFeedback(string id)
         {
             try
             {
-                return await _feedbackService.Get(id);
+                return Ok(await _feedbackService.Get(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult<FeedbackViewModel>> GetCurrentUserFeedback(string userId)
+        {
+            try
+            {
+                return Ok(await _feedbackService.GetCurrentUserFeedback(userId));
             }
             catch (Exception e)
             {
@@ -55,11 +68,12 @@ namespace RoomLocator.Api.Controllers
         }
 
         [HttpPut("[action]")]
-        public async Task<ActionResult<FeedbackViewModel>> Update(FeedbackInputModel feedback)
+        public async Task<ActionResult<FeedbackViewModel>> Update(FeedbackUpdateInputModel feedback)
         {
             try
             {
-                return NoContent();
+                var updatedFeedback = await _feedbackService.Update(feedback);
+                return Ok(updatedFeedback);
             }
             catch (InvalidRequestException e)
             {
