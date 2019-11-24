@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -47,9 +48,11 @@ namespace RoomLocator.Api.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<TokenViewModel>> CampusnetLogin(CnAuthInputModel authenticationModel)
         {
-            var user = await _campusNetAuthService.Authenticate(authenticationModel);
+            var authenticatedUser = await _campusNetAuthService.Authenticate(authenticationModel);
 
-            if (user == null) return Unauthorized(@"Incorrect DTU Credentials");
+            if (authenticatedUser == null) return Unauthorized(@"Incorrect DTU Credentials");
+
+            var user = await _userService.GetOrCreate(authenticatedUser);
 
             // Todo: Create user in database or update existing user
                 // Todo: Extend user with firtsname, lastname, email and profile image
@@ -58,9 +61,9 @@ namespace RoomLocator.Api.Controllers
             var token = new TokenViewModel
             {
                 User = _mapper.Map<UserViewModel>(user),
-                Token = await _tokenService.GenerateUserTokenAsync(user.UserName)
+                Token = await _tokenService.GenerateUserTokenAsync(user.StudentId)
             };
-            token.User.Roles = new[] {"student"};
+            token.User.Roles = new List<string>{"student"};
 
             return token;
         }

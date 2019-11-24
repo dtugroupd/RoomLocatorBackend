@@ -6,6 +6,7 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using RoomLocator.Data.Config;
 using RoomLocator.Domain;
+using RoomLocator.Domain.InputModels;
 using RoomLocator.Domain.Models;
 using RoomLocator.Domain.ViewModels;
 using Shared;
@@ -49,8 +50,6 @@ namespace RoomLocator.Data.Services
                 .ProjectTo<UserViewModel>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(x => x.StudentId == studentId);
 
-            if (user == null) return null;
-
             return user;
         }
 
@@ -83,6 +82,29 @@ namespace RoomLocator.Data.Services
             await _context.SaveChangesAsync();
 
             return await Get(user.Id);
+        }
+
+        public async Task<UserViewModel> GetOrCreate(CnUserViewModel model)
+        {
+            var userToCreate = _mapper.Map<User>(model);
+
+            var existingUser = await GetByStudentId(userToCreate.StudentId);
+
+            if (existingUser != null) return existingUser;
+
+            await _context.Users.AddAsync(userToCreate);
+
+            var studentRoleId = await _context.Roles
+                .Where(x => x.Name == "student")
+                .Select(x => x.Id)
+                .FirstOrDefaultAsync();
+            await _context.UserRoles.AddAsync(new UserRole {UserId = userToCreate.Id, RoleId = studentRoleId});
+            await _context.SaveChangesAsync();
+
+            var outputUser = _mapper.Map<UserViewModel>(userToCreate);
+            outputUser.Roles.Add("student");
+
+            return outputUser;
         }
 
         public async Task Delete(string studentId)

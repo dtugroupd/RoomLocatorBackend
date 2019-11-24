@@ -20,6 +20,14 @@ namespace RoomLocator.Domain.Config.AutoMapperConfigs
                     opt => opt.MapFrom(from => from.FamilyName))
                 .ForMember(dest => dest.StudentId,
                     opt => opt.MapFrom(from => from.UserName));
+            CreateMap<CnUserViewModel, User>()
+                .ForMember(dest => dest.FirstName,
+                    opt => opt.MapFrom(from => from.GivenName))
+                .ForMember(dest => dest.LastName,
+                    opt => opt.MapFrom(from => from.FamilyName))
+                .ForMember(dest => dest.StudentId,
+                    opt => opt.MapFrom(from => from.UserName));
+            
         }
     }
 }
