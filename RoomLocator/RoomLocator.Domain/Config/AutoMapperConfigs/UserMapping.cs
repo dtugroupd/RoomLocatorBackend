@@ -9,12 +9,25 @@ namespace RoomLocator.Domain.Config.AutoMapperConfigs
         public UserMapping()
         {
             CreateMap<User, UserViewModel>()
-                .ForMember(
-                    dest => dest.Roles, 
-                    opt => opt.MapFrom(
-                        from => from.UserRoles.Select(ur => ur.Role.Name)
+                .ForMember(dest => dest.Roles,
+                    opt => opt.MapFrom(from => from.UserRoles.Select(ur => ur.Role.Name)
                         )
                     );
+            CreateMap<CnUserViewModel, UserViewModel>()
+                .ForMember(dest => dest.FirstName,
+                    opt => opt.MapFrom(from => from.GivenName))
+                .ForMember(dest => dest.LastName,
+                    opt => opt.MapFrom(from => from.FamilyName))
+                .ForMember(dest => dest.StudentId,
+                    opt => opt.MapFrom(from => from.UserName));
+            CreateMap<CnUserViewModel, User>()
+                .ForMember(dest => dest.FirstName,
+                    opt => opt.MapFrom(from => from.GivenName))
+                .ForMember(dest => dest.LastName,
+                    opt => opt.MapFrom(from => from.FamilyName))
+                .ForMember(dest => dest.StudentId,
+                    opt => opt.MapFrom(from => from.UserName));
+            
         }
     }
 }
