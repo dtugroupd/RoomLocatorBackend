@@ -12,8 +12,8 @@ namespace RoomLocator.Api.Controllers
     /// <summary>
     /// <author>Anders Wiberg Olsen, s165241</author>
     /// </summary>
-    [ApiVersion("1.0")]
     [Authorize]
+    [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class UserController : ControllerBase

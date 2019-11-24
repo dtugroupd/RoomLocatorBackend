@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RoomLocator.Data;
 using RoomLocator.Data.Services;
@@ -18,6 +19,7 @@ namespace RoomLocator.Api.Controllers
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
+    [Authorize (Roles = "admin")]
     public class ValuesController : ControllerBase
     {
         private readonly ValueService _valueService;

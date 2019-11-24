@@ -3,6 +3,7 @@ using RoomLocator.Data.Services;
 using RoomLocator.Domain.ViewModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RoomLocator.Api.Controllers
 {
@@ -12,6 +13,7 @@ namespace RoomLocator.Api.Controllers
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
+    [Authorize]
     public class MazeMapController : ControllerBase
     {
         private readonly MazeMapService _service;
@@ -27,6 +29,7 @@ namespace RoomLocator.Api.Controllers
             return Ok(new MazeMapCoordinatesViewModel { Latitude = 55.78498471097425, Longitude = 12.52026114549633 });
         }
 
+        
         [HttpGet("[action]")]
         public async Task<ActionResult<IEnumerable<MazeMapSectionViewModel>>> LibrarySections()
         {

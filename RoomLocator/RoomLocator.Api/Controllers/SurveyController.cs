@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RoomLocator.Api.Controllers
 {
@@ -17,6 +18,7 @@ namespace RoomLocator.Api.Controllers
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
+    [Authorize]
     public class SurveyController : ControllerBase
     {
         private readonly SurveyService _service;
@@ -31,6 +33,12 @@ namespace RoomLocator.Api.Controllers
             return Ok(await _service.Get(id));
         }
 
+        [HttpGet("SurveyAnswer/{id}", Name = nameof(GetSurveyAnswer))]
+        public async Task<ActionResult<SurveyAnswerViewModel>> GetSurveyAnswer(int id)
+        {
+            return Ok(await _service.GetSurveyAnswer(id));
+        }
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SurveyViewModel>>> GetAll()
         {
@@ -38,6 +46,7 @@ namespace RoomLocator.Api.Controllers
         }
 
         [HttpPost("[action]")]
+        [Authorize(Roles = "researcher,library")]
         public async Task<ActionResult<SurveyViewModel>> Create([FromBody] SurveyInputModel survey)
         {
             if (!ModelState.IsValid)
@@ -60,8 +69,8 @@ namespace RoomLocator.Api.Controllers
 
             try
             {
-                await _service.SubmitAnswer(survey);
-                return NoContent();
+                var createdSurveyAnswer = await _service.SubmitAnswer(survey);
+                return CreatedAtRoute(nameof(GetSurveyAnswer), new { id = createdSurveyAnswer.Id }, createdSurveyAnswer);
             }
             catch (InvalidRequestException e)
             {

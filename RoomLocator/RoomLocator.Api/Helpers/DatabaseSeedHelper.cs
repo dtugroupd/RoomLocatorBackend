@@ -529,70 +529,72 @@ namespace RoomLocator.Api.Helpers
 
         public static void SeedDemoSurveys(RoomLocatorContext context)
         {   
-            var loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Duis ut diam quam nulla porttitor massa id neque aliquam.";
-            var survey1 = new Survey { Title = "Lorem ipsum dolor sit amet", Description = loremIpsum, CreatedDate = DateTime.Now };
-            var survey2 = new Survey { Title = "Dolor purus non enim praesent elementum", Description = loremIpsum, CreatedDate = DateTime.Now };
-
-            context.Add(survey1);
-            context.Add(survey2);
-            context.SaveChanges();
-
-            var questions = new List<Question>
+            if(!context.Surveys.Any())
             {
-                new Question
-                {
-                    SurveyId = survey1.Id,
-                    Text = "How did you like the coffee machine?"
-                },
-                new Question
-                {
-                    SurveyId = survey1.Id,
-                    Text = "Is the temperature alright?"
-                },
-                new Question
-                {
-                    SurveyId = survey1.Id,
-                    Text = "Are the chairs comfortable?"
-                },
-                new Question
-                {
-                    SurveyId = survey2.Id,
-                    Text = "How do you like the chairs?"
-                },
-                new Question
-                {
-                    SurveyId = survey2.Id,
-                    Text = "We recently installed new printers. If you have gotten a chance to use them, how did you like them?"
-                },
-                new Question
-                {
-                    SurveyId = survey2.Id,
-                    Text = "Do you frequently use the bonfire screen saver?"
-                }
-            };
+                var loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Duis ut diam quam nulla porttitor massa id neque aliquam.";
+                var survey1 = new Survey { Title = "Lorem ipsum dolor sit amet", Description = loremIpsum, CreatedDate = DateTime.Now };
+                var survey2 = new Survey { Title = "Dolor purus non enim praesent elementum", Description = loremIpsum, CreatedDate = DateTime.Now };
 
-            var mazeMapSections = context.MazeMapSections.ToList();
+                context.Add(survey1);
+                context.Add(survey2);
+                context.SaveChanges();
 
-            // Even distribution between the two test surveys
-            var i = 0;
-            foreach(var section in mazeMapSections)
-            {
-                if (i < mazeMapSections.Count() / 2)
+                var questions = new List<Question>
                 {
-                    section.SurveyId = survey1.Id;
-                }
-                else
+                    new Question
+                    {
+                        SurveyId = survey1.Id,
+                        Text = "How did you like the coffee machine?"
+                    },
+                    new Question
+                    {
+                        SurveyId = survey1.Id,
+                        Text = "Is the temperature alright?"
+                    },
+                    new Question
+                    {
+                        SurveyId = survey1.Id,
+                        Text = "Are the chairs comfortable?"
+                    },
+                    new Question
+                    {
+                        SurveyId = survey2.Id,
+                        Text = "How do you like the chairs?"
+                    },
+                    new Question
+                    {
+                        SurveyId = survey2.Id,
+                        Text = "We recently installed new printers. If you have gotten a chance to use them, how did you like them?"
+                    },
+                    new Question
+                    {
+                        SurveyId = survey2.Id,
+                        Text = "Do you frequently use the bonfire screen saver?"
+                    }
+                };
+
+                var mazeMapSections = context.MazeMapSections.ToList();
+
+                // Even distribution between the two test surveys
+                var i = 0;
+                foreach(var section in mazeMapSections)
                 {
-                    section.SurveyId = survey2.Id;
+                    if (i < mazeMapSections.Count() / 2)
+                    {
+                        section.SurveyId = survey1.Id;
+                    }
+                    else
+                    {
+                        section.SurveyId = survey2.Id;
+                    }
+
+                    i++;
                 }
 
-                i++;
+                context.AddRange(questions);
+                context.UpdateRange(mazeMapSections);
+                context.SaveChanges();
             }
-
-            context.AddRange(questions);
-            context.UpdateRange(mazeMapSections);
-            context.SaveChanges();
-
         }
     }
 }
