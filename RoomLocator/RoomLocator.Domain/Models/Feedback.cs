@@ -10,5 +10,6 @@ namespace RoomLocator.Domain.Models
         public string UserId { get; set; }
         public bool? Vote { get; set; }
         public DateTime TimeStamp { get; set; } = DateTime.Now;
+        public virtual User User { get; set; }
     }
 }

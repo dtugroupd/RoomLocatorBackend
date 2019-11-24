@@ -10,7 +10,7 @@ using RoomLocator.Data.Config;
 namespace RoomLocator.Data.Migrations
 {
     [DbContext(typeof(RoomLocatorContext))]
-    [Migration("20191122161128_Feedback")]
+    [Migration("20191124135820_Feedback")]
     partial class Feedback
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,6 +54,8 @@ namespace RoomLocator.Data.Migrations
                     b.Property<bool?>("Vote");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Feedbacks");
                 });
@@ -242,6 +244,13 @@ namespace RoomLocator.Data.Migrations
                         .WithMany("Coordinates")
                         .HasForeignKey("MazeMapSectionId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("RoomLocator.Domain.Models.Feedback", b =>
+                {
+                    b.HasOne("RoomLocator.Domain.User", "User")
+                        .WithMany("Feedbacks")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("RoomLocator.Domain.Models.MazeMapSection", b =>

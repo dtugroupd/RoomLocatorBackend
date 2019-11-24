@@ -53,6 +53,8 @@ namespace RoomLocator.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Feedbacks");
                 });
 
@@ -240,6 +242,13 @@ namespace RoomLocator.Data.Migrations
                         .WithMany("Coordinates")
                         .HasForeignKey("MazeMapSectionId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("RoomLocator.Domain.Models.Feedback", b =>
+                {
+                    b.HasOne("RoomLocator.Domain.User", "User")
+                        .WithMany("Feedbacks")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("RoomLocator.Domain.Models.MazeMapSection", b =>

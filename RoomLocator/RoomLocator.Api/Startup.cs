@@ -55,6 +55,7 @@ namespace RoomLocator.Api
             services.AddScoped<SurveyService, SurveyService>();
             services.AddScoped<ModcamCredentialsService, ModcamCredentialsService>();
             services.AddScoped<ModcamService,ModcamService>();
+            services.AddScoped<FeedbackService, FeedbackService>();
             
             #region JWT Setup, Anders Wiberg Olsen, s165241
             services.AddAuthentication(options =>

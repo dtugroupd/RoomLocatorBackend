@@ -21,28 +21,51 @@ namespace RoomLocator.Api.Controllers
 
     public class FeedbackController : ControllerBase
     {
-        private readonly FeedbackService _feedbackservice;
+        private readonly FeedbackService _feedbackService;
         public FeedbackController(FeedbackService service)
         {
-            _feedbackservice = service;
+            _feedbackService = service;
         }
 
+        [HttpGet("{id}", Name = nameof(GetFeedback))]
+        public async Task<ActionResult<FeedbackViewModel>> GetFeedback(string id)
+        {
+            try
+            {
+                return await _feedbackService.Get(id);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
 
         [HttpPost("[action]")]
         public async Task<ActionResult<FeedbackViewModel>> Create(FeedbackInputModel feedback)
         {
             try
             {
-                var createdFeedback = await _feedbackservice.Create(feedback);
-                return createdFeedback;
+                var createdFeedback = await _feedbackService.Create(feedback);
+                return CreatedAtRoute(nameof(GetFeedback), new { id = createdFeedback.Id }, createdFeedback);
             }
             catch (InvalidRequestException e)
             {
                 return BadRequest(e.Message);
             }
-
         }
 
+        [HttpPut("[action]")]
+        public async Task<ActionResult<FeedbackViewModel>> Update(FeedbackInputModel feedback)
+        {
+            try
+            {
+                return NoContent();
+            }
+            catch (InvalidRequestException e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
         }
 
     }

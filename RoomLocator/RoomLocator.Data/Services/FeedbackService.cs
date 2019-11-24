@@ -23,25 +23,39 @@ namespace RoomLocator.Data.Services
     {
         public FeedbackService(RoomLocatorContext context, IMapper mapper) : base(context, mapper) { }
 
-        public async Task<FeedbackViewModel> GetByDownvote(bool downvote)
+        public async Task<FeedbackViewModel> Get(string id)
         {
-            var downvotes = await _context.Feedbacks
-                .Include(x => x.Vote == true)
-                .ProjectTo<FeedbackViewModel>(_mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync(x => x.downvote == downvote);
-
-            return downvotes;
+            return await _context.Feedbacks.ProjectTo<FeedbackViewModel>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<FeedbackViewModel> GetByUpvote(bool upvote)
+        public async Task<FeedbackViewModel> GetCurrentUserFeedback(string userId)
         {
-            var upvotes = await _context.Feedbacks
-                .Include(x => x.Vote == false)
+            var feedback = await _context.Feedbacks
                 .ProjectTo<FeedbackViewModel>(_mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync(x => x.upvote == upvote);
+                .FirstOrDefaultAsync(x => x.UserId == userId && (DateTime.Now - x.TimeStamp).TotalHours < 2);
 
-            return upvotes;
+            return feedback;
         }
+
+        //public async Task<FeedbackViewModel> GetByDownvote(bool downvote)
+        //{
+        //    var downvotes = await _context.Feedbacks
+        //        .Include(x => x.Vote == true)
+        //        .ProjectTo<FeedbackViewModel>(_mapper.ConfigurationProvider)
+        //        .FirstOrDefaultAsync(x => x.downvote == downvote);
+
+        //    return downvotes;
+        //}
+
+        //public async Task<FeedbackViewModel> GetByUpvote(bool upvote)
+        //{
+        //    var upvotes = await _context.Feedbacks
+        //        .Include(x => x.Vote == false)
+        //        .ProjectTo<FeedbackViewModel>(_mapper.ConfigurationProvider)
+        //        .FirstOrDefaultAsync(x => x.upvote == upvote);
+
+        //    return upvotes;
+        //}
 
 
         public async Task<FeedbackViewModel> Create(FeedbackInputModel input)
@@ -51,10 +65,10 @@ namespace RoomLocator.Data.Services
                 throw new InvalidCastException("Input should not be null");
             }
 
-            var feedbacks = _mapper.Map<Feedback>(input);
-            await _context.Feedbacks.AddAsync(feedbacks);
+            var feedback = _mapper.Map<Feedback>(input);
+            await _context.Feedbacks.AddAsync(feedback);
             await _context.SaveChangesAsync();
-            return _mapper.Map<FeedbackViewModel>(feedbacks);
+            return _mapper.Map<FeedbackViewModel>(feedback);
         }
 
     }

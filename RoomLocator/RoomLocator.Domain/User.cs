@@ -12,5 +12,6 @@ namespace RoomLocator.Domain
         public string Id { get; set; }
         [Required] public string StudentId { get; set; }
         public virtual IList<UserRole> UserRoles { get; set; }
+        public virtual IEnumerable<Feedback> Feedbacks { get; set; }
     }
 }

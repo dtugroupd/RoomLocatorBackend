@@ -41,6 +41,7 @@ namespace RoomLocator.Data.Config
             builder.Entity<Survey>().HasMany(x => x.SurveyAnswers).WithOne(x => x.Survey).HasForeignKey(x => x.SurveyId);
             builder.Entity<SurveyAnswer>().HasMany(x => x.QuestionAnswers).WithOne(x => x.SurveyAnswer);
             builder.Entity<Question>().HasMany(x => x.QuestionAnswers).WithOne(x => x.Question).OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Feedback>().HasOne(x => x.User).WithMany(x => x.Feedbacks).HasForeignKey(x => x.UserId);
         }
     }
 }

@@ -10,7 +10,7 @@ using RoomLocator.Data.Config;
 namespace RoomLocator.Data.Migrations
 {
     [DbContext(typeof(RoomLocatorContext))]
-    [Migration("20191103174242_SurveyAnswerComment")]
+    [Migration("20191124132346_SurveyAnswerComment")]
     partial class SurveyAnswerComment
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -101,6 +101,22 @@ namespace RoomLocator.Data.Migrations
                     b.ToTable("QuestionAnswers");
                 });
 
+            modelBuilder.Entity("RoomLocator.Domain.Models.Role", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Roles");
+                });
+
             modelBuilder.Entity("RoomLocator.Domain.Models.Survey", b =>
                 {
                     b.Property<int>("Id")
@@ -137,6 +153,19 @@ namespace RoomLocator.Data.Migrations
                     b.ToTable("SurveyAnswers");
                 });
 
+            modelBuilder.Entity("RoomLocator.Domain.Models.UserRole", b =>
+                {
+                    b.Property<string>("UserId");
+
+                    b.Property<string>("RoleId");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("UserRoles");
+                });
+
             modelBuilder.Entity("RoomLocator.Domain.Sensor", b =>
                 {
                     b.Property<string>("Id")
@@ -161,6 +190,22 @@ namespace RoomLocator.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Sensors");
+                });
+
+            modelBuilder.Entity("RoomLocator.Domain.User", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("StudentId")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentId")
+                        .IsUnique();
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("RoomLocator.Domain.Value", b =>
@@ -216,6 +261,19 @@ namespace RoomLocator.Data.Migrations
                     b.HasOne("RoomLocator.Domain.Models.Survey", "Survey")
                         .WithMany("SurveyAnswers")
                         .HasForeignKey("SurveyId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("RoomLocator.Domain.Models.UserRole", b =>
+                {
+                    b.HasOne("RoomLocator.Domain.Models.Role", "Role")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("RoomLocator.Domain.User", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
