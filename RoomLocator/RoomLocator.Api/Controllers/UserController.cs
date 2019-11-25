@@ -52,11 +52,10 @@ namespace RoomLocator.Api.Controllers
         }
 
         [HttpDelete("id")]
-        [Authorize(Roles = "admin")]
+     //   [Authorize(Roles = "admin")]
         public async Task<ActionResult> Delete(string studentId)
         {
-            await _userService.Delete(studentId);
-            return NoContent();
+            return Ok(await _userService.DeleteUserInfo(studentId));
         }
 
         /// <summary>

@@ -140,15 +140,50 @@ namespace RoomLocator.Data.Services
             return await Get(user.Id);
         }
 
-        public async Task Delete(string studentId)
+        /// <summary>
+        ///     <author>Hadi Horani, s144885</author>
+        /// </summary>
+        public async Task<UserViewModel> DeleteUserInfo(string studentId)
         {
-            var user = await _context.Users
-                .FirstOrDefaultAsync(x => x.StudentId == studentId);
+            var user = await GetByStudentId(studentId);
 
-            if (user == null) return;
+            var userExists = await _context.Users
+               .AnyAsync(x => x.StudentId == user.StudentId);
 
-            _context.Users.Remove(user);
+            if (!userExists)
+            {
+                throw NotFoundException.NotExistsWithProperty<User>(x => x.StudentId, user.StudentId);
+            }
+
+            var userRoles = await _context.UserRoles
+                .Where(x => x.UserId == user.Id)
+                .FirstOrDefaultAsync();
+
+            _context.UserRoles.Remove(userRoles);
             await _context.SaveChangesAsync();
+
+            foreach (var u in _context.Users)
+            {
+                if (u.StudentId == user.StudentId)
+                {
+                    u.StudentId = "DELETED USER";
+                    _context.SaveChanges();
+                }
+            }
+
+
+                return await Get(user.Id);
         }
+
+        /*     public async Task Delete(string studentId)
+             {
+                 var user = await _context.Users
+                     .FirstOrDefaultAsync(x => x.StudentId == studentId);
+
+                 if (user == null) return;
+
+                 _context.Users.Remove(user);
+                 await _context.SaveChangesAsync();
+             } */
     }
 }
