@@ -21,6 +21,7 @@ using RoomLocator.Api.Middlewares;
 using RoomLocator.Data.Config;
 using RoomLocator.Data.Services;
 using RoomLocator.Domain.Config;
+using RoomLocator.Domain.Models.CredentialsModels;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace RoomLocator.Api
@@ -37,7 +38,7 @@ namespace RoomLocator.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddViewComponentsAsServices();
             services.AddDbContext<RoomLocatorContext>(opt =>
                 opt.UseSqlServer(Configuration.GetConnectionString("RoomLocator")));
             services.AddSingleton(AutoMapperConfig.CreateMapper());
@@ -46,6 +47,10 @@ namespace RoomLocator.Api
                 {
                     AllowAutoRedirect = true
                 });
+            services.AddHttpClient<CampusNetAuthService>();
+            services.AddHttpClient<ModcamService>();
+
+            services.Configure<CampusNetApiCredentials>(Configuration.GetSection("Auth:CampusNet"));
 
             services.AddScoped<ValueService, ValueService>();
             services.AddScoped<UserService, UserService>();
@@ -53,8 +58,9 @@ namespace RoomLocator.Api
             services.AddScoped<SensorService, SensorService>();
             services.AddScoped<MazeMapService, MazeMapService>();
             services.AddScoped<SurveyService, SurveyService>();
-            services.AddScoped<ModcamCredentialsService, ModcamCredentialsService>();
-            services.AddScoped<ModcamService,ModcamService>();
+            services.AddScoped<LocalCredentialsService, LocalCredentialsService>();
+            services.AddScoped<ModcamService, ModcamService>();
+            services.AddScoped<CampusNetAuthService, CampusNetAuthService>();
             
             #region JWT Setup, Anders Wiberg Olsen, s165241
             services.AddAuthentication(options =>

@@ -13,18 +13,19 @@ namespace RoomLocator.Data.Services
     public class ModcamService
     {
         private readonly HttpClient _httpClient;
+        private readonly LocalCredentialsService _credentialsService;
 
-        public ModcamService(HttpClient httpClient)
+        public ModcamService(HttpClient httpClient, LocalCredentialsService credentialsService)
         {
             _httpClient = httpClient;
+            _credentialsService = credentialsService;
         }
 
         private async Task<HttpRequestMessage> MakeModcamHttpRequest(string url)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, url);
-            var modcamCredentialsService = new  ModcamCredentialsService();
 
-            var modcamCredentials = await modcamCredentialsService.LoadFile();
+            var modcamCredentials = await _credentialsService.LoadModcamCredentials();
             
             request.Headers.Add("x-client-id", modcamCredentials.ClientId);
             request.Headers.Add("x-api-key", modcamCredentials.Key);

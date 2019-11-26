@@ -49,8 +49,6 @@ namespace RoomLocator.Data.Services
                 .ProjectTo<UserViewModel>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(x => x.StudentId == studentId);
 
-            if (user == null) return null;
-
             return user;
         }
 
@@ -155,35 +153,31 @@ namespace RoomLocator.Data.Services
                 throw NotFoundException.NotExistsWithProperty<User>(x => x.StudentId, user.StudentId);
             }
 
-            var userRoles = await _context.UserRoles
-                .Where(x => x.UserId == user.Id)
-                .FirstOrDefaultAsync();
-
-            _context.UserRoles.Remove(userRoles);
-            await _context.SaveChangesAsync();
-
-            foreach (var u in _context.Users)
-            {
-                if (u.StudentId == user.StudentId)
-                {
-                    u.StudentId = "DELETED USER";
-                    _context.SaveChanges();
-                }
-            }
-
-
+         
                 return await Get(user.Id);
         }
 
-        /*     public async Task Delete(string studentId)
-             {
-                 var user = await _context.Users
-                     .FirstOrDefaultAsync(x => x.StudentId == studentId);
+        public async Task<UserViewModel> GetOrCreate(CnUserViewModel model)
+        {
+            var userToCreate = _mapper.Map<User>(model);
 
-                 if (user == null) return;
+            var existingUser = await GetByStudentId(userToCreate.StudentId);
 
-                 _context.Users.Remove(user);
-                 await _context.SaveChangesAsync();
-             } */
+            if (existingUser != null) return existingUser;
+
+            await _context.Users.AddAsync(userToCreate);
+
+            var studentRoleId = await _context.Roles
+                .Where(x => x.Name == "student")
+                .Select(x => x.Id)
+                .FirstOrDefaultAsync();
+            await _context.UserRoles.AddAsync(new UserRole {UserId = userToCreate.Id, RoleId = studentRoleId});
+            await _context.SaveChangesAsync();
+
+            var outputUser = _mapper.Map<UserViewModel>(userToCreate);
+            outputUser.Roles.Add("student");
+
+            return outputUser;
+        }  
     }
 }

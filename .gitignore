@@ -12,6 +12,7 @@
 
 ##ignor Jason file
 api_credentials.json
+cn_credentials.json
 
 # Build results
 [Dd]ebug/
