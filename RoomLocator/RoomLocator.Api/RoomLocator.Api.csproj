@@ -27,6 +27,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\RoomLocator.Data\RoomLocator.Data.csproj" />
+      <ProjectReference Include="..\Shared\Shared.csproj" />
     </ItemGroup>
 
 </Project>

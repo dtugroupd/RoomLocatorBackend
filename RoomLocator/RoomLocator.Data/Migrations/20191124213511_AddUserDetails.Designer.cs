@@ -3,19 +3,21 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RoomLocator.Data.Config;
 
 namespace RoomLocator.Data.Migrations
 {
     [DbContext(typeof(RoomLocatorContext))]
-    partial class RoomLocatorContextModelSnapshot : ModelSnapshot
+    [Migration("20191124213511_AddUserDetails")]
+    partial class AddUserDetails
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -38,24 +40,6 @@ namespace RoomLocator.Data.Migrations
                     b.HasIndex("MazeMapSectionId");
 
                     b.ToTable("Coordinates");
-                });
-
-            modelBuilder.Entity("RoomLocator.Domain.Models.Feedback", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("TimeStamp");
-
-                    b.Property<string>("UserId");
-
-                    b.Property<bool?>("Vote");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Feedbacks");
                 });
 
             modelBuilder.Entity("RoomLocator.Domain.Models.MazeMapSection", b =>
@@ -250,13 +234,6 @@ namespace RoomLocator.Data.Migrations
                         .WithMany("Coordinates")
                         .HasForeignKey("MazeMapSectionId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("RoomLocator.Domain.Models.Feedback", b =>
-                {
-                    b.HasOne("RoomLocator.Domain.User", "User")
-                        .WithMany("Feedbacks")
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("RoomLocator.Domain.Models.MazeMapSection", b =>
