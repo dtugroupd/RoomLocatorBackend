@@ -1,6 +1,9 @@
 ﻿
 namespace RoomLocator.Domain.InputModels
 {
+    /// <summary>
+    ///     <author>Andreas Gøricke, s153804</author>
+    /// </summary>
     public class EventInputModel
     {
         public string Title { get; set; }

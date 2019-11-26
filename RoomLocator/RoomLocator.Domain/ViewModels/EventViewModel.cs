@@ -2,6 +2,9 @@
 
 namespace RoomLocator.Domain.ViewModels
 {
+    /// <summary>
+    ///     <author>Andreas Gøricke, s153804</author>
+    /// </summary>
     public class EventViewModel
     {
         public string Id { get; set; }
