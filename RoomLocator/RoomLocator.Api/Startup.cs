@@ -173,6 +173,7 @@ namespace RoomLocator.Api
             
             context.Database.Migrate();
             DatabaseSeedHelper.SeedRoles(context);
+            DatabaseSeedHelper.SeedSensors(context);
             DatabaseSeedHelper.SeedMazeMapSections(context);
             if (env.IsDevelopment())
             {

@@ -34,48 +34,5 @@ namespace RoomLocator.Api.Controllers
         }
 
 
-        [HttpPost]
-        public async Task<ActionResult<SensorViewModel>> Create(SensorInputModel input)
-        {
-            if (!ModelState.IsValid) return BadRequest();
-            
-            try
-            {
-                 var createdSensor= await _sensorService.Create(input);
-                 return createdSensor;
-            }
-            catch (InvalidRequestException e)
-            {
-                return BadRequest(e.Message);
-            }
-           
-            
-            
-        }
-
-        [HttpPut("id")]
-        public async Task<ActionResult<SensorViewModel>> Put(string id, [FromBody]SensorInputModel sensor)
-        {
-            if (!ModelState.IsValid) return BadRequest();
-
-            try
-            {
-                 var updateSensor = await _sensorService.Update(id, sensor); 
-                 return Ok(updateSensor);
-            }
-            catch (InvalidRequestException e)
-            {
-                return BadRequest(e.Message);
-            }
-               
-        }
-
-        [HttpDelete("id")]
-        public async Task<ActionResult> Delete(string id)
-        {
-            await _sensorService.Delete(id);
-            return NoContent();
-        }
-         
     }
 }
