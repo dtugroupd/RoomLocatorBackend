@@ -33,6 +33,5 @@ namespace RoomLocator.Api.Controllers
             return Ok (sensors);
         }
 
-
     }
 }
