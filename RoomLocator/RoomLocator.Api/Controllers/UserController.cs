@@ -55,7 +55,7 @@ namespace RoomLocator.Api.Controllers
         ///     <author>Hadi Horani, s144885</author>
         /// </summary>
         [HttpDelete("id")]
-     //   [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult> Delete(string studentId)
         {
             return Ok(await _userService.DeleteUserInfo(studentId));
@@ -65,7 +65,7 @@ namespace RoomLocator.Api.Controllers
         ///     <author>Hadi Horani, s144885</author>
         /// </summary>
         [HttpPut("id")]
-     //   [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult> UpdateRole(string studentId, string roleName)
         {
             return Ok(await _userService.UpdateRole(studentId, roleName));
