@@ -17,7 +17,7 @@ namespace RoomLocator.Api.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
 
-    //  [Authorize]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly UserService _userService;
@@ -37,7 +37,7 @@ namespace RoomLocator.Api.Controllers
         }
 
         [HttpGet]
-//        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<IEnumerable<UserViewModel>>> Get()
         {
             var users = await _userService.Get();
