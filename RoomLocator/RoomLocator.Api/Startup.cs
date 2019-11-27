@@ -56,7 +56,7 @@ namespace RoomLocator.Api
             services.AddScoped<UserService, UserService>();
             services.AddScoped<TokenService, TokenService>();
             services.AddScoped<SensorService, SensorService>();
-            services.AddScoped<MazeMapService, MazeMapService>();
+            services.AddScoped<LocationService, LocationService>();
             services.AddScoped<SurveyService, SurveyService>();
             services.AddScoped<LocalCredentialsService, LocalCredentialsService>();
             services.AddScoped<ModcamService, ModcamService>();
@@ -173,7 +173,7 @@ namespace RoomLocator.Api
             
             context.Database.Migrate();
             DatabaseSeedHelper.SeedRoles(context);
-            DatabaseSeedHelper.SeedMazeMapSections(context);
+            DatabaseSeedHelper.SeedLocations(context);
             if (env.IsDevelopment())
             {
                 DatabaseSeedHelper.SeedDemoSurveys(context);

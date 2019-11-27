@@ -10,11 +10,12 @@ namespace RoomLocator.Domain.Config.AutoMapperConfigs
     /// <summary>
     ///     <author>Thomas Lien Christensen, s165242</author>
     /// </summary>
-    public class MazeMapSectionMapping : Profile
+    public class LocationMappingProfile : Profile
     {
-        public MazeMapSectionMapping()
+        public LocationMappingProfile()
         {
-            CreateMap<MazeMapSectionViewModel, MazeMapSection>().ReverseMap();
+            CreateMap<LocationViewModel, Location>().ReverseMap();
+            CreateMap<LocationSimpleViewModel, Location>().ReverseMap();
         }
     }
 }

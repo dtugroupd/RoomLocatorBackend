@@ -7,7 +7,7 @@ namespace RoomLocator.Domain.Enums
     /// <summary>
     ///     <author>Thomas Lien Christensen, s165242</author>
     /// </summary>
-    public enum LibrarySectionType
+    public enum SectionType
     {
         DATABAR = 0,
         STUDY = 1,
@@ -16,5 +16,6 @@ namespace RoomLocator.Domain.Enums
         STAGE = 4,
         KITCHEN = 5,
         INFORMATION = 6,
+        BOOKABLE = 7
     }
 }

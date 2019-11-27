@@ -9,8 +9,8 @@ namespace RoomLocator.Domain.Models
     /// </summary>
     public class SurveyAnswer
     {
-        public int Id { get; set; }
-        public int SurveyId { get; set; }
+        public string Id { get; set; }
+        public string SurveyId { get; set; }
         public string Comment { get; set; }
         public DateTime TimeStamp { get; set; }
         public virtual IEnumerable<QuestionAnswer> QuestionAnswers { get; set; }

@@ -6,13 +6,15 @@ namespace RoomLocator.Domain.Models
     /// <summary>
     ///     <author>Thomas Lien Christensen, s165242</author>
     /// </summary>
-    public class MazeMapSection
+    public class Section
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
+        public string LocationId { get; set; }
+        public string SurveyId { get; set; }
         public int ZLevel { get; set; }
-        public int? SurveyId { get; set; }
-        public LibrarySectionType Type { get; set; } 
+        public SectionType Type { get; set; } 
         public virtual Survey Survey { get; set; }
+        public virtual Location Location { get; set; }
         public virtual IEnumerable<Coordinates> Coordinates { get; set; }
     }
 }

@@ -7,11 +7,11 @@ namespace RoomLocator.Domain.ViewModels
     /// <summary>
     ///     <author>Thomas Lien Christensen, s165242</author>
     /// </summary>
-    public class MazeMapSectionViewModel
+    public class SectionViewModel
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public int ZLevel { get; set; }
-        public LibrarySectionType Type { get; set; }
+        public SectionType Type { get; set; }
         public SurveyViewModel Survey { get; set; }
         public IEnumerable<CoordinatesViewModel> Coordinates { get; set; }
     }

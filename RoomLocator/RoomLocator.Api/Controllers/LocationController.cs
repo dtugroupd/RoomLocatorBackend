@@ -14,26 +14,25 @@ namespace RoomLocator.Api.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [Authorize]
-    public class MazeMapController : ControllerBase
+    public class LocationController : ControllerBase
     {
-        private readonly MazeMapService _service;
+        private readonly LocationService _service;
 
-        public MazeMapController(MazeMapService service)
+        public LocationController(LocationService service)
         {
             _service = service;
         }
-
+        
         [HttpGet]
-        public ActionResult<MazeMapCoordinatesViewModel> GetStaticPoint()
+        public async Task<ActionResult<IEnumerable<LocationSimpleViewModel>>> Get()
         {
-            return Ok(new MazeMapCoordinatesViewModel { Latitude = 55.78498471097425, Longitude = 12.52026114549633 });
+            return Ok(await _service.GetLocations());
         }
 
-        
-        [HttpGet("[action]")]
-        public async Task<ActionResult<IEnumerable<MazeMapSectionViewModel>>> LibrarySections()
+        [HttpGet("{id}")]
+        public async Task<ActionResult<LocationViewModel>> GetLocation(string id)
         {
-            return Ok(await _service.GetSections());
+            return Ok(await _service.GetLocation(id));
         }
 
     }

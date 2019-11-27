@@ -11,7 +11,7 @@ namespace RoomLocator.Domain.InputModels
     /// </summary>
     public class SurveyInputModel
     {
-        public int SectionId { get; set; }
+        public string SectionId { get; set; }
 
         [Required]
         public string Title { get; set; }
