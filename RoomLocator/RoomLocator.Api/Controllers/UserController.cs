@@ -51,6 +51,9 @@ namespace RoomLocator.Api.Controllers
             return Ok(await _userService.GetByStudentId(studentId));
         }
 
+        /// <summary>
+        ///     <author>Hadi Horani, s144885</author>
+        /// </summary>
         [HttpDelete("id")]
      //   [Authorize(Roles = "admin")]
         public async Task<ActionResult> Delete(string studentId)

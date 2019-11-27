@@ -9,6 +9,9 @@ using RoomLocator.Domain;
 using RoomLocator.Domain.Models;
 using RoomLocator.Domain.ViewModels;
 using Shared;
+using Microsoft.Extensions.Logging;
+using RoomLocator.Domain.Config;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace RoomLocator.Data.Services
 {
@@ -17,6 +20,8 @@ namespace RoomLocator.Data.Services
     /// </summary>
     public class UserService : BaseService
     {
+        protected DbContextOptions<RoomLocatorContext> Options;
+
         public UserService(RoomLocatorContext context, IMapper mapper) : base(context, mapper) { }
 
         public async Task<IEnumerable<UserViewModel>> Get()
@@ -143,18 +148,21 @@ namespace RoomLocator.Data.Services
         /// </summary>
         public async Task<UserViewModel> DeleteUserInfo(string studentId)
         {
-            var user = await GetByStudentId(studentId);
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.StudentId == studentId);
 
-            var userExists = await _context.Users
-               .AnyAsync(x => x.StudentId == user.StudentId);
-
-            if (!userExists)
+            if (user == null)
             {
                 throw NotFoundException.NotExistsWithProperty<User>(x => x.StudentId, user.StudentId);
             }
 
-         
-                return await Get(user.Id);
+            user.ProfileImage = null;
+            user.FirstName = null;
+            user.LastName = null;
+
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+
+            return await Get(user.Id);
         }
 
         public async Task<UserViewModel> GetOrCreate(CnUserViewModel model)

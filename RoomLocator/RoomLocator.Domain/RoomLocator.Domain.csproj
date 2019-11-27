@@ -5,17 +5,21 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="Models\Role\**" />
+      <Compile Remove="Models\UserRole\**" />
+      <EmbeddedResource Remove="Models\Role\**" />
+      <EmbeddedResource Remove="Models\UserRole\**" />
+      <None Remove="Models\Role\**" />
+      <None Remove="Models\UserRole\**" />
+    </ItemGroup>
+
+    <ItemGroup>
       <PackageReference Include="AutoMapper" Version="9.0.0" />
       <PackageReference Include="CsvHelper" Version="12.1.3" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Shared\Shared.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Models\Role" />
-      <Folder Include="Models\UserRole" />
     </ItemGroup>
 
 </Project>
