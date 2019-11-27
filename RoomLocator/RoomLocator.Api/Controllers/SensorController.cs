@@ -15,7 +15,6 @@ namespace RoomLocator.Api.Controllers
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    [Authorize (Roles = "admin")]
     public class SensorController : ControllerBase
     {
 
