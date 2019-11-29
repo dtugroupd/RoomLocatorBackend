@@ -1,16 +1,15 @@
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RoomLocator.Data.Services;
 using RoomLocator.Domain.ViewModels;
+using Shared.Extentions;
 
 namespace RoomLocator.Api.Controllers
 {
     /// <summary>
-    /// <author>Anders Wiberg Olsen, s165241</author>
+    ///     <author>Anders Wiberg Olsen, s165241</author>
     /// </summary>
     [Authorize]
     [ApiVersion("1.0")]
@@ -28,8 +27,7 @@ namespace RoomLocator.Api.Controllers
         [HttpGet("me")]
         public async Task<ActionResult<UserViewModel>> GetCurrentUser()
         {
-            var userId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
-            var user = await _userService.GetByStudentId(userId);
+            var user = await _userService.GetByStudentId(User.StudentId());
 
             return user;
         }
