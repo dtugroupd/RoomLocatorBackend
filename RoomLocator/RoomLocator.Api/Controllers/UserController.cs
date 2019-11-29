@@ -62,6 +62,16 @@ namespace RoomLocator.Api.Controllers
         /// <summary>
         ///     <author>Hadi Horani, s144885</author>
         /// </summary>
+        [HttpDelete("me")]
+        public async Task<ActionResult> DeleteCurrentUserInfo()
+        {
+            var user = await _userService.GetByStudentId(User.StudentId());
+            return Ok(await _userService.DeleteUserInfo(user.StudentId));
+        }
+
+        /// <summary>
+        ///     <author>Hadi Horani, s144885</author>
+        /// </summary>
         [HttpPut("id")]
         [Authorize(Roles = "admin")]
         public async Task<ActionResult> UpdateRole(string studentId, string roleName)
