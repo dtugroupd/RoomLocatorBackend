@@ -33,7 +33,7 @@ namespace RoomLocator.Api.Controllers
             return Ok (sensors);
         }
 
-
+        
         [HttpPost]
         public async Task<ActionResult<SensorViewModel>> Create(SensorInputModel input)
         {
