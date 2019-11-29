@@ -12,6 +12,7 @@ using Shared;
 using Microsoft.Extensions.Logging;
 using RoomLocator.Domain.Config;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using System;
 
 namespace RoomLocator.Data.Services
 {
@@ -158,6 +159,9 @@ namespace RoomLocator.Data.Services
             user.ProfileImage = null;
             user.FirstName = null;
             user.LastName = null;
+            user.Email = null;
+            user.StudentId = Guid.NewGuid().ToString();
+
 
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
