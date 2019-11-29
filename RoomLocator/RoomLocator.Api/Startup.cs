@@ -57,6 +57,7 @@ namespace RoomLocator.Api
             services.AddScoped<TokenService, TokenService>();
             services.AddScoped<SensorService, SensorService>();
             services.AddScoped<LocationService, LocationService>();
+            services.AddScoped<ScadadataService, ScadadataService>();
             services.AddScoped<SurveyService, SurveyService>();
             services.AddScoped<LocalCredentialsService, LocalCredentialsService>();
             services.AddScoped<ModcamService, ModcamService>();
@@ -104,8 +105,8 @@ namespace RoomLocator.Api
                 };
             });
             services.AddAuthorization();
-            #endregion
 
+            #endregion
             services.Configure<ApiBehaviorOptions>(options => {
                 options.InvalidModelStateResponseFactory = InvalidModelHandler.HandleInvalidModelAggregate;
             });
