@@ -15,7 +15,7 @@ namespace RoomLocator.Data.Services
 {
     /// <summary>
     /// Authenticating with old CampusNet API
-    /// <author>Anders Wiberg Olsen, s165241</author>
+    ///     <author>Anders Wiberg Olsen, s165241</author>
     /// </summary>
     public class CampusNetAuthService
     {
@@ -159,7 +159,6 @@ namespace RoomLocator.Data.Services
                     _logger.LogError("Didn't handle error: {Error}'", error);
                     throw new InvalidRequestException("Failed to fetch request", $"Failed with CampusNet error: {error}");
                 }
-                
             }
             
             var userInfo =
