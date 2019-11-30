@@ -36,6 +36,172 @@ namespace RoomLocator.Api.Helpers
             context.SaveChanges();
         }
         
+        /// <summary>
+        ///     <author>Andreas Gøricke, s153804</author>
+        /// </summary>
+        public static void SeedSensors(RoomLocatorContext context)
+        {
+            if (context.Sensors.Any()) return;
+            var sensors = new List<Sensor>
+            {
+                new Sensor
+                {
+                    Id = "B101_DI100_02_US01",
+                    Type = SensorType.Ultrasound,
+                    Provider = SensorProvider.Scadadata,
+                    Latitude = 55.7869945007994,
+                    Longitude = 12.5232421671629,
+                    ZLevel = 1
+                },
+                new Sensor
+                {
+                    Id = "B101_DI100_02_TR01",
+                    Type = SensorType.Temperature,
+                    Provider = SensorProvider.Scadadata,
+                    Latitude = 55.7869945007994,
+                    Longitude = 12.5232421671629,
+                    ZLevel = 1
+                },
+                new Sensor
+                {
+                    Id = "B101_DI100_02_HR01",
+                    Type = SensorType.Humidity,
+                    Provider = SensorProvider.Scadadata,
+                    Latitude = 55.7869945007994,
+                    Longitude = 12.5232421671629,
+                    ZLevel = 1
+                },
+                new Sensor
+                {
+                    Id = "B101_DI100_02_SR01",
+                    Type = SensorType.Sound,
+                    Provider = SensorProvider.Scadadata,
+                    Latitude = 55.7869945007994,
+                    Longitude = 12.5232421671629,
+                    ZLevel = 1
+                },
+                new Sensor
+                {
+                    Id = "B101_DI100_02_LX01",
+                    Type = SensorType.Light,
+                    Provider = SensorProvider.Scadadata,
+                    Latitude = 55.7869945007994,
+                    Longitude = 12.5232421671629,
+                    ZLevel = 1
+                },
+                new Sensor
+                {
+                    Id = "B101_DI200_06_US01",
+                    Type = SensorType.Ultrasound,
+                    Provider = SensorProvider.Scadadata,
+                    Latitude = 55.7867729072814,
+                    Longitude = 12.523521560966,
+                    ZLevel = 1
+                },
+                new Sensor
+                {
+                    Id = "B101_DI200_06_TR01",
+                    Type = SensorType.Temperature,
+                    Provider = SensorProvider.Scadadata,
+                    Latitude = 55.7867729072814,
+                    Longitude = 12.523521560966,
+                    ZLevel = 1
+                },
+                new Sensor
+                {
+                    Id = "B101_DI200_06_HR01",
+                    Type = SensorType.Humidity,
+                    Provider = SensorProvider.Scadadata,
+                    Latitude = 55.7867729072814,
+                    Longitude = 12.523521560966,
+                    ZLevel = 1
+                },
+                new Sensor
+                {
+                    Id = "B101_DI200_06_SR01",
+                    Type = SensorType.Sound,
+                    Provider = SensorProvider.Scadadata,
+                    Latitude = 55.7867729072814,
+                    Longitude = 12.523521560966,
+                    ZLevel = 1
+                },
+                new Sensor
+                {
+                    Id = "B101_DI200_06_LX01",
+                    Type = SensorType.Light,
+                    Provider = SensorProvider.Scadadata,
+                    Latitude = 55.7867729072814,
+                    Longitude = 12.523521560966,
+                    ZLevel = 1
+                },
+                new Sensor
+                {
+                    Id = "B101_DI000_07_US01",
+                    Type = SensorType.Ultrasound,
+                    Provider = SensorProvider.Scadadata,
+                    Latitude = 55.7868413016794,
+                    Longitude = 12.5231868449781,
+                    ZLevel = 1
+                },
+                new Sensor
+                {
+                    Id = "B101_DI000_07_TR01",
+                    Type = SensorType.Temperature,
+                    Provider = SensorProvider.Scadadata,
+                    Latitude = 55.7868413016794,
+                    Longitude = 12.5231868449781,
+                    ZLevel = 1
+                },
+                new Sensor
+                {
+                    Id = "B101_DI000_07_HR01",
+                    Type = SensorType.Humidity,
+                    Provider = SensorProvider.Scadadata,
+                    Latitude = 55.7868413016794,
+                    Longitude = 12.5231868449781,
+                    ZLevel = 1
+                },
+                new Sensor
+                {
+                    Id = "B101_DI000_07_SR01",
+                    Type = SensorType.Sound,
+                    Provider = SensorProvider.Scadadata,
+                    Latitude = 55.7868413016794,
+                    Longitude = 12.5231868449781,
+                    ZLevel = 1
+                },
+                new Sensor
+                {
+                    Id = "B101_DI000_07_LX01",
+                    Type = SensorType.Light,
+                    Provider = SensorProvider.Scadadata,
+                    Latitude = 55.7868413016794,
+                    Longitude = 12.5231868449781,
+                    ZLevel = 1
+                },
+                new Sensor
+                {
+                    Id = "B101_DI000_00_OP01",
+                    Type = SensorType.AvailableSeats,
+                    Provider = SensorProvider.Scadadata,
+                    Latitude = 55.7868413016794,
+                    Longitude = 12.5231868449781,
+                    ZLevel = 1
+                },
+                new Sensor
+                {
+                    Id = "B101_DI000_00_OP01_MAX",
+                    Type = SensorType.MaxAvailableSeats,
+                    Provider = SensorProvider.Scadadata,
+                    Latitude = 55.7868413016794,
+                    Longitude = 12.5231868449781,
+                    ZLevel = 1
+                }
+            };
+            context.Sensors.AddRange(sensors);
+            context.SaveChanges();
+        }
+        
         public static void SeedMazeMapSections(RoomLocatorContext context)
         {
             // Should be removed when all sections are defined and created

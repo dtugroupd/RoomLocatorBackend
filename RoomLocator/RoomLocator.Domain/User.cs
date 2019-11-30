@@ -17,6 +17,6 @@ namespace RoomLocator.Domain
         public string ProfileImage { get; set; }
         public virtual IList<UserRole> UserRoles { get; set; }
         public bool UserIsDeleted { get; set; }
-
+        public virtual IEnumerable<Feedback> Feedbacks { get; set; }
     }
 }
