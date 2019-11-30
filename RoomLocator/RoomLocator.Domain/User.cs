@@ -16,5 +16,6 @@ namespace RoomLocator.Domain
         public string Email { get; set; }
         public string ProfileImage { get; set; }
         public virtual IList<UserRole> UserRoles { get; set; }
+        public virtual IEnumerable<Feedback> Feedbacks { get; set; }
     }
 }
