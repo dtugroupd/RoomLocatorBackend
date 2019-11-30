@@ -1,10 +1,10 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -17,11 +17,13 @@ namespace RoomLocator.Data.Services
     {
         private readonly IConfiguration _configuration;
         private readonly UserService _userService;
+        private readonly IHttpContextAccessor _httpContext;
 
-        public TokenService(IConfiguration configuration, UserService userService)
+        public TokenService(IConfiguration configuration, UserService userService, IHttpContextAccessor httpContext)
         {
             _configuration = configuration;
             _userService = userService;
+            _httpContext = httpContext;
         }
 
         public async Task<string> GenerateUserTokenAsync(string studentId)
@@ -54,5 +56,7 @@ namespace RoomLocator.Data.Services
                 expires: expiration,
                 signingCredentials: credentials);
         }
+
+        public ClaimsPrincipal User => _httpContext.HttpContext.User;
     }
 }
