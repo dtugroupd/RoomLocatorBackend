@@ -9,9 +9,6 @@ using RoomLocator.Domain;
 using RoomLocator.Domain.Models;
 using RoomLocator.Domain.ViewModels;
 using Shared;
-using Microsoft.Extensions.Logging;
-using RoomLocator.Domain.Config;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using System;
 
 namespace RoomLocator.Data.Services
@@ -186,10 +183,7 @@ namespace RoomLocator.Data.Services
             await _context.UserRoles.AddAsync(new UserRole {UserId = userToCreate.Id, RoleId = studentRoleId});
             await _context.SaveChangesAsync();
 
-            var outputUser = _mapper.Map<UserViewModel>(userToCreate);
-            outputUser.Roles.Add("student");
-
-            return outputUser;
+            return await GetByStudentId(model.UserName);
         }  
     }
 }
