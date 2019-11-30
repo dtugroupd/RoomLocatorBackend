@@ -1,11 +1,10 @@
 ﻿using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using RoomLocator.Data.Config;
 using RoomLocator.Data.Services;
-using RoomLocator.Domain;
 using RoomLocator.Domain.Models;
+using RoomLocator.Domain.ViewModels;
 using Xunit;
 
 namespace RoomLocator.UnitTest.Services
@@ -18,8 +17,8 @@ namespace RoomLocator.UnitTest.Services
         [Fact]
         public async Task Create_CreatesTheUser_AssignsStudentRole()
         {
-            var studentId = "s123456";
-            var expectedRole = "student";
+            const string studentId = "s123456";
+            const string expectedRole = "student";
 
             using (var context = new RoomLocatorContext(Options))
             {
@@ -44,6 +43,32 @@ namespace RoomLocator.UnitTest.Services
                 var hasRole = user.UserRoles.Any(ur => ur.Role.Name.ToLower() == expectedRole);
                 Assert.True(hasRole);
             }
+        }
+
+        [Fact]
+        public async Task GetOrCreate_CreatesUser_IfNotExists()
+        {
+            var userToCreate = new CnUserViewModel
+            {
+                GivenName = "John",
+                FamilyName = "Doe",
+                UserName = "s123456",
+            };
+
+            UserViewModel createdUser = null;
+
+            using (var context = new RoomLocatorContext(Options))
+            {
+                Assert.False(await context.Users.AnyAsync(x => x.StudentId == userToCreate.UserName));
+
+                var userService = new UserService(context, Mapper);
+                createdUser = await userService.GetOrCreate(userToCreate);
+            }
+            
+            Assert.NotNull(createdUser);
+            Assert.Equal(userToCreate.GivenName, createdUser.FirstName);
+            Assert.Equal(userToCreate.FamilyName, createdUser.LastName);
+            Assert.Equal(userToCreate.UserName, createdUser.StudentId);
         }
     }
 }
