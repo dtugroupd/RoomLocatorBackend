@@ -160,8 +160,8 @@ namespace RoomLocator.Data.Services
             user.FirstName = null;
             user.LastName = null;
             user.Email = null;
+            user.UserIsDeleted = true;
             user.StudentId = Guid.NewGuid().ToString();
-
 
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
