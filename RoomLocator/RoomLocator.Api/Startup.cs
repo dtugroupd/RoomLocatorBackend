@@ -9,11 +9,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RoomLocator.Api.Helpers;
@@ -64,7 +66,9 @@ namespace RoomLocator.Api
             services.AddScoped<LocalCredentialsService, LocalCredentialsService>();
             services.AddScoped<ModcamService, ModcamService>();
             services.AddScoped<CampusNetAuthService, CampusNetAuthService>();
-            
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+
             #region JWT Setup, Anders Wiberg Olsen, s165241
             services.AddAuthentication(options =>
             {
