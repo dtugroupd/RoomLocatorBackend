@@ -35,7 +35,7 @@ namespace RoomLocator.Api.Controllers
         }
 
         [HttpGet]
-     //   [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<IEnumerable<UserViewModel>>> Get()
         {
             var users = await _userService.Get();
