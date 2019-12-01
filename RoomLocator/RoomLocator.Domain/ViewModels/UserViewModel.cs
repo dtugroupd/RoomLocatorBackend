@@ -11,5 +11,6 @@ namespace RoomLocator.Domain.ViewModels
         public string FullName => $"{FirstName ?? ""} {LastName ?? ""}".Trim();
         public string ProfileImage { get; set; }
         public List<string> Roles { get; set; }
+        public bool UserIsDeleted { get; set; }
     }
 }
