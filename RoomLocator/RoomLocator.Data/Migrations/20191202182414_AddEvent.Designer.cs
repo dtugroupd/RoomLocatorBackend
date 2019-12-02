@@ -10,8 +10,8 @@ using RoomLocator.Data.Config;
 namespace RoomLocator.Data.Migrations
 {
     [DbContext(typeof(RoomLocatorContext))]
-    [Migration("20191202153527_AddEvents")]
-    partial class AddEvents
+    [Migration("20191202182414_AddEvent")]
+    partial class AddEvent
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

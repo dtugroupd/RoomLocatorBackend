@@ -8,6 +8,7 @@ using RoomLocator.Data.Config;
 using RoomLocator.Domain.InputModels;
 using RoomLocator.Domain.Models;
 using RoomLocator.Domain.ViewModels;
+using Shared;
 
 namespace RoomLocator.Data.Services
 {
@@ -32,6 +33,18 @@ namespace RoomLocator.Data.Services
             await _context.SaveChangesAsync();
 
             return _mapper.Map<EventViewModel>(eventToCreate);
+        }
+
+        public async Task<EventViewModel> UpdateEvent(EventUpdateInputModel inputModel)
+        {
+            var currentEvent = await _context.Events.FirstOrDefaultAsync(x => x.Id == inputModel.Id);
+            if (currentEvent == null) throw NotFoundException.NotExistsWithProperty<Event>(x => x.Id, inputModel.Id);
+
+            _mapper.Map(inputModel, currentEvent);
+            //currentEvent = _mapper.Map<Event>(inputModel);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<EventViewModel>(currentEvent);
         }
         
         public async Task<IEnumerable<EventViewModel>> GetAll()

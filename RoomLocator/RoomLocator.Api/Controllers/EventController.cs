@@ -45,5 +45,12 @@ namespace RoomLocator.Api.Controllers
             var createdEvent = await _service.CreateEvent(eventInput);
             return CreatedAtRoute(nameof(GetEvent), new { id = createdEvent.Id }, createdEvent);
         }
+
+        [Authorize(Roles = "admin")]
+        [HttpPut("[action]")]
+        public async Task<ActionResult<EventViewModel>> Update([FromBody] EventUpdateInputModel eventInput)
+        {
+            return Ok(await _service.UpdateEvent(eventInput));
+        }
     }
 }

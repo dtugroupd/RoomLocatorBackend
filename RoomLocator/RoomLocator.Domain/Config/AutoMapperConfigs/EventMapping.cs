@@ -11,6 +11,7 @@ namespace RoomLocator.Domain.Config.AutoMapperConfigs
         {
             CreateMap<EventViewModel, Event>().ReverseMap();
             CreateMap<EventInputModel, Event>().ReverseMap();
+            CreateMap<EventUpdateInputModel, Event>().ReverseMap();
         }
     }
 }
