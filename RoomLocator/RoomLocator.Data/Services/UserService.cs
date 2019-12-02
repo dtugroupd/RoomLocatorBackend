@@ -55,7 +55,7 @@ namespace RoomLocator.Data.Services
             return user;
         }
 
-        public async Task<UserViewModel> Create(string studentId)
+        public async Task<UserViewModel> Create(string studentId, bool hasAcceptedDisclaimer)
         {
             var user = new User {StudentId = studentId};
 
@@ -66,8 +66,11 @@ namespace RoomLocator.Data.Services
             {
                 throw DuplicateException.DuplicateEntry<User>();
             }
+            
+            if (!hasAcceptedDisclaimer) throw new InvalidRequestException("Disclaimer Not Accepted", "You have to accept the disclaimer in order to register for the service");
 
             await _context.Users.AddAsync(user);
+            await _context.UserDisclaimers.AddAsync(new UserDisclaimer(user.Id, true));
 
             var studentRoleId = await _context.Roles
                 .Where(x => x.Name == "student")
@@ -166,15 +169,17 @@ namespace RoomLocator.Data.Services
             return await Get(user.Id);
         }
 
-        public async Task<UserViewModel> GetOrCreate(CnUserViewModel model)
+        public async Task<UserViewModel> GetOrCreate(CnUserViewModel model, bool? hasAcceptedDisclaimer)
         {
             var userToCreate = _mapper.Map<User>(model);
 
             var existingUser = await GetByStudentId(userToCreate.StudentId);
 
             if (existingUser != null) return existingUser;
-
+            if (!hasAcceptedDisclaimer ?? false) throw new InvalidRequestException("Disclaimer Not Accepted", "You have to accept the disclaimer in order to register for the service");
+            
             await _context.Users.AddAsync(userToCreate);
+            await _context.UserDisclaimers.AddAsync(new UserDisclaimer(userToCreate.Id, true));
 
             var studentRoleId = await _context.Roles
                 .Where(x => x.Name == "student")
@@ -184,6 +189,36 @@ namespace RoomLocator.Data.Services
             await _context.SaveChangesAsync();
 
             return await GetByStudentId(model.UserName);
-        }  
+        }
+
+        public async Task<UserDisclaimerViewModel> HasAcceptedDisclaimer(string studentId)
+        {
+            var user = await _context.Users
+                .Include(x => x.UserDisclaimer)
+                .Where(x => !x.UserIsDeleted)
+                .Where(x => x.StudentId == studentId)
+                .FirstOrDefaultAsync();
+            
+            if (user?.UserDisclaimer == null) return UserDisclaimerViewModel.NotAccepted();
+
+            return new UserDisclaimerViewModel(user.UserDisclaimer.HasAcceptedDisclaimer);
+        }
+
+        public async Task<UserDisclaimerViewModel> AcceptDisclaimer(string studentId)
+        {
+            var user = await _context.Users
+                .Include(x => x.UserDisclaimer)
+                .Where(x => !x.UserIsDeleted)
+                .Where(x => x.StudentId == studentId)
+                .FirstOrDefaultAsync();
+            
+            if (user == null) return UserDisclaimerViewModel.NotAccepted();
+            if (user?.UserDisclaimer.HasAcceptedDisclaimer ?? false) return UserDisclaimerViewModel.Accepted();
+
+            await _context.UserDisclaimers.AddAsync(new UserDisclaimer(user.Id, true));
+            await _context.SaveChangesAsync();
+            
+            return UserDisclaimerViewModel.Accepted();
+        }
     }
 }
