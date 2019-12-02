@@ -8,8 +8,10 @@ namespace RoomLocator.Domain.ViewModels
         public string StudentId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string Email { get; set; }
         public string FullName => $"{FirstName ?? ""} {LastName ?? ""}".Trim();
         public string ProfileImage { get; set; }
         public List<string> Roles { get; set; }
+        public bool UserIsDeleted { get; set; }
     }
 }
