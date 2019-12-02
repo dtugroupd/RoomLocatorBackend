@@ -51,7 +51,7 @@ namespace RoomLocator.Api.Controllers
 
             if (authenticatedUser == null) return Unauthorized(@"Incorrect DTU Credentials");
 
-            var user = await _userService.GetOrCreate(authenticatedUser);
+            var user = await _userService.GetOrCreate(authenticatedUser, authenticationModel.LoginModel.HasAcceptedDisclaimer);
             
             var token = new TokenViewModel
             {
@@ -98,7 +98,7 @@ namespace RoomLocator.Api.Controllers
 
             var studentId = responseMessage.Split("\n")[1];
             _logger.LogInformation($"Validating user '{studentId}'");
-            var existingUser = await _userService.GetByStudentId(studentId) ?? await _userService.Create(studentId);
+            var existingUser = await _userService.GetByStudentId(studentId) ?? await _userService.Create(studentId, true);
             _logger.LogInformation($"Found user, user id '{existingUser.Id}' with roles '{existingUser.Roles}'");
 
             var token = await _tokenService.GenerateUserTokenAsync(existingUser.StudentId);

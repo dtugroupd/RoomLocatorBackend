@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RoomLocator.Data.Services;
-using RoomLocator.Domain.Models;
 using RoomLocator.Domain.ViewModels;
 using Shared.Extentions;
 
@@ -15,7 +15,6 @@ namespace RoomLocator.Api.Controllers
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-
     [Authorize]
     public class UserController : ControllerBase
     {
@@ -77,6 +76,32 @@ namespace RoomLocator.Api.Controllers
         public async Task<ActionResult> UpdateRole(string studentId, string roleName)
         {
             return Ok(await _userService.UpdateRole(studentId, roleName));
+        }
+
+        /// <summary>
+        /// States whether or not a user has accepted the disclaimer. If the user does not exist, it says false
+        ///     <author>Anders Wiberg Olsen, s165241</author>
+        /// </summary>
+        /// <param name="studentId"></param>
+        /// <returns></returns>
+        [HttpGet("{studentId}/disclaimer")]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(UserDisclaimerViewModel), StatusCodes.Status200OK)]
+        public async Task<ActionResult<UserDisclaimerViewModel>> GetUserDisclaimer(string studentId)
+        {
+            return await _userService.HasAcceptedDisclaimer(studentId);
+        }
+        
+        /// <summary>
+        /// Adds a record stating the user has accepted the disclaimer already
+        ///     <author>Anders Wiberg Olsen, s165241</author>
+        /// </summary>
+        /// <returns></returns>
+        [HttpPut("me/disclaimer/accept")]
+        [ProducesResponseType(typeof(UserDisclaimerViewModel), StatusCodes.Status200OK)]
+        public async Task<ActionResult<UserDisclaimerViewModel>> AcceptUserDisclaimer()
+        {
+            return await _userService.HasAcceptedDisclaimer(User.StudentId());
         }
     }
 }

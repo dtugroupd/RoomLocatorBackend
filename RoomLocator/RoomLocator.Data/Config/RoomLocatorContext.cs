@@ -25,7 +25,7 @@ namespace RoomLocator.Data.Config
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
-
+        public DbSet<UserDisclaimer> UserDisclaimers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
