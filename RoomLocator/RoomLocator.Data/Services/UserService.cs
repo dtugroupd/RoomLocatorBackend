@@ -67,7 +67,7 @@ namespace RoomLocator.Data.Services
                 throw DuplicateException.DuplicateEntry<User>();
             }
             
-            if (hasAcceptedDisclaimer) throw new InvalidRequestException("Disclaimer Not Accepted", "You have to accept the disclaimer in order to register for the service");
+            if (!hasAcceptedDisclaimer) throw new InvalidRequestException("Disclaimer Not Accepted", "You have to accept the disclaimer in order to register for the service");
 
             await _context.Users.AddAsync(user);
             await _context.UserDisclaimers.AddAsync(new UserDisclaimer(user.Id, true));
