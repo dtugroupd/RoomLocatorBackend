@@ -5,15 +5,16 @@ using Microsoft.AspNetCore.Mvc;
 using RoomLocator.Data.Services;
 using RoomLocator.Domain.InputModels;
 using RoomLocator.Domain.ViewModels;
-using Shared;
 
 namespace RoomLocator.Api.Controllers
 {
     /// <summary>
     ///     <author>Andreas Gøricke, s153804</author>
+    ///     <author>Anders Wiberg Olsen, s165241</author>
     /// </summary>
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
+    [Authorize]
     [ApiController]
 
     public class EventController : ControllerBase
@@ -37,19 +38,12 @@ namespace RoomLocator.Api.Controllers
             return Ok(await _service.GetAll());
         }
         
+        [Authorize(Roles = "admin")]
         [HttpPost("[action]")]
         public async Task<ActionResult<EventViewModel>> Create([FromBody] EventInputModel eventInput)
         {
-            if (!ModelState.IsValid)
-                return BadRequest();
-            try
-            {
-                var createdEvent = await _service.CreateEvent(eventInput);
-                return CreatedAtRoute(nameof(GetEvent), new { id = createdEvent.Id }, createdEvent);
-            } catch(InvalidRequestException e) {
-                return BadRequest(e.Message);
-            }
+            var createdEvent = await _service.CreateEvent(eventInput);
+            return CreatedAtRoute(nameof(GetEvent), new { id = createdEvent.Id }, createdEvent);
         }
-        
     }
 }

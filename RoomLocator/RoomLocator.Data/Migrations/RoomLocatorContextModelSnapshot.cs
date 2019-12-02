@@ -40,6 +40,28 @@ namespace RoomLocator.Data.Migrations
                     b.ToTable("Coordinates");
                 });
 
+            modelBuilder.Entity("RoomLocator.Domain.Models.Event", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("Date");
+
+                    b.Property<string>("Description");
+
+                    b.Property<bool>("DurationApproximated");
+
+                    b.Property<double>("DurationInHours");
+
+                    b.Property<string>("Speakers");
+
+                    b.Property<string>("Title");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Events");
+                });
+
             modelBuilder.Entity("RoomLocator.Domain.Models.Feedback", b =>
                 {
                     b.Property<string>("Id")
