@@ -29,7 +29,7 @@ namespace RoomLocator.UnitTest.Services
                 await context.SaveChangesAsync();
 
                 var userService = new UserService(context, Mapper);
-                await userService.Create(studentId);
+                await userService.Create(studentId, true);
             }
 
             using (var context = new RoomLocatorContext(Options))
@@ -65,7 +65,7 @@ namespace RoomLocator.UnitTest.Services
                 Assert.False(await context.Users.AnyAsync(x => x.StudentId == userToCreate.UserName));
 
                 var userService = new UserService(context, Mapper);
-                createdUser = await userService.GetOrCreate(userToCreate);
+                createdUser = await userService.GetOrCreate(userToCreate, true);
             }
             
             Assert.NotNull(createdUser);
@@ -97,7 +97,7 @@ namespace RoomLocator.UnitTest.Services
                 Assert.True(await context.Users.AnyAsync(x => x.StudentId == userToCreate.UserName));
 
                 var userService = new UserService(context, Mapper);
-                fetchedUser = await userService.GetOrCreate(userToCreate);
+                fetchedUser = await userService.GetOrCreate(userToCreate, true);
             }
             
             Assert.NotNull(fetchedUser);
