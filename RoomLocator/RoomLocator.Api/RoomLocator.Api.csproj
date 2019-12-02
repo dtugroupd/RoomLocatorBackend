@@ -4,6 +4,7 @@
         <TargetFramework>netcoreapp2.2</TargetFramework>
         <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
 	<NoWarn>1591</NoWarn>
+	<StartupObject>RoomLocator.Api.Program</StartupObject>
     </PropertyGroup>
     
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -26,6 +27,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\RoomLocator.Data\RoomLocator.Data.csproj" />
+      <ProjectReference Include="..\Shared\Shared.csproj" />
     </ItemGroup>
 
 </Project>

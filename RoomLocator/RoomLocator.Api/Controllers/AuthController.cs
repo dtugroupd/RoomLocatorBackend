@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using Microsoft.AspNetCore.Authorization;
+using AutoMapper;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using RoomLocator.Data.Services;
+using RoomLocator.Domain.InputModels;
 using RoomLocator.Domain.ViewModels;
 
 namespace RoomLocator.Api.Controllers
@@ -27,16 +28,38 @@ namespace RoomLocator.Api.Controllers
         private readonly IHttpClientFactory _clientFactory;
         private readonly IConfiguration _config;
         private readonly UserService _userService;
+        private readonly CampusNetAuthService _campusNetAuthService;
         private readonly TokenService _tokenService;
         private readonly ILogger<AuthController> _logger;
+        private readonly IMapper _mapper;
 
-        public AuthController(IHttpClientFactory clientFactory, IConfiguration config, UserService userService, TokenService tokenService, ILogger<AuthController> logger)
+        public AuthController(IHttpClientFactory clientFactory, IConfiguration config, UserService userService, CampusNetAuthService campusNetAuthService, TokenService tokenService, ILogger<AuthController> logger, IMapper mapper)
         {
             _clientFactory = clientFactory;
             _config = config;
             _userService = userService;
+            _campusNetAuthService = campusNetAuthService;
             _tokenService = tokenService;
             _logger = logger;
+            _mapper = mapper;
+        }
+
+        [HttpPost("login")]
+        public async Task<ActionResult<TokenViewModel>> CampusnetLogin(CnAuthInputModel authenticationModel)
+        {
+            var authenticatedUser = await _campusNetAuthService.Authenticate(authenticationModel);
+
+            if (authenticatedUser == null) return Unauthorized(@"Incorrect DTU Credentials");
+
+            var user = await _userService.GetOrCreate(authenticatedUser);
+            
+            var token = new TokenViewModel
+            {
+                User = _mapper.Map<UserViewModel>(user),
+                Token = await _tokenService.GenerateUserTokenAsync(user.StudentId)
+            };
+
+            return token;
         }
 
         [HttpGet("validate")]

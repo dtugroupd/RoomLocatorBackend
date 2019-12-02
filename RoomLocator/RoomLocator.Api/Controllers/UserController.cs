@@ -1,21 +1,21 @@
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RoomLocator.Data.Services;
+using RoomLocator.Domain.Models;
 using RoomLocator.Domain.ViewModels;
+using Shared.Extentions;
 
 namespace RoomLocator.Api.Controllers
 {
     /// <summary>
-    /// <author>Anders Wiberg Olsen, s165241</author>
+    ///     <author>Anders Wiberg Olsen, s165241</author>
     /// </summary>
     [ApiVersion("1.0")]
-    [Authorize]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
+
     [Authorize]
     public class UserController : ControllerBase
     {
@@ -29,8 +29,7 @@ namespace RoomLocator.Api.Controllers
         [HttpGet("me")]
         public async Task<ActionResult<UserViewModel>> GetCurrentUser()
         {
-            var userId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
-            var user = await _userService.GetByStudentId(userId);
+            var user = await _userService.GetByStudentId(User.StudentId());
 
             return user;
         }
@@ -50,12 +49,34 @@ namespace RoomLocator.Api.Controllers
             return Ok(await _userService.GetByStudentId(studentId));
         }
 
+        /// <summary>
+        ///     <author>Hadi Horani, s144885</author>
+        /// </summary>
         [HttpDelete("id")]
         [Authorize(Roles = "admin")]
         public async Task<ActionResult> Delete(string studentId)
         {
-            await _userService.Delete(studentId);
-            return NoContent();
+            return Ok(await _userService.DeleteUserInfo(studentId));
+        }
+
+        /// <summary>
+        ///     <author>Hadi Horani, s144885</author>
+        /// </summary>
+        [HttpDelete("me")]
+        public async Task<ActionResult> DeleteCurrentUserInfo()
+        {
+            var user = await _userService.GetByStudentId(User.StudentId());
+            return Ok(await _userService.DeleteUserInfo(user.StudentId));
+        }
+
+        /// <summary>
+        ///     <author>Hadi Horani, s144885</author>
+        /// </summary>
+        [HttpPut("id")]
+        [Authorize(Roles = "admin")]
+        public async Task<ActionResult> UpdateRole(string studentId, string roleName)
+        {
+            return Ok(await _userService.UpdateRole(studentId, roleName));
         }
     }
 }

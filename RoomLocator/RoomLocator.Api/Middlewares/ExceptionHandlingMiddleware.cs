@@ -54,11 +54,19 @@ public class ExceptionHandlingMiddleware
 
         private Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            _logger.LogError($"Failed with: {exception.Message}\n{exception.StackTrace}");
-            if (exception.InnerException != null)
+            if (GetStatusCode(exception.GetType()) == HttpStatusCode.InternalServerError)
             {
-                _logger.LogError($"Inner Exception: {exception.InnerException.Message}\n{exception.InnerException.StackTrace}");
+                _logger.LogError($"Failed with: {exception.GetType().Name} -- {exception.Message}\n{exception.StackTrace}");
+                if (exception.InnerException != null)
+                {
+                    _logger.LogError($"Inner Exception: {exception.InnerException.Message}\n{exception.InnerException.StackTrace}");
+                }
             }
+            else
+            {
+                _logger.LogWarning($"Caught {exception.GetType().Name} -- {exception.Message}");
+            }
+
             var title = "Unexpected Error";
             var message =
                 "Oops! Sorry! Something went wrong.";

@@ -9,11 +9,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RoomLocator.Api.Helpers;
@@ -21,6 +23,7 @@ using RoomLocator.Api.Middlewares;
 using RoomLocator.Data.Config;
 using RoomLocator.Data.Services;
 using RoomLocator.Domain.Config;
+using RoomLocator.Domain.Models.CredentialsModels;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace RoomLocator.Api
@@ -37,7 +40,7 @@ namespace RoomLocator.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddViewComponentsAsServices();
             services.AddDbContext<RoomLocatorContext>(opt =>
                 opt.UseSqlServer(Configuration.GetConnectionString("RoomLocator")));
             services.AddSingleton(AutoMapperConfig.CreateMapper());
@@ -46,6 +49,10 @@ namespace RoomLocator.Api
                 {
                     AllowAutoRedirect = true
                 });
+            services.AddHttpClient<CampusNetAuthService>();
+            services.AddHttpClient<ModcamService>();
+
+            services.Configure<CampusNetApiCredentials>(Configuration.GetSection("Auth:CampusNet"));
 
             services.AddScoped<ValueService, ValueService>();
             services.AddScoped<UserService, UserService>();
@@ -54,8 +61,12 @@ namespace RoomLocator.Api
             services.AddScoped<ScadadataService, ScadadataService>();
             services.AddScoped<MazeMapService, MazeMapService>();
             services.AddScoped<SurveyService, SurveyService>();
-            services.AddScoped<ModcamCredentialsService, ModcamCredentialsService>();
             services.AddScoped<ModcamService,ModcamService>();
+            services.AddScoped<FeedbackService, FeedbackService>();
+            services.AddScoped<LocalCredentialsService, LocalCredentialsService>();
+            services.AddScoped<ModcamService, ModcamService>();
+            services.AddScoped<CampusNetAuthService, CampusNetAuthService>();
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<EventService,EventService>();
             
             #region JWT Setup, Anders Wiberg Olsen, s165241
@@ -169,6 +180,7 @@ namespace RoomLocator.Api
             
             context.Database.Migrate();
             DatabaseSeedHelper.SeedRoles(context);
+            DatabaseSeedHelper.SeedSensors(context);
             DatabaseSeedHelper.SeedMazeMapSections(context);
             if (env.IsDevelopment())
             {

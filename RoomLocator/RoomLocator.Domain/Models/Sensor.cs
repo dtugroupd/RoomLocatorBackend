@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using RoomLocator.Domain.Enums;
 
-namespace RoomLocator.Domain.ViewModels
+namespace RoomLocator.Domain.Models
 {
     /// <summary>
-    /// 	<author>Andreas Gøricke, s153804</author>
+    ///     <author>Andreas Gøricke, s153804</author>
     /// </summary>
-    public class SensorViewModel
+    public class Sensor
     {
         public string Id { get; set; }
         public int ZLevel { get; set; }

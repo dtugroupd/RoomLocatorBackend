@@ -9,7 +9,7 @@ namespace RoomLocator.Data.Config
     ///     <author>Anders Wiberg Olsen, s165241, main structure</author>
     ///     <author>Most members working on backend have contributed</author>
     /// </summary>
-    public class  RoomLocatorContext : DbContext
+    public class RoomLocatorContext : DbContext
     {
         public RoomLocatorContext(DbContextOptions options) : base(options) { }
         
@@ -26,6 +26,8 @@ namespace RoomLocator.Data.Config
         public DbSet<UserRole> UserRoles { get; set; }
         
         public DbSet<Event> Events { get; set; }
+        public DbSet<Feedback> Feedbacks { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -42,6 +44,7 @@ namespace RoomLocator.Data.Config
             builder.Entity<Survey>().HasMany(x => x.SurveyAnswers).WithOne(x => x.Survey).HasForeignKey(x => x.SurveyId);
             builder.Entity<SurveyAnswer>().HasMany(x => x.QuestionAnswers).WithOne(x => x.SurveyAnswer);
             builder.Entity<Question>().HasMany(x => x.QuestionAnswers).WithOne(x => x.Question).OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Feedback>().HasOne(x => x.User).WithMany(x => x.Feedbacks).HasForeignKey(x => x.UserId);
         }
     }
 }
