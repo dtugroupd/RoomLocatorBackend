@@ -18,15 +18,13 @@ namespace RoomLocator.Data.Services
     /// </summary>
     public class UserService : BaseService
     {
-        protected DbContextOptions<RoomLocatorContext> Options;
-
         public UserService(RoomLocatorContext context, IMapper mapper) : base(context, mapper) { }
 
         public async Task<IEnumerable<UserViewModel>> Get()
         {
             var users = await _context.Users
                 .Include(x => x.UserRoles)
-                    .ThenInclude(x => x.Role)
+                .ThenInclude(x => x.Role)
                 .ProjectTo<UserViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
@@ -51,6 +49,11 @@ namespace RoomLocator.Data.Services
                     .ThenInclude(x => x.Role)
                 .ProjectTo<UserViewModel>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(x => x.StudentId == studentId);
+
+            if (user.Roles.Contains("admin"))
+            {
+                user.Roles.AddRange(await _context.Roles.Where(x => !user.Roles.Contains(x.Name)).Select(x => x.Name).ToListAsync());                
+            }
 
             return user;
         }
