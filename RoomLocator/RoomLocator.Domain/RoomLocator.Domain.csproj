@@ -13,9 +13,4 @@
       <ProjectReference Include="..\Shared\Shared.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Models\Role" />
-      <Folder Include="Models\UserRole" />
-    </ItemGroup>
-
 </Project>

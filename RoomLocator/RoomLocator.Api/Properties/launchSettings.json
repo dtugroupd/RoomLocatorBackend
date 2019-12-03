@@ -33,7 +33,7 @@
       "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "ConnectionStrings__RoomLocator": "Server=127.0.0.1,1433;Database=todoDb;User Id=SA;Password=myStrong()Password"
+        "ConnectionStrings__RoomLocator": "Server=127.0.0.1,1433;Database=todoDb;User Id=SA;Password=myStrongP@assword"
       }
     }
   }

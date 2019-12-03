@@ -9,16 +9,19 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RoomLocator.Api.Helpers;
 using RoomLocator.Api.Middlewares;
 using RoomLocator.Data.Config;
+using RoomLocator.Data.Hubs;
 using RoomLocator.Data.Services;
 using RoomLocator.Domain.Config;
 using RoomLocator.Domain.Models.CredentialsModels;
@@ -49,6 +52,7 @@ namespace RoomLocator.Api
                 });
             services.AddHttpClient<CampusNetAuthService>();
             services.AddHttpClient<ModcamService>();
+            services.AddSignalR();
 
             services.Configure<CampusNetApiCredentials>(Configuration.GetSection("Auth:CampusNet"));
 
@@ -59,9 +63,13 @@ namespace RoomLocator.Api
             services.AddScoped<LocationService, LocationService>();
             services.AddScoped<ScadadataService, ScadadataService>();
             services.AddScoped<SurveyService, SurveyService>();
+            services.AddScoped<ModcamService,ModcamService>();
+            services.AddScoped<FeedbackService, FeedbackService>();
             services.AddScoped<LocalCredentialsService, LocalCredentialsService>();
             services.AddScoped<ModcamService, ModcamService>();
             services.AddScoped<CampusNetAuthService, CampusNetAuthService>();
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<EventService,EventService>();
             
             #region JWT Setup, Anders Wiberg Olsen, s165241
             services.AddAuthentication(options =>
@@ -169,12 +177,14 @@ namespace RoomLocator.Api
 
             app.UseMiddleware<ExceptionHandlingMiddleware>();
             app.UseHttpsRedirection();
+            app.UseSignalR(routes => { routes.MapHub<MainHub>("/api/connect"); });
             app.UseAuthentication();
             app.UseMvc();
             
             context.Database.Migrate();
             DatabaseSeedHelper.SeedRoles(context);
             DatabaseSeedHelper.SeedLocations(context);
+            DatabaseSeedHelper.SeedSensors(context);
             if (env.IsDevelopment())
             {
                 DatabaseSeedHelper.SeedDemoSurveys(context);
