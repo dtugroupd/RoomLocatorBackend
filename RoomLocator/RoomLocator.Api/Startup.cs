@@ -69,8 +69,8 @@ namespace RoomLocator.Api
             services.AddScoped<ModcamService, ModcamService>();
             services.AddScoped<CampusNetAuthService, CampusNetAuthService>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
-
+            services.AddScoped<EventService,EventService>();
+            
             #region JWT Setup, Anders Wiberg Olsen, s165241
             services.AddAuthentication(options =>
             {
