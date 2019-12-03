@@ -13,7 +13,7 @@ namespace RoomLocator.Api.Controllers
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class MazeMapController : ControllerBase
     {
         private readonly MazeMapService _service;
@@ -34,6 +34,12 @@ namespace RoomLocator.Api.Controllers
         public async Task<ActionResult<IEnumerable<MazeMapSectionViewModel>>> LibrarySections()
         {
             return Ok(await _service.GetSections());
+        }
+        
+        [HttpGet("[action]")]
+        public async Task<ActionResult<IEnumerable<MazeMapSectionSensorViewModel>>> LibrarySectionsWithSensors()
+        {
+            return Ok(await _service.GetSectionsWithSensors());
         }
 
     }

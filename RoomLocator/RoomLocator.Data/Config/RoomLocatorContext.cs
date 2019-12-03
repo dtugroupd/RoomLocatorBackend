@@ -30,8 +30,12 @@ namespace RoomLocator.Data.Config
             builder.ApplyConfiguration(new UserFluentConfig());
             builder.ApplyConfiguration(new RoleFluentConfig());
             builder.ApplyConfiguration(new UserRoleFluentConfig());
-
+            builder.ApplyConfiguration(new SensorFluentConfig());
+            
+            
             base.OnModelCreating(builder);
+            
+            //builder.ApplyConfiguration(new MazeMapSectionWithSensorsFluentConfig());
 
             builder.Entity<MazeMapSection>().HasMany(x => x.Coordinates).WithOne(x => x.MazeMapSection).HasForeignKey(x => x.MazeMapSectionId);
             builder.Entity<Survey>().HasMany(x => x.MazeMapSections).WithOne(x => x.Survey).IsRequired(required: false);
