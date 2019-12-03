@@ -21,6 +21,7 @@ using Microsoft.OpenApi.Models;
 using RoomLocator.Api.Helpers;
 using RoomLocator.Api.Middlewares;
 using RoomLocator.Data.Config;
+using RoomLocator.Data.Hubs;
 using RoomLocator.Data.Services;
 using RoomLocator.Domain.Config;
 using RoomLocator.Domain.Models.CredentialsModels;
@@ -51,6 +52,7 @@ namespace RoomLocator.Api
                 });
             services.AddHttpClient<CampusNetAuthService>();
             services.AddHttpClient<ModcamService>();
+            services.AddSignalR();
 
             services.Configure<CampusNetApiCredentials>(Configuration.GetSection("Auth:CampusNet"));
 
@@ -175,6 +177,7 @@ namespace RoomLocator.Api
 
             app.UseMiddleware<ExceptionHandlingMiddleware>();
             app.UseHttpsRedirection();
+            app.UseSignalR(routes => { routes.MapHub<MainHub>("/api/connect"); });
             app.UseAuthentication();
             app.UseMvc();
             
