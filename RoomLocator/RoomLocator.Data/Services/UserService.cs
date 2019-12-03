@@ -25,6 +25,7 @@ namespace RoomLocator.Data.Services
             var users = await _context.Users
                 .Include(x => x.UserRoles)
                 .ThenInclude(x => x.Role)
+                    .Where(x => !x.UserIsDeleted)
                 .ProjectTo<UserViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 

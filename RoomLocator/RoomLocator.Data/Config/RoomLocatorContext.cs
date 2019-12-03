@@ -24,6 +24,8 @@ namespace RoomLocator.Data.Config
         public DbSet<Coordinates> Coordinates { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
+        
+        public DbSet<Event> Events { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<UserDisclaimer> UserDisclaimers { get; set; }
 
@@ -32,9 +34,10 @@ namespace RoomLocator.Data.Config
             builder.ApplyConfiguration(new UserFluentConfig());
             builder.ApplyConfiguration(new RoleFluentConfig());
             builder.ApplyConfiguration(new UserRoleFluentConfig());
-
+            builder.ApplyConfiguration(new EventFluentConfig());
+            
             base.OnModelCreating(builder);
-
+            
             builder.Entity<MazeMapSection>().HasMany(x => x.Coordinates).WithOne(x => x.MazeMapSection).HasForeignKey(x => x.MazeMapSectionId);
             builder.Entity<Survey>().HasMany(x => x.MazeMapSections).WithOne(x => x.Survey).IsRequired(required: false);
             builder.Entity<Survey>().HasMany(x => x.Questions).WithOne(x => x.Survey).HasForeignKey(x => x.SurveyId);
