@@ -41,10 +41,10 @@ namespace RoomLocator.Data.Config
             builder.ApplyConfiguration(new SurveyAnswerFluentConfig());
             builder.ApplyConfiguration(new QuestionFluentConfig());
             builder.ApplyConfiguration(new EventFluentConfig());
+            builder.ApplyConfiguration(new FeedbackFluentConfig());
 
             base.OnModelCreating(builder);
                         
-            builder.Entity<Feedback>().HasOne(x => x.User).WithMany(x => x.Feedbacks).HasForeignKey(x => x.UserId);
         }
     }
 }

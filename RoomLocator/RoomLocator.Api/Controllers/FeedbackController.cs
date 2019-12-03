@@ -41,11 +41,11 @@ namespace RoomLocator.Api.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<ActionResult<FeedbackViewModel>> GetCurrentUserFeedback(string userId)
+        public async Task<ActionResult<FeedbackViewModel>> GetCurrentUserFeedback(string userId, string locationId)
         {
             try
             {
-                return Ok(await _feedbackService.GetCurrentUserFeedback(userId));
+                return Ok(await _feedbackService.GetCurrentUserFeedback(userId, locationId));
             }
             catch (Exception e)
             {

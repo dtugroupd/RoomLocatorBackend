@@ -28,11 +28,11 @@ namespace RoomLocator.Data.Services
             return await _context.Feedbacks.ProjectTo<FeedbackViewModel>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<FeedbackViewModel> GetCurrentUserFeedback(string userId)
+        public async Task<FeedbackViewModel> GetCurrentUserFeedback(string userId, string locationId)
         {
             var feedback = await _context.Feedbacks
                 .ProjectTo<FeedbackViewModel>(_mapper.ConfigurationProvider)
-                .FirstOrDefaultAsync(x => x.UserId == userId && (DateTime.Now - x.TimeStamp).TotalHours < 2);
+                .FirstOrDefaultAsync(x => x.UserId == userId && x.LocationId == locationId && (DateTime.Now - x.TimeStamp).TotalHours < 2);
 
             return feedback;
         }

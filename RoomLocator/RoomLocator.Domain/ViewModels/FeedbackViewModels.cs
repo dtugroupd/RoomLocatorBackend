@@ -10,6 +10,7 @@ namespace RoomLocator.Domain.ViewModels
     {
         public string Id { get; set; }
         public string UserId { get; set; }
+        public string LocationId { get; set; }
         public bool? Vote { get; set; }
         public DateTime TimeStamp { get; set; }
 

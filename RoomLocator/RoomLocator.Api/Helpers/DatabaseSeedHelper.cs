@@ -723,6 +723,78 @@ namespace RoomLocator.Api.Helpers
 
                 };
 
+                var events = new List<Event>
+                {
+                    new Event
+                    {
+                        LocationId = library.Id,
+                        Title = "Scientists of biomedicine present their results",
+                        Description = "This is mock data, seeded by the backend.",
+                        Speakers = "Anne-Mette Frandsen, Ole Nygaard Jakobsen",
+                        Longitude = 12.523135159684443,
+                        Latitude = 55.786914912087894,
+                        ZLevel = 1,
+                        Date = DateTime.Now,
+                        DurationInHours = 2,
+                    },
+                    new Event
+                    {
+                        LocationId = library.Id,
+                        Title = "Extreme library party",
+                        Description = "This is mock data, seeded by the backend.",
+                        Longitude = 12.523606406323665,
+                        Latitude = 55.786835836454884,
+                        ZLevel = 2,
+                        Date = DateTime.Now,
+                        DurationInHours = 10,
+                    },
+                    new Event
+                    {
+                        LocationId = library.Id,
+                        Title = "Free Laptop Maintenance",
+                        Description = "This is mock data, seeded by the backend.",
+                        Longitude = 12.523665464716544,
+                        Latitude = 55.78689552535516,
+                        ZLevel = 1,
+                        Date = DateTime.Now,
+                        DurationInHours = 6,
+                    },
+                    new Event
+                    {
+                        LocationId = skylab.Id,
+                        Title = "Networking: Meet your next investors",
+                        Description = "This is mock data, seeded by the backend.",
+                        Longitude = 12.512822403380198,
+                        Latitude = 55.78183460587695,
+                        ZLevel = 1,
+                        Date = DateTime.Now,
+                        DurationInHours = 4,
+                    },
+                    new Event
+                    {
+                        LocationId = skylab.Id,
+                        Title = "DanSTAR rocket launch",
+                        Description = "This is mock data, seeded by the backend.",
+                        Longitude = 12.512847682376417,
+                        Latitude = 55.78172089043085,
+                        ZLevel = 1,
+                        Date = DateTime.Now,
+                        DurationInHours = 4,
+                    },
+                    new Event
+                    {
+                        LocationId = skylab.Id,
+                        Title = "Tech startup assembly meeting",
+                        Description = "This is mock data, seeded by the backend.",
+                        Longitude = 12.512898776644477,
+                        Latitude = 55.781836285833634,
+                        ZLevel = 2,
+                        Date = DateTime.Now,
+                        DurationInHours = 4,
+                    }
+                };
+
+                context.AddRange(events);
                 context.AddRange(coordinates);
                 context.SaveChanges();
             }

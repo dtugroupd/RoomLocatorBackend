@@ -13,5 +13,6 @@ namespace RoomLocator.Domain.ViewModels
         public double Latitude { get; set; }
         public double Zoom { get; set; }
         public IEnumerable<SectionViewModel> Sections { get; set; }
+        public IEnumerable<EventViewModel> Events { get; set; }
     }
 }

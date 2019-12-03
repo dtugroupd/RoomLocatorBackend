@@ -39,14 +39,11 @@ namespace RoomLocator.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    Type = table.Column<string>(nullable: true),
+                    ZLevel = table.Column<int>(nullable: false),
+                    Type = table.Column<int>(nullable: false),
+                    Provider = table.Column<int>(nullable: false),
                     Longitude = table.Column<double>(nullable: false),
-                    Latitude = table.Column<double>(nullable: false),
-                    TimeStamp = table.Column<DateTime>(nullable: false),
-                    Unit = table.Column<string>(nullable: true),
-                    Value = table.Column<double>(nullable: false),
-                    Status = table.Column<string>(nullable: true)
+                    Latitude = table.Column<double>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -76,7 +73,8 @@ namespace RoomLocator.Data.Migrations
                     FirstName = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: true),
                     Email = table.Column<string>(nullable: true),
-                    ProfileImage = table.Column<string>(nullable: true)
+                    ProfileImage = table.Column<string>(nullable: true),
+                    UserIsDeleted = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -93,6 +91,33 @@ namespace RoomLocator.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Values", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Events",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    Date = table.Column<DateTime>(nullable: false),
+                    Title = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    DurationInHours = table.Column<double>(nullable: false),
+                    DurationApproximated = table.Column<bool>(nullable: false),
+                    Longitude = table.Column<double>(nullable: false),
+                    Latitude = table.Column<double>(nullable: false),
+                    Speakers = table.Column<string>(nullable: true),
+                    ZLevel = table.Column<int>(nullable: false),
+                    LocationId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Events", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Events_Locations_LocationId",
+                        column: x => x.LocationId,
+                        principalTable: "Locations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -159,6 +184,52 @@ namespace RoomLocator.Data.Migrations
                         principalTable: "Surveys",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Feedbacks",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    UserId = table.Column<string>(nullable: true),
+                    LocationId = table.Column<string>(nullable: true),
+                    Vote = table.Column<bool>(nullable: true),
+                    TimeStamp = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Feedbacks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Feedbacks_Locations_LocationId",
+                        column: x => x.LocationId,
+                        principalTable: "Locations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Feedbacks_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserDisclaimers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    UserId = table.Column<string>(nullable: false),
+                    HasAcceptedDisclaimer = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserDisclaimers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserDisclaimers_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -247,6 +318,21 @@ namespace RoomLocator.Data.Migrations
                 column: "SectionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Events_LocationId",
+                table: "Events",
+                column: "LocationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Feedbacks_LocationId",
+                table: "Feedbacks",
+                column: "LocationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Feedbacks_UserId",
+                table: "Feedbacks",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_QuestionAnswers_QuestionId",
                 table: "QuestionAnswers",
                 column: "QuestionId");
@@ -283,6 +369,12 @@ namespace RoomLocator.Data.Migrations
                 column: "SurveyId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UserDisclaimers_UserId",
+                table: "UserDisclaimers",
+                column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserRoles_LocationId",
                 table: "UserRoles",
                 column: "LocationId");
@@ -312,10 +404,19 @@ namespace RoomLocator.Data.Migrations
                 name: "Coordinates");
 
             migrationBuilder.DropTable(
+                name: "Events");
+
+            migrationBuilder.DropTable(
+                name: "Feedbacks");
+
+            migrationBuilder.DropTable(
                 name: "QuestionAnswers");
 
             migrationBuilder.DropTable(
                 name: "Sensors");
+
+            migrationBuilder.DropTable(
+                name: "UserDisclaimers");
 
             migrationBuilder.DropTable(
                 name: "UserRoles");

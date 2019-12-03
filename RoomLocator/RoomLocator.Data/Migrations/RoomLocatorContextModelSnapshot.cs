@@ -39,9 +39,6 @@ namespace RoomLocator.Data.Migrations
                     b.ToTable("Coordinates");
                 });
 
-<<<<<<< HEAD
-            modelBuilder.Entity("RoomLocator.Domain.Models.Location", b =>
-=======
             modelBuilder.Entity("RoomLocator.Domain.Models.Event", b =>
                 {
                     b.Property<string>("Id")
@@ -55,11 +52,21 @@ namespace RoomLocator.Data.Migrations
 
                     b.Property<double>("DurationInHours");
 
+                    b.Property<double>("Latitude");
+
+                    b.Property<string>("LocationId");
+
+                    b.Property<double>("Longitude");
+
                     b.Property<string>("Speakers");
 
                     b.Property<string>("Title");
 
+                    b.Property<int>("ZLevel");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("LocationId");
 
                     b.ToTable("Events");
                 });
@@ -69,6 +76,8 @@ namespace RoomLocator.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("LocationId");
+
                     b.Property<DateTime>("TimeStamp");
 
                     b.Property<string>("UserId");
@@ -77,13 +86,14 @@ namespace RoomLocator.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("LocationId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Feedbacks");
                 });
 
-            modelBuilder.Entity("RoomLocator.Domain.Models.MazeMapSection", b =>
->>>>>>> fa9010ed5097d901a0223242f4c70104772ad054
+            modelBuilder.Entity("RoomLocator.Domain.Models.Location", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -155,26 +165,14 @@ namespace RoomLocator.Data.Migrations
                     b.ToTable("Roles");
                 });
 
-<<<<<<< HEAD
             modelBuilder.Entity("RoomLocator.Domain.Models.Section", b =>
-=======
-            modelBuilder.Entity("RoomLocator.Domain.Models.Sensor", b =>
->>>>>>> fa9010ed5097d901a0223242f4c70104772ad054
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-<<<<<<< HEAD
                     b.Property<string>("LocationId");
 
                     b.Property<string>("SurveyId");
-=======
-                    b.Property<double>("Latitude");
-
-                    b.Property<double>("Longitude");
-
-                    b.Property<int>("Provider");
->>>>>>> fa9010ed5097d901a0223242f4c70104772ad054
 
                     b.Property<int>("Type");
 
@@ -182,15 +180,31 @@ namespace RoomLocator.Data.Migrations
 
                     b.HasKey("Id");
 
-<<<<<<< HEAD
                     b.HasIndex("LocationId");
 
                     b.HasIndex("SurveyId");
 
                     b.ToTable("Sections");
-=======
+                });
+
+            modelBuilder.Entity("RoomLocator.Domain.Models.Sensor", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<double>("Latitude");
+
+                    b.Property<double>("Longitude");
+
+                    b.Property<int>("Provider");
+
+                    b.Property<int>("Type");
+
+                    b.Property<int>("ZLevel");
+
+                    b.HasKey("Id");
+
                     b.ToTable("Sensors");
->>>>>>> fa9010ed5097d901a0223242f4c70104772ad054
                 });
 
             modelBuilder.Entity("RoomLocator.Domain.Models.Survey", b =>
@@ -227,7 +241,24 @@ namespace RoomLocator.Data.Migrations
                     b.ToTable("SurveyAnswers");
                 });
 
-<<<<<<< HEAD
+            modelBuilder.Entity("RoomLocator.Domain.Models.UserDisclaimer", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("HasAcceptedDisclaimer");
+
+                    b.Property<string>("UserId")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("UserDisclaimers");
+                });
+
             modelBuilder.Entity("RoomLocator.Domain.Models.UserRole", b =>
                 {
                     b.Property<string>("Id")
@@ -250,40 +281,6 @@ namespace RoomLocator.Data.Migrations
                     b.HasIndex("UserId", "RoleId", "LocationId")
                         .IsUnique()
                         .HasFilter("[LocationId] IS NOT NULL");
-
-                    b.ToTable("UserRoles");
-                });
-
-            modelBuilder.Entity("RoomLocator.Domain.Sensor", b =>
-=======
-            modelBuilder.Entity("RoomLocator.Domain.Models.UserDisclaimer", b =>
->>>>>>> fa9010ed5097d901a0223242f4c70104772ad054
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<bool>("HasAcceptedDisclaimer");
-
-                    b.Property<string>("UserId")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("UserDisclaimers");
-                });
-
-            modelBuilder.Entity("RoomLocator.Domain.Models.UserRole", b =>
-                {
-                    b.Property<string>("UserId");
-
-                    b.Property<string>("RoleId");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("RoleId");
 
                     b.ToTable("UserRoles");
                 });
@@ -330,26 +327,27 @@ namespace RoomLocator.Data.Migrations
                 {
                     b.HasOne("RoomLocator.Domain.Models.Section", "MazeMapSection")
                         .WithMany("Coordinates")
-<<<<<<< HEAD
                         .HasForeignKey("SectionId");
-=======
-                        .HasForeignKey("MazeMapSectionId")
+                });
+
+            modelBuilder.Entity("RoomLocator.Domain.Models.Event", b =>
+                {
+                    b.HasOne("RoomLocator.Domain.Models.Location", "Location")
+                        .WithMany("Events")
+                        .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("RoomLocator.Domain.Models.Feedback", b =>
                 {
+                    b.HasOne("RoomLocator.Domain.Models.Location", "Location")
+                        .WithMany("Feedbacks")
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("RoomLocator.Domain.User", "User")
                         .WithMany("Feedbacks")
                         .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("RoomLocator.Domain.Models.MazeMapSection", b =>
-                {
-                    b.HasOne("RoomLocator.Domain.Models.Survey", "Survey")
-                        .WithMany("MazeMapSections")
-                        .HasForeignKey("SurveyId");
->>>>>>> fa9010ed5097d901a0223242f4c70104772ad054
                 });
 
             modelBuilder.Entity("RoomLocator.Domain.Models.Question", b =>
