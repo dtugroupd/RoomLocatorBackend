@@ -72,8 +72,11 @@ namespace RoomLocator.Data.Services
             await _context.Users.AddAsync(user);
             await _context.UserDisclaimers.AddAsync(new UserDisclaimer(user.Id, true));
 
+            var userCount = await _context.Users.CountAsync();
+            var roleName = userCount == 0 ? "admin" : "student";
+
             var studentRoleId = await _context.Roles
-                .Where(x => x.Name == "student")
+                .Where(x => x.Name == roleName)
                 .Select(x => x.Id)
                 .FirstOrDefaultAsync();
 
@@ -180,9 +183,12 @@ namespace RoomLocator.Data.Services
             
             await _context.Users.AddAsync(userToCreate);
             await _context.UserDisclaimers.AddAsync(new UserDisclaimer(userToCreate.Id, true));
+            
+            var userCount = await _context.Users.CountAsync();
+            var roleName = userCount == 0 ? "admin" : "student";
 
             var studentRoleId = await _context.Roles
-                .Where(x => x.Name == "student")
+                .Where(x => x.Name == roleName)
                 .Select(x => x.Id)
                 .FirstOrDefaultAsync();
             await _context.UserRoles.AddAsync(new UserRole {UserId = userToCreate.Id, RoleId = studentRoleId});
