@@ -112,8 +112,11 @@ namespace RoomLocator.Data.Services
                 .Where(x => x.UserId == user.Id)
                 .FirstOrDefaultAsync();
 
-            _context.UserRoles.Remove(userRoles);
-            await _context.SaveChangesAsync();
+            if (userRoles != null)
+            {
+                _context.UserRoles.Remove(userRoles);
+                await _context.SaveChangesAsync();
+            }
 
             var roleId = await _context.Roles
                 .Where(x => x.Name == roleName)
