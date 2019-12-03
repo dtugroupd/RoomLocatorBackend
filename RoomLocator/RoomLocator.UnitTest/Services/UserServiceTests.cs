@@ -18,10 +18,10 @@ namespace RoomLocator.UnitTest.Services
     public class UserServiceTests : BaseTest
     {
         [Fact]
-        public async Task Create_CreatesTheUser_AssignsStudentRole()
+        public async Task Create_CreatesTheUser_AssignsAdminRoleFirstUser()
         {
             const string studentId = "s123456";
-            const string expectedRole = "student";
+            const string expectedRole = "admin";
 
             using (var context = new RoomLocatorContext(Options))
             {
