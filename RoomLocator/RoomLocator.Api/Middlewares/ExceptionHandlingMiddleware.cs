@@ -23,6 +23,7 @@ public class ExceptionHandlingMiddleware
             { typeof(DuplicateException), HttpStatusCode.Conflict },
 //            { typeof(DuplicationException), HttpStatusCode.Conflict },
             { typeof(InvalidRequestException), HttpStatusCode.BadRequest },
+            { typeof(UnauthorizedException), HttpStatusCode.Unauthorized },
             { typeof(Exception), HttpStatusCode.InternalServerError },
         };
 
