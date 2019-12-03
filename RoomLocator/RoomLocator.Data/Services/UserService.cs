@@ -51,6 +51,8 @@ namespace RoomLocator.Data.Services
                 .ProjectTo<UserViewModel>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(x => x.StudentId == studentId);
 
+            if (user == null) return null;
+
             if (user.Roles.Contains("admin"))
             {
                 user.Roles.AddRange(await _context.Roles.Where(x => !user.Roles.Contains(x.Name)).Select(x => x.Name).ToListAsync());                
