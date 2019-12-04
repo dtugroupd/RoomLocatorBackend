@@ -22,7 +22,7 @@ namespace RoomLocator.UnitTest.Mappings
             };
             var adminRole = new Role
             {
-                Name = "admin"
+                Name = "admin",
             };
 
             var user = new User
@@ -33,11 +33,13 @@ namespace RoomLocator.UnitTest.Mappings
                 {
                     new UserRole
                     {
-                        Role = studentRole
+                        Role = studentRole,
+                        LocationId = null
                     },
                     new UserRole()
                     {
-                        Role = adminRole
+                        Role = adminRole,
+                        LocationId = null
                     }
                 }
             };
@@ -46,8 +48,8 @@ namespace RoomLocator.UnitTest.Mappings
             
             Assert.Equal(2, mappedUser.Roles.Count());
 
-            Assert.Contains(studentRole.Name, mappedUser.Roles);
-            Assert.Contains(adminRole.Name, mappedUser.Roles);
+            Assert.Contains(studentRole.Name, mappedUser.Roles.Select(x => x.Name));
+            Assert.Contains(adminRole.Name, mappedUser.Roles.Select(x => x.Name));
         }
     }
 }
