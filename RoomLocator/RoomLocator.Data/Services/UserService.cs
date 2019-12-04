@@ -53,9 +53,14 @@ namespace RoomLocator.Data.Services
 
             if (user == null) return null;
 
-            if (user.Roles.Contains("admin"))
+            if (user.Roles.Exists(x => x.Name == "admin"))
             {
-                user.Roles.AddRange(await _context.Roles.Where(x => !user.Roles.Contains(x.Name)).Select(x => x.Name).ToListAsync());                
+                user.Roles.AddRange(
+                    await _context.Roles
+                        .Where(x => !user.Roles.Exists(y => y.Name == x.Name))
+                        .ProjectTo<RoleViewModel>(_mapper.ConfigurationProvider)
+                        .ToListAsync()
+                    );                
             }
 
             return user;
