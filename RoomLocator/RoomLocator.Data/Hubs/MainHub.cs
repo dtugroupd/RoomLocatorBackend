@@ -23,7 +23,10 @@ namespace RoomLocator.Data.Hubs
         public override async Task OnConnectedAsync()
         {
             var connectionId = Context.ConnectionId;
-            var user = await _userService.GetByStudentId(Context.User.StudentId());
+            var studentId = Context.User.StudentId();
+            await Groups.AddToGroupAsync(connectionId, $"user/{studentId}");
+            
+            _logger.LogInformation("User \"{StudentId}\" connection to the websocket with connectionId {ConnectionId}'", studentId, connectionId);
 
             await base.OnConnectedAsync();
         }

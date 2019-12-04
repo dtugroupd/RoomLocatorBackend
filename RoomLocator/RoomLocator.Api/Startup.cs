@@ -109,6 +109,17 @@ namespace RoomLocator.Api
                         context.Principal.AddIdentity(appIdentity);
 
                         return Task.CompletedTask;
+                    },
+                    OnMessageReceived = context => {
+                        var accessToken = context.Request.Query["access_token"];
+                        // If the request is for our hub...
+                        if (!string.IsNullOrEmpty(accessToken) &&
+                            context.Request.Path.Value.StartsWith("/api/socket")) {
+                            // Read the token out of the query string
+                            context.Token = accessToken;
+                        }
+
+                        return Task.CompletedTask;
                     }
                 };
             });
@@ -165,7 +176,7 @@ namespace RoomLocator.Api
             {
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
-                app.UseCors(builder =>
+                app.UseCors(builder => 
                 {
                     builder.AllowCredentials();
                     builder.WithOrigins("https://se2-webapp04.compute.dtu.dk");
@@ -177,8 +188,8 @@ namespace RoomLocator.Api
 
             app.UseMiddleware<ExceptionHandlingMiddleware>();
             app.UseHttpsRedirection();
-            app.UseSignalR(routes => { routes.MapHub<MainHub>("/api/connect"); });
             app.UseAuthentication();
+            app.UseSignalR(routes => { routes.MapHub<MainHub>("/api/socket"); });
             app.UseMvc();
             
             context.Database.Migrate();
