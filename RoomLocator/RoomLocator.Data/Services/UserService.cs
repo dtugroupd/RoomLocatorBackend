@@ -230,5 +230,17 @@ namespace RoomLocator.Data.Services
             
             return UserDisclaimerViewModel.Accepted();
         }
+
+        public async Task EnsureAdmin(string studentId, string locationId = null)
+        {
+            var user = await _context.Users
+                .ProjectTo<UserViewModel>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync(x => x.StudentId == studentId);
+
+            if (user.IsGeneralAdmin) return;
+            if (user.Roles.Exists(x => x.Name == "admin" && x.LocationId == locationId)) return;
+
+            throw ExceptionFactory.Forbidden();
+        }
     }
 }

@@ -17,5 +17,6 @@ namespace Shared
         /// </summary>
         /// <returns></returns>
         public static UnauthorizedException Unauthorized() => new UnauthorizedException();
+        public static ForbiddenException Forbidden() => new ForbiddenException();
     }
 }

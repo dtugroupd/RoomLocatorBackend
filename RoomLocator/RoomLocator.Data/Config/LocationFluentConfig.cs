@@ -21,6 +21,10 @@ namespace RoomLocator.Data.Config
                 .HasMany(x => x.Coordinates)
                 .WithOne(x => x.Location)
                 .HasForeignKey(x => x.LocationId);
+
+            builder
+                .HasIndex(x => x.Name)
+                .IsUnique();
         }
     }
 }

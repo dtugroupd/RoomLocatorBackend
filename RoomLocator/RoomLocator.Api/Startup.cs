@@ -26,6 +26,7 @@ using RoomLocator.Data.Services;
 using RoomLocator.Domain.Config;
 using RoomLocator.Domain.Models.CredentialsModels;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Shared.Extentions;
 
 namespace RoomLocator.Api
 {
@@ -93,7 +94,7 @@ namespace RoomLocator.Api
                     OnTokenValidated = context =>
                     {
                         var userService = context.HttpContext.RequestServices.GetRequiredService<UserService>();
-                        var studentId = context.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+                        var studentId = context.Principal.StudentId();
 
                         var user = userService.GetByStudentId(studentId).GetAwaiter().GetResult();
 
@@ -104,7 +105,7 @@ namespace RoomLocator.Api
 
                         if (user?.Roles == null) return Task.CompletedTask;
 
-                        var appClaims = user.Roles.Select(x => new Claim(ClaimTypes.Role, x));
+                        var appClaims = user.Roles.Select(x => new Claim(ClaimTypes.Role, x.Name));
                         var appIdentity = new ClaimsIdentity(appClaims);
                         context.Principal.AddIdentity(appIdentity);
 
