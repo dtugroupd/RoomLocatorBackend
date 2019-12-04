@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using RoomLocator.Data.Hubs;
 using RoomLocator.Data.Services;
 using RoomLocator.Domain.ViewModels;
 using Shared.Extentions;
@@ -19,10 +21,12 @@ namespace RoomLocator.Api.Controllers
     public class UserController : ControllerBase
     {
         private readonly UserService _userService;
+        private readonly IHubContext<MainHub> _hub;
 
-        public UserController(UserService userService)
+        public UserController(UserService userService, IHubContext<MainHub> hub)
         {
             _userService = userService;
+            _hub = hub;
         }
 
         [HttpGet("me")]
@@ -31,6 +35,15 @@ namespace RoomLocator.Api.Controllers
             var user = await _userService.GetByStudentId(User.StudentId());
 
             return user;
+        }
+
+        [HttpPost("message/{id}")]
+        [AllowAnonymous]
+        public async Task<ActionResult> SendMessage(string id)
+        {
+//            await _hub.Clients.All.SendAsync("message", message);
+            await _hub.Clients.Groups($"user/{id}").SendAsync("message", await _userService.GetByStudentId(id));
+            return NoContent();
         }
 
         [HttpGet]
