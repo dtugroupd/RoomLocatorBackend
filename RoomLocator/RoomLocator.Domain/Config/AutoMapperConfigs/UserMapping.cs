@@ -11,11 +11,7 @@ namespace RoomLocator.Domain.Config.AutoMapperConfigs
             CreateMap<User, UserViewModel>()
                 .ForMember(dest => dest.Roles,
                     opt => opt.MapFrom(from => from.UserRoles.Select(
-                        ur => new RoleViewModel {
-                            Name = ur.Role.Name,
-                            LocationName = ur.Location.Name,
-                            LocationId = ur.LocationId
-                        })));
+                        ur => new RoleViewModel(ur))));
             CreateMap<CnUserViewModel, UserViewModel>()
                 .ForMember(dest => dest.FirstName,
                     opt => opt.MapFrom(from => from.GivenName))
