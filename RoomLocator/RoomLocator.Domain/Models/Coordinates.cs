@@ -7,9 +7,11 @@
     {
         public string Id { get; set; }
         public string SectionId { get; set; }
+        public string LocationId { get; set; }
         public int Index { get; set; }
         public double Longitude { get; set; }
         public double Latitude { get; set; }
         public virtual Section MazeMapSection { get; set; }
+        public virtual Location Location { get; set; }
     }
 }

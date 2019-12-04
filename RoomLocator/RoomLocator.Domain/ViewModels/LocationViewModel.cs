@@ -14,5 +14,6 @@ namespace RoomLocator.Domain.ViewModels
         public double Zoom { get; set; }
         public IEnumerable<SectionViewModel> Sections { get; set; }
         public IEnumerable<EventViewModel> Events { get; set; }
+        public IEnumerable<Coordinates> Coordinates { get; set; }
     }
 }

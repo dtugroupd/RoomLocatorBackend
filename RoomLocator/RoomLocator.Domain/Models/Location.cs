@@ -14,6 +14,7 @@ namespace RoomLocator.Domain.Models
         public double Longitude { get; set; }
         public double Latitude { get; set; }
         public double Zoom { get; set; }
+        public virtual IEnumerable<Coordinates> Coordinates { get; set; }
         public virtual IEnumerable<Section> Sections { get; set; }
         public virtual IEnumerable<Feedback> Feedbacks { get; set; }
         public virtual IEnumerable<Event> Events { get; set; }

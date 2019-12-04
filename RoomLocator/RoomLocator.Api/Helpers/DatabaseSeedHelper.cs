@@ -224,6 +224,7 @@ namespace RoomLocator.Api.Helpers
                     Latitude = 55.7868826
                 };
 
+
                 var skylab = new Location
                 {
                     Name = "Skylab",
@@ -234,6 +235,101 @@ namespace RoomLocator.Api.Helpers
 
                 context.Add(library);
                 context.Add(skylab);
+                context.SaveChanges();
+
+                var libraryCoordinates = new List<Coordinates>
+                {
+                    new Coordinates {
+                        LocationId = library.Id,
+                        Longitude = 12.522826451499327,
+                        Latitude = 55.7868407920258,
+                        Index = 0
+                    },
+                    new Coordinates
+                    {
+                        LocationId = library.Id,
+                        Longitude =  12.523636754439451,
+                        Latitude = 55.78669774067555,
+                        Index = 1
+                    },
+                    new Coordinates
+                    {
+                        LocationId = library.Id,
+                        Longitude = 12.523772219883227,
+                        Latitude = 55.78695031346959,
+                        Index = 2
+                    },
+                    new Coordinates
+                    {
+                        LocationId = library.Id,
+                        Longitude = 12.522979520197367,
+                        Latitude = 55.78708626864673,
+                        Index = 3
+                    },
+                    new Coordinates
+                    {
+                        LocationId = library.Id,
+                        Longitude = 12.522826451499327,
+                        Latitude = 55.7868407920258,
+                        Index = 4
+                    }
+                };
+
+                var skylabCoordinates = new List<Coordinates>
+                {
+                    new Coordinates
+                    {
+                        LocationId = skylab.Id,
+                        Longitude = 12.51258206866791,
+                        Latitude = 55.78165062589744,
+                        Index = 0
+                    },
+                    new Coordinates
+                    {
+                        LocationId = skylab.Id,
+                        Longitude = 12.512980552976444,
+                        Latitude = 55.7815838769842,
+                        Index = 1
+                    },
+                    new Coordinates
+                    {
+                        LocationId = skylab.Id,
+                        Longitude = 12.513094596103514,
+                        Latitude = 55.78178259745198,
+                        Index = 2
+                    },
+                    new Coordinates
+                    {
+                        LocationId = skylab.Id,
+                        Longitude = 12.513271688830883,
+                        Latitude = 55.781749152341774,
+                        Index = 3
+                    },
+                    new Coordinates
+                    {
+                        LocationId = skylab.Id,
+                        Longitude = 12.51334689318358,
+                        Latitude = 55.78191536847402,
+                        Index = 4
+                    },
+                    new Coordinates
+                    {
+                        LocationId = skylab.Id,
+                        Longitude = 12.512788761932086,
+                        Latitude = 55.782000745601636,
+                        Index = 5
+                    },
+                    new Coordinates
+                    {
+                        LocationId = skylab.Id,
+                        Longitude = 12.51258206866791,
+                        Latitude = 55.78165062589744,
+                        Index = 6
+                    },
+                };
+
+                context.AddRange(libraryCoordinates);
+                context.AddRange(skylabCoordinates);
                 context.SaveChanges();
 
                 /* ######################

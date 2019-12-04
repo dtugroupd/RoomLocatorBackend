@@ -38,7 +38,7 @@ namespace RoomLocator.Api.Controllers
             return Ok(await _service.GetAll());
         }
         
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
         [HttpPost("[action]")]
         public async Task<ActionResult<EventViewModel>> Create([FromBody] EventInputModel eventInput)
         {
@@ -46,7 +46,7 @@ namespace RoomLocator.Api.Controllers
             return CreatedAtRoute(nameof(GetEvent), new { id = createdEvent.Id }, createdEvent);
         }
 
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
         [HttpPut("[action]")]
         public async Task<ActionResult<EventViewModel>> Update([FromBody] EventUpdateInputModel eventInput)
         {
