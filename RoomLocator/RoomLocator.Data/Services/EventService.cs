@@ -37,11 +37,13 @@ namespace RoomLocator.Data.Services
 
         public async Task<EventViewModel> UpdateEvent(EventUpdateInputModel inputModel)
         {
-            var currentEvent = await _context.Events.FirstOrDefaultAsync(x => x.Id == inputModel.Id);
+            var currentEvent = await _context
+                .Events
+                .Include(e => e.Location)
+                .FirstOrDefaultAsync(x => x.Id == inputModel.Id);
             if (currentEvent == null) throw NotFoundException.NotExistsWithProperty<Event>(x => x.Id, inputModel.Id);
 
             _mapper.Map(inputModel, currentEvent);
-            //currentEvent = _mapper.Map<Event>(inputModel);
             await _context.SaveChangesAsync();
 
             return _mapper.Map<EventViewModel>(currentEvent);

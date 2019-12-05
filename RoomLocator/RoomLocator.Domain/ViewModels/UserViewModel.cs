@@ -14,5 +14,6 @@ namespace RoomLocator.Domain.ViewModels
         public List<RoleViewModel> Roles { get; set; }
         public bool UserIsDeleted { get; set; }
         public bool IsGeneralAdmin => Roles.Exists(x => x.Name == "admin" && string.IsNullOrWhiteSpace(x.LocationId));
+        public bool IsGeneralResearcher => Roles.Exists(x => x.Name == "researcher" && string.IsNullOrWhiteSpace(x.LocationId));
     }
 }
