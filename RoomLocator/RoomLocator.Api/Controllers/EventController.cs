@@ -63,7 +63,7 @@ namespace RoomLocator.Api.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpDelete("{id}")]
-        public async Task<ActionResult<EventViewModel>> Update(string id)
+        public async Task<ActionResult<EventViewModel>> Delete(string id)
         {
             await _service.DeleteEvent(id);
             return NoContent();
