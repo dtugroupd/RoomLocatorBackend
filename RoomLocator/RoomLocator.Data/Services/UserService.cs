@@ -45,6 +45,17 @@ namespace RoomLocator.Data.Services
 
         public async Task<UserViewModel> GetByStudentId(string studentId)
         {
+            #region Stupid Fix
+            /*    This is a incredibly stupid fix. If the first user fetch is removed, the app crashes when trying
+             *  to access it from the Frontend. This is a temporary fix until we find a better one. We need to find
+             *  out why this error is occuring...
+             */
+            await _context.Users
+                .Include(x => x.UserRoles)
+                .ThenInclude(x => x.Role)
+                .FirstOrDefaultAsync(x => x.StudentId == studentId);
+            #endregion End of Stupid Fix
+
             var user = await _context.Users
                 .Include(x => x.UserRoles)
                     .ThenInclude(x => x.Role)
