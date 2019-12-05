@@ -78,6 +78,7 @@ namespace RoomLocator.Data.Services
             _context.Remove(eventToDelete);
 
             await _context.SaveChangesAsync();
+            await _eventServiceHub.UpdateEvents();
         }
         
         public async Task<IEnumerable<EventViewModel>> GetAll()
