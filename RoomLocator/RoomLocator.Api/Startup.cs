@@ -22,6 +22,7 @@ using RoomLocator.Api.Helpers;
 using RoomLocator.Api.Middlewares;
 using RoomLocator.Data.Config;
 using RoomLocator.Data.Hubs;
+using RoomLocator.Data.Hubs.Services;
 using RoomLocator.Data.Services;
 using RoomLocator.Domain.Config;
 using RoomLocator.Domain.Models.CredentialsModels;
@@ -71,6 +72,9 @@ namespace RoomLocator.Api
             services.AddScoped<CampusNetAuthService, CampusNetAuthService>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<EventService,EventService>();
+            
+            // SignalR Dependencies
+            services.AddScoped<UserServiceHub>();
             
             #region JWT Setup, Anders Wiberg Olsen, s165241
             services.AddAuthentication(options =>
