@@ -75,6 +75,7 @@ namespace RoomLocator.Api
             
             // SignalR Dependencies
             services.AddScoped<UserServiceHub>();
+            services.AddScoped<EventServiceHub>();
             
             #region JWT Setup, Anders Wiberg Olsen, s165241
             services.AddAuthentication(options =>
