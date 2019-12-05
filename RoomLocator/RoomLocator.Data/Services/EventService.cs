@@ -9,6 +9,7 @@ using RoomLocator.Domain.InputModels;
 using RoomLocator.Domain.Models;
 using RoomLocator.Domain.ViewModels;
 using Shared;
+using Shared.Extentions;
 
 namespace RoomLocator.Data.Services
 {
@@ -18,7 +19,13 @@ namespace RoomLocator.Data.Services
     /// </summary>
     public class EventService : BaseService
     {
-        public EventService(RoomLocatorContext context, IMapper mapper) : base(context, mapper) { }
+        private readonly UserService _userService;
+        private readonly TokenService _tokenService;
+
+        public EventService(RoomLocatorContext context, IMapper mapper, UserService userService, TokenService tokenService) : base(context, mapper) {
+            _userService = userService;
+            _tokenService = tokenService;
+        }
         
         public async Task<EventViewModel> Get(string id)
         {
@@ -47,6 +54,16 @@ namespace RoomLocator.Data.Services
             await _context.SaveChangesAsync();
 
             return _mapper.Map<EventViewModel>(currentEvent);
+        }
+
+        public async Task DeleteEvent(string id)
+        {
+            var eventToDelete = await _context.Events.FirstOrDefaultAsync(x => x.Id == id);
+
+            await _userService.EnsureAdmin(_tokenService.User.StudentId(), eventToDelete.LocationId);
+            _context.Remove(eventToDelete);
+
+            await _context.SaveChangesAsync();
         }
         
         public async Task<IEnumerable<EventViewModel>> GetAll()

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -58,6 +59,14 @@ namespace RoomLocator.Api.Controllers
             await _userService.EnsureAdmin(User.StudentId(), eventInput.LocationId);
 
             return Ok(await _service.UpdateEvent(eventInput));
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<EventViewModel>> Update(string id)
+        {
+            await _service.DeleteEvent(id);
+            return NoContent();
         }
     }
 }
