@@ -8,6 +8,9 @@ using Shared.Extentions;
 
 namespace RoomLocator.Data.Hubs
 {
+    /// <summary>
+    ///     <author>Anders Wiberg Olsen, s165241</author>
+    /// </summary>
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class MainHub : Hub
     {
@@ -24,7 +27,14 @@ namespace RoomLocator.Data.Hubs
         {
             var connectionId = Context.ConnectionId;
             var studentId = Context.User.StudentId();
-            await Groups.AddToGroupAsync(connectionId, $"user/{studentId}");
+            var user = await _userService.GetByStudentId(studentId);
+
+            await Groups.AddToGroupAsync(connectionId, studentId);
+
+            if (user.IsGeneralAdmin)
+            {
+                await Groups.AddToGroupAsync(connectionId, "admin");
+            }
             
             _logger.LogInformation("User \"{StudentId}\" connection to the websocket with connectionId {ConnectionId}'", studentId, connectionId);
 

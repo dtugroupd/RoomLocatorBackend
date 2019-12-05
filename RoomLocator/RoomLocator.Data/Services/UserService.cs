@@ -10,6 +10,7 @@ using RoomLocator.Domain.Models;
 using RoomLocator.Domain.ViewModels;
 using Shared;
 using System;
+using RoomLocator.Data.Hubs.Services;
 
 namespace RoomLocator.Data.Services
 {
@@ -18,7 +19,11 @@ namespace RoomLocator.Data.Services
     /// </summary>
     public class UserService : BaseService
     {
-        public UserService(RoomLocatorContext context, IMapper mapper) : base(context, mapper) { }
+        private readonly UserServiceHub _userServiceHub;
+        public UserService(RoomLocatorContext context, IMapper mapper, UserServiceHub userServiceHub) : base(context, mapper)
+        {
+            _userServiceHub = userServiceHub;
+        }
 
         public async Task<IEnumerable<UserViewModel>> Get()
         {
@@ -111,7 +116,11 @@ namespace RoomLocator.Data.Services
             await _context.UserRoles.AddAsync(studentUserRole);
             await _context.SaveChangesAsync();
 
-            return await Get(user.Id);
+            var userViewModel = await Get(user.Id);
+
+            await _userServiceHub.CreateUser(userViewModel);
+
+            return userViewModel;
         }
 
         /// <summary>
@@ -119,7 +128,6 @@ namespace RoomLocator.Data.Services
         /// </summary>
         public async Task<UserViewModel> UpdateRole(string studentId, string roleName)
         {
-
             var userExists = await _context.Users
                .AnyAsync(x => x.StudentId == studentId);
 
@@ -169,6 +177,8 @@ namespace RoomLocator.Data.Services
             await _context.UserRoles.AddAsync(studentUserRole);
             await _context.SaveChangesAsync();
 
+            await _userServiceHub.UpdateUserRole(user, Get());
+
             return await Get(user.Id);
         }
 
@@ -193,6 +203,8 @@ namespace RoomLocator.Data.Services
 
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
+
+            await _userServiceHub.DeleteUser(studentId);
 
             return await Get(user.Id);
         }
@@ -219,7 +231,11 @@ namespace RoomLocator.Data.Services
             await _context.UserRoles.AddAsync(new UserRole {UserId = userToCreate.Id, RoleId = studentRoleId});
             await _context.SaveChangesAsync();
 
-            return await GetByStudentId(model.UserName);
+            var user = await GetByStudentId(model.UserName);
+
+            await _userServiceHub.CreateUser(user);
+
+            return user;
         }
 
         public async Task<UserDisclaimerViewModel> HasAcceptedDisclaimer(string studentId)
