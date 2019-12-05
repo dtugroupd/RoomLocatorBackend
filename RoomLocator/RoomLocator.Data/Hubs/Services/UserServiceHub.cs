@@ -41,5 +41,10 @@ namespace RoomLocator.Data.Hubs.Services
             await _hub.Clients.Groups(studentId).SendAsync("deleted-user", studentId);
             await _hub.Clients.Groups("admin").SendAsync("deleted-user", studentId);
         }
+
+        public async Task CreateUser(UserViewModel user)
+        {
+            await _hub.Clients.Groups("admin").SendAsync("created-user", user);
+        }
     }
 }

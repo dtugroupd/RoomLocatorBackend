@@ -116,7 +116,11 @@ namespace RoomLocator.Data.Services
             await _context.UserRoles.AddAsync(studentUserRole);
             await _context.SaveChangesAsync();
 
-            return await Get(user.Id);
+            var userViewModel = await Get(user.Id);
+
+            await _userServiceHub.CreateUser(userViewModel);
+
+            return userViewModel;
         }
 
         /// <summary>
@@ -227,7 +231,11 @@ namespace RoomLocator.Data.Services
             await _context.UserRoles.AddAsync(new UserRole {UserId = userToCreate.Id, RoleId = studentRoleId});
             await _context.SaveChangesAsync();
 
-            return await GetByStudentId(model.UserName);
+            var user = await GetByStudentId(model.UserName);
+
+            await _userServiceHub.CreateUser(user);
+
+            return user;
         }
 
         public async Task<UserDisclaimerViewModel> HasAcceptedDisclaimer(string studentId)
