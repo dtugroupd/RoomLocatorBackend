@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace RoomLocator.UnitTest
@@ -19,5 +20,7 @@ namespace RoomLocator.UnitTest
 
             return mockSet;
         }
+        
+        public static ILogger<T> Logger<T>() => new Mock<ILogger<T>>().Object;
     }
 }

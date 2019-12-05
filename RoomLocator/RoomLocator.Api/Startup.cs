@@ -22,10 +22,12 @@ using RoomLocator.Api.Helpers;
 using RoomLocator.Api.Middlewares;
 using RoomLocator.Data.Config;
 using RoomLocator.Data.Hubs;
+using RoomLocator.Data.Hubs.Services;
 using RoomLocator.Data.Services;
 using RoomLocator.Domain.Config;
 using RoomLocator.Domain.Models.CredentialsModels;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Shared.Extentions;
 
 namespace RoomLocator.Api
 {
@@ -60,8 +62,8 @@ namespace RoomLocator.Api
             services.AddScoped<UserService, UserService>();
             services.AddScoped<TokenService, TokenService>();
             services.AddScoped<SensorService, SensorService>();
+            services.AddScoped<LocationService, LocationService>();
             services.AddScoped<ScadadataService, ScadadataService>();
-            services.AddScoped<MazeMapService, MazeMapService>();
             services.AddScoped<SurveyService, SurveyService>();
             services.AddScoped<ModcamService,ModcamService>();
             services.AddScoped<FeedbackService, FeedbackService>();
@@ -70,6 +72,10 @@ namespace RoomLocator.Api
             services.AddScoped<CampusNetAuthService, CampusNetAuthService>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<EventService,EventService>();
+            
+            // SignalR Dependencies
+            services.AddScoped<UserServiceHub>();
+            services.AddScoped<EventServiceHub>();
             
             #region JWT Setup, Anders Wiberg Olsen, s165241
             services.AddAuthentication(options =>
@@ -93,7 +99,7 @@ namespace RoomLocator.Api
                     OnTokenValidated = context =>
                     {
                         var userService = context.HttpContext.RequestServices.GetRequiredService<UserService>();
-                        var studentId = context.Principal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+                        var studentId = context.Principal.StudentId();
 
                         var user = userService.GetByStudentId(studentId).GetAwaiter().GetResult();
 
@@ -104,7 +110,7 @@ namespace RoomLocator.Api
 
                         if (user?.Roles == null) return Task.CompletedTask;
 
-                        var appClaims = user.Roles.Select(x => new Claim(ClaimTypes.Role, x));
+                        var appClaims = user.Roles.Select(x => new Claim(ClaimTypes.Role, x.Name));
                         var appIdentity = new ClaimsIdentity(appClaims);
                         context.Principal.AddIdentity(appIdentity);
 
@@ -194,8 +200,8 @@ namespace RoomLocator.Api
             
             context.Database.Migrate();
             DatabaseSeedHelper.SeedRoles(context);
+            DatabaseSeedHelper.SeedLocations(context);
             DatabaseSeedHelper.SeedSensors(context);
-            DatabaseSeedHelper.SeedMazeMapSections(context);
             if (env.IsDevelopment())
             {
                 DatabaseSeedHelper.SeedDemoSurveys(context);

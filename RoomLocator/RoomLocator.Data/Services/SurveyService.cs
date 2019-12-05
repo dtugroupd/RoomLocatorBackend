@@ -26,12 +26,12 @@ namespace RoomLocator.Data.Services
         {
         }
 
-        public async Task<SurveyViewModel> Get(int id)
+        public async Task<SurveyViewModel> Get(string id)
         {
             return await _context.Surveys.ProjectTo<SurveyViewModel>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<SurveyAnswerViewModel> GetSurveyAnswer(int id)
+        public async Task<SurveyAnswerViewModel> GetSurveyAnswer(string id)
         {
             return await _context.SurveyAnswers.ProjectTo<SurveyAnswerViewModel>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(x => x.Id == id);
         }
@@ -67,7 +67,7 @@ namespace RoomLocator.Data.Services
             await _context.AddAsync(surveyToCreate);
             await _context.SaveChangesAsync();
 
-            var section = _context.MazeMapSections.FirstOrDefault(x => x.Id == viewModel.SectionId);
+            var section = _context.Sections.FirstOrDefault(x => x.Id == viewModel.SectionId);
             section.SurveyId = surveyToCreate.Id;
             _context.Update(section);
 
@@ -127,7 +127,7 @@ namespace RoomLocator.Data.Services
             return _mapper.Map<SurveyAnswerViewModel>(surveyAnswerToCreate);
         }
 
-        public async Task<MemoryStream> GetSurveyAnswersCsvMemoryStream(int surveyId)
+        public async Task<MemoryStream> GetSurveyAnswersCsvMemoryStream(string surveyId)
         {
             var survey = _context.Surveys
                 .Include(s => s.SurveyAnswers)

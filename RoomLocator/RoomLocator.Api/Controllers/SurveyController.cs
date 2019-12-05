@@ -28,13 +28,13 @@ namespace RoomLocator.Api.Controllers
         }
 
         [HttpGet("{id}", Name = nameof(Get))]
-        public async Task<ActionResult<SurveyViewModel>> Get(int id)
+        public async Task<ActionResult<SurveyViewModel>> Get(string id)
         {
             return Ok(await _service.Get(id));
         }
 
         [HttpGet("SurveyAnswer/{id}", Name = nameof(GetSurveyAnswer))]
-        public async Task<ActionResult<SurveyAnswerViewModel>> GetSurveyAnswer(int id)
+        public async Task<ActionResult<SurveyAnswerViewModel>> GetSurveyAnswer(string id)
         {
             return Ok(await _service.GetSurveyAnswer(id));
         }
@@ -79,7 +79,7 @@ namespace RoomLocator.Api.Controllers
         }
 
         [HttpGet("[action]/{id}")]
-        public async Task<ActionResult> DownloadSurveyAnswers(int id)
+        public async Task<ActionResult> DownloadSurveyAnswers(string id)
         {
             try
             {

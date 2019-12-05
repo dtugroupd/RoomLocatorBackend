@@ -11,7 +11,8 @@ namespace RoomLocator.Data.Config
     {
         public void Configure(EntityTypeBuilder<UserRole> builder)
         {
-            builder.HasKey(x => new { x.UserId, x.RoleId });
+            builder.HasKey(x => x.Id);
+            builder.HasIndex(x => new { x.UserId, x.RoleId, x.LocationId }).IsUnique();
             builder
                 .HasOne(x => x.User)
                 .WithMany(x => x.UserRoles)
@@ -21,6 +22,11 @@ namespace RoomLocator.Data.Config
                 .HasOne(x => x.Role)
                 .WithMany(x => x.UserRoles)
                 .HasForeignKey(x => x.RoleId)
+                .OnDelete(DeleteBehavior.Cascade);
+            builder
+                .HasOne(x => x.Location)
+                .WithMany()
+                .HasForeignKey(x => x.LocationId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

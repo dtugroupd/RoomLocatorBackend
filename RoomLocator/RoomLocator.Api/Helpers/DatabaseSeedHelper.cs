@@ -18,7 +18,7 @@ namespace RoomLocator.Api.Helpers
         /// <param name="context"></param>
         public static void SeedRoles(RoomLocatorContext context)
         {
-            var roles = new[] {"admin", "researcher", "student"};
+            var roles = new[] { "admin", "researcher", "student" };
             var existingRoles = context.Roles.Select(x => x.Name.ToLower()).ToList();
             var missingRoleNames = new List<string>();
 
@@ -30,7 +30,7 @@ namespace RoomLocator.Api.Helpers
                 }
             }
 
-            var missingRoles = missingRoleNames.Select(x => new Role {Name = x.ToLower()});
+            var missingRoles = missingRoleNames.Select(x => new Role { Name = x.ToLower() });
 
             context.Roles.AddRange(missingRoles);
             context.SaveChanges();
@@ -202,82 +202,213 @@ namespace RoomLocator.Api.Helpers
             context.SaveChanges();
         }
         
-        public static void SeedMazeMapSections(RoomLocatorContext context)
+        public static void SeedLocations(RoomLocatorContext context)
         {
             // Should be removed when all sections are defined and created
-            if (context.MazeMapSections.Count() < 9)
+            if (context.Locations.Count() < 2)
             {
-                var sections = context.MazeMapSections;
-                context.RemoveRange(sections);
+                var locations = context.Locations;
+                context.RemoveRange(locations);
                 context.SaveChanges();
             }
+            
 
-            if (!context.MazeMapSections.Any())
+            if (!context.Locations.Any())
             {
-                // Test sections on ground floor
-                var mazeMapSection1 = new MazeMapSection
+                // Library location
+                var library = new Location
                 {
+                    Name = "Bibliotek",
+                    Zoom = 19.1,
+                    Longitude = 12.5233335,
+                    Latitude = 55.7868826
+                };
+
+
+                var skylab = new Location
+                {
+                    Name = "Skylab",
+                    Zoom = 19.7,
+                    Longitude = 12.512870194188451,
+                    Latitude = 55.781780056860384
+                };
+
+                context.Add(library);
+                context.Add(skylab);
+                context.SaveChanges();
+
+                var libraryCoordinates = new List<Coordinates>
+                {
+                    new Coordinates {
+                        LocationId = library.Id,
+                        Longitude = 12.522826451499327,
+                        Latitude = 55.7868407920258,
+                        Index = 0
+                    },
+                    new Coordinates
+                    {
+                        LocationId = library.Id,
+                        Longitude =  12.523636754439451,
+                        Latitude = 55.78669774067555,
+                        Index = 1
+                    },
+                    new Coordinates
+                    {
+                        LocationId = library.Id,
+                        Longitude = 12.523772219883227,
+                        Latitude = 55.78695031346959,
+                        Index = 2
+                    },
+                    new Coordinates
+                    {
+                        LocationId = library.Id,
+                        Longitude = 12.522979520197367,
+                        Latitude = 55.78708626864673,
+                        Index = 3
+                    },
+                    new Coordinates
+                    {
+                        LocationId = library.Id,
+                        Longitude = 12.522826451499327,
+                        Latitude = 55.7868407920258,
+                        Index = 4
+                    }
+                };
+
+                var skylabCoordinates = new List<Coordinates>
+                {
+                    new Coordinates
+                    {
+                        LocationId = skylab.Id,
+                        Longitude = 12.51258206866791,
+                        Latitude = 55.78165062589744,
+                        Index = 0
+                    },
+                    new Coordinates
+                    {
+                        LocationId = skylab.Id,
+                        Longitude = 12.512980552976444,
+                        Latitude = 55.7815838769842,
+                        Index = 1
+                    },
+                    new Coordinates
+                    {
+                        LocationId = skylab.Id,
+                        Longitude = 12.513094596103514,
+                        Latitude = 55.78178259745198,
+                        Index = 2
+                    },
+                    new Coordinates
+                    {
+                        LocationId = skylab.Id,
+                        Longitude = 12.513271688830883,
+                        Latitude = 55.781749152341774,
+                        Index = 3
+                    },
+                    new Coordinates
+                    {
+                        LocationId = skylab.Id,
+                        Longitude = 12.51334689318358,
+                        Latitude = 55.78191536847402,
+                        Index = 4
+                    },
+                    new Coordinates
+                    {
+                        LocationId = skylab.Id,
+                        Longitude = 12.512788761932086,
+                        Latitude = 55.782000745601636,
+                        Index = 5
+                    },
+                    new Coordinates
+                    {
+                        LocationId = skylab.Id,
+                        Longitude = 12.51258206866791,
+                        Latitude = 55.78165062589744,
+                        Index = 6
+                    },
+                };
+
+                context.AddRange(libraryCoordinates);
+                context.AddRange(skylabCoordinates);
+                context.SaveChanges();
+
+                /* ######################
+                 * Begin library sections 
+                 * ###################### */
+
+                // Test sections on ground floor
+                var Section1 = new Section
+                {
+                    LocationId = library.Id,
                     ZLevel = 1,
                 };
 
-                var mazeMapSection2 = new MazeMapSection
+                var Section2 = new Section
                 {
+                    LocationId = library.Id,
                     ZLevel = 1,
                 };
 
                 // All sections on first floor
-                var mazeMapSection3 = new MazeMapSection
+                var Section3 = new Section
                 {
+                    LocationId = library.Id,
                     ZLevel = 2,
-                    Type = LibrarySectionType.LOUNGE
+                    Type = SectionType.LOUNGE
                 };
 
-                var mazeMapSection4 = new MazeMapSection
+                var Section4 = new Section
                 {
+                    LocationId = library.Id,
                     ZLevel = 2,
-                    Type = LibrarySectionType.DATABAR
+                    Type = SectionType.DATABAR
                 };
 
-                var mazeMapSection5 = new MazeMapSection
+                var Section5 = new Section
                 {
+                    LocationId = library.Id,
                     ZLevel = 2,
-                    Type = LibrarySectionType.GROUP_STUDY
+                    Type = SectionType.GROUP_STUDY
                 };
 
-                var mazeMapSection6 = new MazeMapSection
+                var Section6 = new Section
                 {
+                    LocationId = library.Id,
                     ZLevel = 2,
-                    Type = LibrarySectionType.DATABAR
+                    Type = SectionType.DATABAR
                 };
 
-                var mazeMapSection7 = new MazeMapSection
+                var Section7 = new Section
                 {
+                    LocationId = library.Id,
                     ZLevel = 2,
-                    Type = LibrarySectionType.GROUP_STUDY
+                    Type = SectionType.GROUP_STUDY
                 };
 
-                var mazeMapSection8 = new MazeMapSection
+                var Section8 = new Section
                 {
+                    LocationId = library.Id,
                     ZLevel = 2,
-                    Type = LibrarySectionType.GROUP_STUDY
+                    Type = SectionType.GROUP_STUDY
                 };
 
-                var mazeMapSection9 = new MazeMapSection
+                var Section9 = new Section
                 {
+                    LocationId = library.Id,
                     ZLevel = 2,
-                    Type = LibrarySectionType.GROUP_STUDY
+                    Type = SectionType.GROUP_STUDY
 
                 };
 
-                context.Add(mazeMapSection1);
-                context.Add(mazeMapSection2);
-                context.Add(mazeMapSection3);
-                context.Add(mazeMapSection4);
-                context.Add(mazeMapSection5);
-                context.Add(mazeMapSection6);
-                context.Add(mazeMapSection7);
-                context.Add(mazeMapSection8);
-                context.Add(mazeMapSection9);
+                context.Add(Section1);
+                context.Add(Section2);
+                context.Add(Section3);
+                context.Add(Section4);
+                context.Add(Section5);
+                context.Add(Section6);
+                context.Add(Section7);
+                context.Add(Section8);
+                context.Add(Section9);
                 context.SaveChanges();
 
                 var coordinates = new List<Coordinates>
@@ -285,21 +416,21 @@ namespace RoomLocator.Api.Helpers
                     // Test section 1
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection1.Id,
+                        SectionId = Section1.Id,
                         Longitude = 12.523394936706552,
                         Latitude = 55.787009187536114,
                         Index = 0
                     },
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection1.Id,
+                        SectionId = Section1.Id,
                         Longitude = 12.52317152962101,
                         Latitude = 55.78704845759867,
                         Index = 1
                     },
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection1.Id,
+                        SectionId = Section1.Id,
                         Longitude = 12.523106783718134,
                         Latitude = 55.78693157515275,
                         Index = 2
@@ -307,14 +438,14 @@ namespace RoomLocator.Api.Helpers
                     },
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection1.Id,
+                        SectionId = Section1.Id,
                         Longitude = 12.523328398202466,
                         Latitude = 55.78689276418302,
                         Index = 3
                     },
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection1.Id,
+                        SectionId = Section1.Id,
                         Longitude = 12.523394936706552,
                         Latitude = 55.787009187536114,
                         Index = 4
@@ -323,35 +454,35 @@ namespace RoomLocator.Api.Helpers
                     // Test section 2
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection2.Id,
+                        SectionId = Section2.Id,
                         Longitude = 12.523259637399121,
                         Latitude = 55.786766267668895,
                         Index = 0
                     },
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection2.Id,
+                        SectionId = Section2.Id,
                         Longitude = 12.523328398202466,
                         Latitude = 55.78689276418302,
                         Index = 1
                     },
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection2.Id,
+                        SectionId = Section2.Id,
                         Longitude = 12.523106783718134,
                         Latitude = 55.78693157515275,
                         Index = 2
                     },
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection2.Id,
+                        SectionId = Section2.Id,
                         Longitude = 12.523038473405279,
                         Latitude = 55.78680352605781,
                         Index = 3
                     },
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection2.Id,
+                        SectionId = Section2.Id,
                         Longitude = 12.523259637399121,
                         Latitude = 55.786766267668895,
                         Index = 4
@@ -360,35 +491,35 @@ namespace RoomLocator.Api.Helpers
                     // 1st floor corner lounge
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection3.Id,
+                        SectionId = Section3.Id,
                         Longitude = 12.522992396101245,
                         Latitude = 55.78708067483939,
                         Index = 0
                     },
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection3.Id,
+                        SectionId = Section3.Id,
                         Longitude = 12.52296211062415,
                         Latitude = 55.787025664233454,
                         Index = 1
                     },
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection3.Id,
+                        SectionId = Section3.Id,
                         Longitude = 12.523103078712865,
                         Latitude = 55.78700090057603,
                         Index = 2
                     },
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection3.Id,
+                        SectionId = Section3.Id,
                         Longitude = 12.523133512544206,
                         Latitude = 55.787056448768766,
                         Index = 3
                     },
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection3.Id,
+                        SectionId = Section3.Id,
                         Longitude = 12.522992396101245,
                         Latitude = 55.78708067483939,
                         Index = 4
@@ -397,7 +528,7 @@ namespace RoomLocator.Api.Helpers
                     // 1st floor databar 1
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection4.Id,
+                        SectionId = Section4.Id,
                         Longitude = 12.523070611196516,
                         Latitude = 55.78688036166568,
                         Index = 0
@@ -405,7 +536,7 @@ namespace RoomLocator.Api.Helpers
 
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection4.Id,
+                        SectionId = Section4.Id,
                         Longitude = 12.523035424992003,
                         Latitude = 55.7868150048902,
                         Index = 1
@@ -414,7 +545,7 @@ namespace RoomLocator.Api.Helpers
 
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection4.Id,
+                        SectionId = Section4.Id,
                         Longitude = 12.523057303704121,
                         Latitude = 55.786811200586556,
                         Index = 2
@@ -423,7 +554,7 @@ namespace RoomLocator.Api.Helpers
 
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection4.Id,
+                        SectionId = Section4.Id,
                         Longitude = 12.523052804076087,
                         Latitude = 55.78680270866491,
                         Index = 3
@@ -431,7 +562,7 @@ namespace RoomLocator.Api.Helpers
 
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection4.Id,
+                        SectionId = Section4.Id,
                         Longitude = 12.523442220398778,
                         Latitude = 55.78673536458402,
                         Index = 4
@@ -439,7 +570,7 @@ namespace RoomLocator.Api.Helpers
 
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection4.Id,
+                        SectionId = Section4.Id,
                         Longitude = 12.523482255351013,
                         Latitude = 55.78680885135134,
                         Index = 5
@@ -447,7 +578,7 @@ namespace RoomLocator.Api.Helpers
 
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection4.Id,
+                        SectionId = Section4.Id,
                         Longitude = 12.523070611196516,
                         Latitude = 55.78688036166568,
                         Index = 6
@@ -456,7 +587,7 @@ namespace RoomLocator.Api.Helpers
                     // 1st floor group study 1
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection5.Id,
+                        SectionId = Section5.Id,
                         Longitude = 12.523482255351013,
                         Latitude = 55.78680885135134,
                         Index = 0
@@ -464,7 +595,7 @@ namespace RoomLocator.Api.Helpers
 
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection5.Id,
+                        SectionId = Section5.Id,
                         Longitude = 12.523447000092318,
                         Latitude = 55.786743509263715,
                         Index = 1
@@ -472,7 +603,7 @@ namespace RoomLocator.Api.Helpers
 
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection5.Id,
+                        SectionId = Section5.Id,
                         Longitude = 12.523641059141397,
                         Latitude = 55.78670979806952,
                         Index = 2
@@ -480,7 +611,7 @@ namespace RoomLocator.Api.Helpers
 
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection5.Id,
+                        SectionId = Section5.Id,
                         Longitude = 12.52374629327332,
                         Latitude = 55.786901383480824,
                         Index = 3
@@ -488,7 +619,7 @@ namespace RoomLocator.Api.Helpers
 
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection5.Id,
+                        SectionId = Section5.Id,
                         Longitude = 12.523572349344818,
                         Latitude = 55.78693143358913,
                         Index = 4
@@ -496,7 +627,7 @@ namespace RoomLocator.Api.Helpers
 
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection5.Id,
+                        SectionId = Section5.Id,
                         Longitude = 12.523502485736486,
                         Latitude = 55.78680528200479,
                         Index = 5
@@ -504,7 +635,7 @@ namespace RoomLocator.Api.Helpers
 
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection5.Id,
+                        SectionId = Section5.Id,
                         Longitude = 12.523482255351013,
                         Latitude = 55.78680885135134,
                         Index = 6
@@ -513,42 +644,42 @@ namespace RoomLocator.Api.Helpers
                     // 1st floor databar 2
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection6.Id,
+                        SectionId = Section6.Id,
                         Longitude = 12.523381586623486,
                         Latitude = 55.787013378777004,
                         Index = 0
                     },
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection6.Id,
+                        SectionId = Section6.Id,
                         Longitude = 12.523356818522757,
                         Latitude = 55.78696882184383,
                         Index = 1
                     },
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection6.Id,
+                        SectionId = Section6.Id,
                         Longitude = 12.523572349344818,
                         Latitude = 55.78693143358913,
                         Index = 2
                     },
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection6.Id,
+                        SectionId = Section6.Id,
                         Longitude = 12.52374629327332,
                         Latitude = 55.786901383480824,
                         Index = 3
                     },
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection6.Id,
+                        SectionId = Section6.Id,
                         Longitude = 12.52377028372436,
                         Latitude = 55.78694572525518,
                         Index = 4
                     },
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection6.Id,
+                        SectionId = Section6.Id,
                         Longitude = 12.523381586623486,
                         Latitude = 55.787013378777004,
                         Index = 5
@@ -557,42 +688,42 @@ namespace RoomLocator.Api.Helpers
                     // 1st floor group study 2
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection7.Id,
+                        SectionId = Section7.Id,
                         Longitude = 12.523356818522757,
                         Latitude = 55.78696882184383,
                         Index = 0
                     },
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection7.Id,
+                        SectionId = Section7.Id,
                         Longitude = 12.523339474902428,
                         Latitude = 55.78693753051286,
                         Index = 1
                     },
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection7.Id,
+                        SectionId = Section7.Id,
                         Longitude = 12.5235550453948,
                         Latitude = 55.78689997276197,
                         Index = 2
                     },
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection7.Id,
+                        SectionId = Section7.Id,
                         Longitude = 12.5235550453948,
                         Latitude = 55.78689997276197,
                         Index = 3
                     },
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection7.Id,
+                        SectionId = Section7.Id,
                         Longitude = 12.523572349344818,
                         Latitude = 55.78693143358913,
                         Index = 4
                     },
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection7.Id,
+                        SectionId = Section7.Id,
                         Longitude = 12.523356818522757,
                         Latitude = 55.78696882184383,
                         Index = 5
@@ -601,35 +732,35 @@ namespace RoomLocator.Api.Helpers
                     // 1st floor group study 3
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection8.Id,
+                        SectionId = Section8.Id,
                         Longitude = 12.523133512544206,
                         Latitude = 55.787056448768766,
                         Index = 0
                     },
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection8.Id,
+                        SectionId = Section8.Id,
                         Longitude = 12.523091692964897,
                         Latitude = 55.78698056999656,
                         Index = 1
                     },
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection8.Id,
+                        SectionId = Section8.Id,
                         Longitude = 12.523339474902428,
                         Latitude = 55.78693753051286,
                         Index = 2
                     },
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection8.Id,
+                        SectionId = Section8.Id,
                         Longitude = 12.523381586623486,
                         Latitude = 55.787013378777004,
                         Index = 3
                     },
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection8.Id,
+                        SectionId = Section8.Id,
                         Longitude = 12.523133512544206,
                         Latitude = 55.787056448768766,
                         Index = 4
@@ -638,49 +769,49 @@ namespace RoomLocator.Api.Helpers
                     // 1st floor group study 4
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection9.Id,
+                        SectionId = Section9.Id,
                         Longitude = 12.52296211062415,
                         Latitude = 55.787025664233454,
                         Index = 0
                     },
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection9.Id,
+                        SectionId = Section9.Id,
                         Longitude = 12.522862484572613,
                         Latitude = 55.786844942921476,
                         Index = 1
                     },
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection9.Id,
+                        SectionId = Section9.Id,
                         Longitude = 12.523035424992003,
                         Latitude = 55.7868150048902,
                         Index = 2
                     },
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection9.Id,
+                        SectionId = Section9.Id,
                         Longitude = 12.523122460328437,
                         Latitude = 55.786975109109136,
                         Index = 3
                     },
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection9.Id,
+                        SectionId = Section9.Id,
                         Longitude = 12.523091692964897,
                         Latitude = 55.78698056999656,
                         Index = 4
                     },
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection9.Id,
+                        SectionId = Section9.Id,
                         Longitude = 12.523103078712865,
                         Latitude = 55.78700090057603,
                         Index = 5
                     },
                     new Coordinates
                     {
-                        MazeMapSectionId = mazeMapSection9.Id,
+                        SectionId = Section9.Id,
                         Longitude = 12.52296211062415,
                         Latitude = 55.787025664233454,
                         Index = 6
@@ -688,14 +819,86 @@ namespace RoomLocator.Api.Helpers
 
                 };
 
-            context.AddRange(coordinates);
-            context.SaveChanges();
+                var events = new List<Event>
+                {
+                    new Event
+                    {
+                        LocationId = library.Id,
+                        Title = "Scientists of biomedicine present their results",
+                        Description = "This is mock data, seeded by the backend.",
+                        Speakers = "Anne-Mette Frandsen, Ole Nygaard Jakobsen",
+                        Longitude = 12.523135159684443,
+                        Latitude = 55.786914912087894,
+                        ZLevel = 1,
+                        Date = DateTime.Now,
+                        DurationInHours = 2,
+                    },
+                    new Event
+                    {
+                        LocationId = library.Id,
+                        Title = "Extreme library party",
+                        Description = "This is mock data, seeded by the backend.",
+                        Longitude = 12.523606406323665,
+                        Latitude = 55.786835836454884,
+                        ZLevel = 2,
+                        Date = DateTime.Now,
+                        DurationInHours = 10,
+                    },
+                    new Event
+                    {
+                        LocationId = library.Id,
+                        Title = "Free Laptop Maintenance",
+                        Description = "This is mock data, seeded by the backend.",
+                        Longitude = 12.523665464716544,
+                        Latitude = 55.78689552535516,
+                        ZLevel = 1,
+                        Date = DateTime.Now,
+                        DurationInHours = 6,
+                    },
+                    new Event
+                    {
+                        LocationId = skylab.Id,
+                        Title = "Networking: Meet your next investors",
+                        Description = "This is mock data, seeded by the backend.",
+                        Longitude = 12.512822403380198,
+                        Latitude = 55.78183460587695,
+                        ZLevel = 1,
+                        Date = DateTime.Now,
+                        DurationInHours = 4,
+                    },
+                    new Event
+                    {
+                        LocationId = skylab.Id,
+                        Title = "DanSTAR rocket launch",
+                        Description = "This is mock data, seeded by the backend.",
+                        Longitude = 12.512847682376417,
+                        Latitude = 55.78172089043085,
+                        ZLevel = 1,
+                        Date = DateTime.Now,
+                        DurationInHours = 4,
+                    },
+                    new Event
+                    {
+                        LocationId = skylab.Id,
+                        Title = "Tech startup assembly meeting",
+                        Description = "This is mock data, seeded by the backend.",
+                        Longitude = 12.512898776644477,
+                        Latitude = 55.781836285833634,
+                        ZLevel = 2,
+                        Date = DateTime.Now,
+                        DurationInHours = 4,
+                    }
+                };
+
+                context.AddRange(events);
+                context.AddRange(coordinates);
+                context.SaveChanges();
             }
         }
 
         public static void SeedDemoSurveys(RoomLocatorContext context)
-        {   
-            if(!context.Surveys.Any())
+        {
+            if (!context.Surveys.Any())
             {
                 var loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Duis ut diam quam nulla porttitor massa id neque aliquam.";
                 var survey1 = new Survey { Title = "Lorem ipsum dolor sit amet", Description = loremIpsum, CreatedDate = DateTime.Now };
@@ -739,13 +942,13 @@ namespace RoomLocator.Api.Helpers
                     }
                 };
 
-                var mazeMapSections = context.MazeMapSections.ToList();
+                var Sections = context.Sections.ToList();
 
                 // Even distribution between the two test surveys
                 var i = 0;
-                foreach(var section in mazeMapSections)
+                foreach (var section in Sections)
                 {
-                    if (i < mazeMapSections.Count() / 2)
+                    if (i < Sections.Count() / 2)
                     {
                         section.SurveyId = survey1.Id;
                     }
@@ -758,7 +961,7 @@ namespace RoomLocator.Api.Helpers
                 }
 
                 context.AddRange(questions);
-                context.UpdateRange(mazeMapSections);
+                context.UpdateRange(Sections);
                 context.SaveChanges();
             }
         }

@@ -12,5 +12,6 @@ namespace RoomLocator.Domain.InputModels
     {
         public bool? Vote { get; set; }
         public string UserId { get; set; }
+        public string LocationId { get; set; }
     }
 }

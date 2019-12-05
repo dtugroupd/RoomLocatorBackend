@@ -9,6 +9,12 @@ namespace RoomLocator.Data.Config
         public void Configure(EntityTypeBuilder<Event> builder)
         {
             builder.HasKey(x => new { x.Id });
+
+            builder
+                .HasOne(x => x.Location)
+                .WithMany(x => x.Events)
+                .HasForeignKey(x => x.LocationId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

@@ -12,8 +12,9 @@ namespace RoomLocator.Data.Config
     public class RoomLocatorContext : DbContext
     {
         public RoomLocatorContext(DbContextOptions options) : base(options) { }
-        
-        public DbSet<MazeMapSection> MazeMapSections { get; set; }
+
+        public DbSet<Location> Locations { get; set; }
+        public DbSet<Section> Sections { get; set; }
         public DbSet<Survey> Surveys { get; set; }
         public DbSet<SurveyAnswer> SurveyAnswers { get; set; }
         public DbSet<Question> Questions { get; set; }
@@ -34,17 +35,16 @@ namespace RoomLocator.Data.Config
             builder.ApplyConfiguration(new UserFluentConfig());
             builder.ApplyConfiguration(new RoleFluentConfig());
             builder.ApplyConfiguration(new UserRoleFluentConfig());
+            builder.ApplyConfiguration(new LocationFluentConfig());
+            builder.ApplyConfiguration(new SectionFluentConfig());
+            builder.ApplyConfiguration(new SurveyFluentConfig());
+            builder.ApplyConfiguration(new SurveyAnswerFluentConfig());
+            builder.ApplyConfiguration(new QuestionFluentConfig());
             builder.ApplyConfiguration(new EventFluentConfig());
-            
+            builder.ApplyConfiguration(new FeedbackFluentConfig());
+
             base.OnModelCreating(builder);
-            
-            builder.Entity<MazeMapSection>().HasMany(x => x.Coordinates).WithOne(x => x.MazeMapSection).HasForeignKey(x => x.MazeMapSectionId);
-            builder.Entity<Survey>().HasMany(x => x.MazeMapSections).WithOne(x => x.Survey).IsRequired(required: false);
-            builder.Entity<Survey>().HasMany(x => x.Questions).WithOne(x => x.Survey).HasForeignKey(x => x.SurveyId);
-            builder.Entity<Survey>().HasMany(x => x.SurveyAnswers).WithOne(x => x.Survey).HasForeignKey(x => x.SurveyId);
-            builder.Entity<SurveyAnswer>().HasMany(x => x.QuestionAnswers).WithOne(x => x.SurveyAnswer);
-            builder.Entity<Question>().HasMany(x => x.QuestionAnswers).WithOne(x => x.Question).OnDelete(DeleteBehavior.Restrict);
-            builder.Entity<Feedback>().HasOne(x => x.User).WithMany(x => x.Feedbacks).HasForeignKey(x => x.UserId);
+                        
         }
     }
 }

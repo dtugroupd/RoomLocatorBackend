@@ -21,21 +21,24 @@ namespace RoomLocator.Data.Migrations
 
             modelBuilder.Entity("RoomLocator.Domain.Models.Coordinates", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<int>("Index");
 
                     b.Property<double>("Latitude");
 
+                    b.Property<string>("LocationId");
+
                     b.Property<double>("Longitude");
 
-                    b.Property<int>("MazeMapSectionId");
+                    b.Property<string>("SectionId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MazeMapSectionId");
+                    b.HasIndex("LocationId");
+
+                    b.HasIndex("SectionId");
 
                     b.ToTable("Coordinates");
                 });
@@ -53,11 +56,21 @@ namespace RoomLocator.Data.Migrations
 
                     b.Property<double>("DurationInHours");
 
+                    b.Property<double>("Latitude");
+
+                    b.Property<string>("LocationId");
+
+                    b.Property<double>("Longitude");
+
                     b.Property<string>("Speakers");
 
                     b.Property<string>("Title");
 
+                    b.Property<int>("ZLevel");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("LocationId");
 
                     b.ToTable("Events");
                 });
@@ -67,6 +80,8 @@ namespace RoomLocator.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("LocationId");
+
                     b.Property<DateTime>("TimeStamp");
 
                     b.Property<string>("UserId");
@@ -75,37 +90,41 @@ namespace RoomLocator.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("LocationId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Feedbacks");
                 });
 
-            modelBuilder.Entity("RoomLocator.Domain.Models.MazeMapSection", b =>
+            modelBuilder.Entity("RoomLocator.Domain.Models.Location", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("SurveyId");
+                    b.Property<double>("Latitude");
 
-                    b.Property<int>("Type");
+                    b.Property<double>("Longitude");
 
-                    b.Property<int>("ZLevel");
+                    b.Property<string>("Name");
+
+                    b.Property<double>("Zoom");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SurveyId");
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasFilter("[Name] IS NOT NULL");
 
-                    b.ToTable("MazeMapSections");
+                    b.ToTable("Locations");
                 });
 
             modelBuilder.Entity("RoomLocator.Domain.Models.Question", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<int>("SurveyId");
+                    b.Property<string>("SurveyId");
 
                     b.Property<string>("Text");
 
@@ -118,15 +137,14 @@ namespace RoomLocator.Data.Migrations
 
             modelBuilder.Entity("RoomLocator.Domain.Models.QuestionAnswer", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<int>("QuestionId");
+                    b.Property<string>("QuestionId");
 
                     b.Property<int>("Score");
 
-                    b.Property<int>("SurveyAnswerId");
+                    b.Property<string>("SurveyAnswerId");
 
                     b.Property<string>("Text");
 
@@ -155,6 +173,28 @@ namespace RoomLocator.Data.Migrations
                     b.ToTable("Roles");
                 });
 
+            modelBuilder.Entity("RoomLocator.Domain.Models.Section", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("LocationId");
+
+                    b.Property<string>("SurveyId");
+
+                    b.Property<int>("Type");
+
+                    b.Property<int>("ZLevel");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LocationId");
+
+                    b.HasIndex("SurveyId");
+
+                    b.ToTable("Sections");
+                });
+
             modelBuilder.Entity("RoomLocator.Domain.Models.Sensor", b =>
                 {
                     b.Property<string>("Id")
@@ -177,9 +217,8 @@ namespace RoomLocator.Data.Migrations
 
             modelBuilder.Entity("RoomLocator.Domain.Models.Survey", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("CreatedDate");
 
@@ -194,13 +233,12 @@ namespace RoomLocator.Data.Migrations
 
             modelBuilder.Entity("RoomLocator.Domain.Models.SurveyAnswer", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Comment");
 
-                    b.Property<int>("SurveyId");
+                    b.Property<string>("SurveyId");
 
                     b.Property<DateTime>("TimeStamp");
 
@@ -231,13 +269,26 @@ namespace RoomLocator.Data.Migrations
 
             modelBuilder.Entity("RoomLocator.Domain.Models.UserRole", b =>
                 {
-                    b.Property<string>("UserId");
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<string>("RoleId");
+                    b.Property<string>("LocationId");
 
-                    b.HasKey("UserId", "RoleId");
+                    b.Property<string>("RoleId")
+                        .IsRequired();
+
+                    b.Property<string>("UserId")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LocationId");
 
                     b.HasIndex("RoleId");
+
+                    b.HasIndex("UserId", "RoleId", "LocationId")
+                        .IsUnique()
+                        .HasFilter("[LocationId] IS NOT NULL");
 
                     b.ToTable("UserRoles");
                 });
@@ -282,32 +333,40 @@ namespace RoomLocator.Data.Migrations
 
             modelBuilder.Entity("RoomLocator.Domain.Models.Coordinates", b =>
                 {
-                    b.HasOne("RoomLocator.Domain.Models.MazeMapSection", "MazeMapSection")
+                    b.HasOne("RoomLocator.Domain.Models.Location", "Location")
                         .WithMany("Coordinates")
-                        .HasForeignKey("MazeMapSectionId")
+                        .HasForeignKey("LocationId");
+
+                    b.HasOne("RoomLocator.Domain.Models.Section", "MazeMapSection")
+                        .WithMany("Coordinates")
+                        .HasForeignKey("SectionId");
+                });
+
+            modelBuilder.Entity("RoomLocator.Domain.Models.Event", b =>
+                {
+                    b.HasOne("RoomLocator.Domain.Models.Location", "Location")
+                        .WithMany("Events")
+                        .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("RoomLocator.Domain.Models.Feedback", b =>
                 {
+                    b.HasOne("RoomLocator.Domain.Models.Location", "Location")
+                        .WithMany("Feedbacks")
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("RoomLocator.Domain.User", "User")
                         .WithMany("Feedbacks")
                         .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("RoomLocator.Domain.Models.MazeMapSection", b =>
-                {
-                    b.HasOne("RoomLocator.Domain.Models.Survey", "Survey")
-                        .WithMany("MazeMapSections")
-                        .HasForeignKey("SurveyId");
                 });
 
             modelBuilder.Entity("RoomLocator.Domain.Models.Question", b =>
                 {
                     b.HasOne("RoomLocator.Domain.Models.Survey", "Survey")
                         .WithMany("Questions")
-                        .HasForeignKey("SurveyId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("SurveyId");
                 });
 
             modelBuilder.Entity("RoomLocator.Domain.Models.QuestionAnswer", b =>
@@ -319,16 +378,25 @@ namespace RoomLocator.Data.Migrations
 
                     b.HasOne("RoomLocator.Domain.Models.SurveyAnswer", "SurveyAnswer")
                         .WithMany("QuestionAnswers")
-                        .HasForeignKey("SurveyAnswerId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("SurveyAnswerId");
+                });
+
+            modelBuilder.Entity("RoomLocator.Domain.Models.Section", b =>
+                {
+                    b.HasOne("RoomLocator.Domain.Models.Location", "Location")
+                        .WithMany("Sections")
+                        .HasForeignKey("LocationId");
+
+                    b.HasOne("RoomLocator.Domain.Models.Survey", "Survey")
+                        .WithMany("Sections")
+                        .HasForeignKey("SurveyId");
                 });
 
             modelBuilder.Entity("RoomLocator.Domain.Models.SurveyAnswer", b =>
                 {
                     b.HasOne("RoomLocator.Domain.Models.Survey", "Survey")
                         .WithMany("SurveyAnswers")
-                        .HasForeignKey("SurveyId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("SurveyId");
                 });
 
             modelBuilder.Entity("RoomLocator.Domain.Models.UserDisclaimer", b =>
@@ -341,6 +409,11 @@ namespace RoomLocator.Data.Migrations
 
             modelBuilder.Entity("RoomLocator.Domain.Models.UserRole", b =>
                 {
+                    b.HasOne("RoomLocator.Domain.Models.Location", "Location")
+                        .WithMany()
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("RoomLocator.Domain.Models.Role", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
