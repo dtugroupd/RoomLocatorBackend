@@ -31,6 +31,17 @@ namespace RoomLocator.Data.Services
             return await _context.Surveys.ProjectTo<SurveyViewModel>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<IEnumerable<SurveyViewModel>> GetLocationSurveys(string locationId)
+        {
+            return await (from survey in _context.Surveys
+                          join section in _context.Sections on survey.Id equals section.SurveyId
+                          where section.LocationId == locationId
+                          select survey)
+                .Distinct()
+                .ProjectTo<SurveyViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
         public async Task<SurveyAnswerViewModel> GetSurveyAnswer(string id)
         {
             return await _context.SurveyAnswers.ProjectTo<SurveyAnswerViewModel>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(x => x.Id == id);
@@ -152,7 +163,7 @@ namespace RoomLocator.Data.Services
 
             foreach(var question in surveyAnswers[0].QuestionAnswers)
             {
-                csvWriter.WriteField($"Question {question.QuestionId} score");
+                csvWriter.WriteField($"{question.Text}");
             }
 
             await csvWriter.NextRecordAsync();

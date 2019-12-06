@@ -90,5 +90,11 @@ namespace RoomLocator.Api.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [HttpGet("[action]/{locationId}")]
+        public async Task<ActionResult> GetLocationSurveys(string locationId)
+        {
+            return Ok(await _service.GetLocationSurveys(locationId));
+        }
     }
 }
