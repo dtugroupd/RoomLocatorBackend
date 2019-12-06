@@ -29,8 +29,10 @@ namespace RoomLocator.Data.Services
         {
             var users = await _context.Users
                 .Include(x => x.UserRoles)
-                .ThenInclude(x => x.Role)
-                    .Where(x => !x.UserIsDeleted)
+                    .ThenInclude(x => x.Role)
+                .Include(x => x.UserRoles)
+                    .ThenInclude(x => x.Location)
+                .Where(x => !x.UserIsDeleted)
                 .ProjectTo<UserViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
@@ -62,24 +64,35 @@ namespace RoomLocator.Data.Services
             #endregion End of Stupid Fix
 
             var user = await _context.Users
-                .Include(x => x.UserRoles)
-                    .ThenInclude(x => x.Role)
                 .ProjectTo<UserViewModel>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(x => x.StudentId == studentId);
 
             if (user == null) return null;
-
-            if (user.Roles.Exists(x => x.Name == "admin"))
-            {
-                user.Roles.AddRange(
-                    await _context.Roles
-                        .Where(x => !user.Roles.Exists(y => y.Name == x.Name))
-                        .ProjectTo<RoleViewModel>(_mapper.ConfigurationProvider)
-                        .ToListAsync()
-                    );                
-            }
+            
+            AttachUsersRoles(user, await _context.Roles.ToListAsync());
 
             return user;
+        }
+
+        private static void AttachUsersRoles(UserViewModel user, IList<Role> roles)
+        {
+            var adminRoles = user.Roles.Where(x => x.Name == "admin").ToList();
+
+            foreach (var adminRole in adminRoles)
+            {
+                var rolesToAdd = roles
+                    .Where(x => !user.Roles.Exists(r => r.Name == x.Name && r.LocationId == adminRole.LocationId))
+                    .Select(x => new RoleViewModel
+                    {
+                        Name = x.Name,
+                        LocationId = adminRole.LocationId,
+                        LocationName = adminRole.LocationName
+                    }
+                ).ToList();
+                user.Roles.AddRange(rolesToAdd);
+            }
+
+            Console.WriteLine();
         }
 
         public async Task<UserViewModel> Create(string studentId, bool hasAcceptedDisclaimer)
