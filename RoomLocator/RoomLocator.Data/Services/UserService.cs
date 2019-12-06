@@ -188,9 +188,11 @@ namespace RoomLocator.Data.Services
             await _context.UserRoles.AddAsync(studentUserRole);
             await _context.SaveChangesAsync();
 
-            await _userServiceHub.UpdateUserRole(user, Get());
+            var updatedUser = await GetByStudentId(user.StudentId);
 
-            return await Get(user.Id);
+            await _userServiceHub.UpdateUserRole(updatedUser, Get());
+
+            return updatedUser;
         }
 
         /// <summary>
