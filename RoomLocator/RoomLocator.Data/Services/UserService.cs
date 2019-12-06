@@ -91,8 +91,6 @@ namespace RoomLocator.Data.Services
                 ).ToList();
                 user.Roles.AddRange(rolesToAdd);
             }
-
-            Console.WriteLine();
         }
 
         public async Task<UserViewModel> Create(string studentId, bool hasAcceptedDisclaimer)
