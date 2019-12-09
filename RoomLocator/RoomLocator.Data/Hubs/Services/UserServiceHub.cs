@@ -26,6 +26,7 @@ namespace RoomLocator.Data.Hubs.Services
             var updateListTask = UpdateUserList(usersTask);
             _logger.LogInformation("Updating user model for '{StudentId}'", updatedUser.StudentId);
             await _hub.Clients.Groups(updatedUser.StudentId).SendAsync("updated-user", updatedUser);
+            await _hub.Clients.Groups(updatedUser.StudentId).SendAsync("updated-role", updatedUser.Roles);
             await updateListTask;
         }
 
