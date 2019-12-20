@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.Design;
 
 namespace RoomLocator.Domain.Models
@@ -10,6 +11,7 @@ namespace RoomLocator.Domain.Models
     public class Event
     {
         public string Id { get; set; }
+        [Required] public string LocationId { get; set; }
         public DateTime Date { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
@@ -19,7 +21,6 @@ namespace RoomLocator.Domain.Models
         public double Latitude { get; set; }
         public int ZLevel { get; set; }
         public string Speakers { get; set; }
-        public string LocationId { get; set; }
         public virtual Location Location { get; set; }
     }
 }

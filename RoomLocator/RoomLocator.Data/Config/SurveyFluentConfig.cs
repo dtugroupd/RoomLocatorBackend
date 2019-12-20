@@ -13,12 +13,13 @@ namespace RoomLocator.Data.Config
         {
             builder
                 .HasMany(x => x.Sections)
-                .WithOne(x => x.Survey)
-                .IsRequired(required: false);
+                .WithOne(x => x.Survey);
+
             builder
                 .HasMany(x => x.Questions)
                 .WithOne(x => x.Survey)
                 .HasForeignKey(x => x.SurveyId);
+
             builder
                 .HasMany(x => x.SurveyAnswers)
                 .WithOne(x => x.Survey)

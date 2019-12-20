@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RoomLocator.Data.Config;
 
 namespace RoomLocator.Data.Migrations
 {
     [DbContext(typeof(RoomLocatorContext))]
-    partial class RoomLocatorContextModelSnapshot : ModelSnapshot
+    [Migration("20191220193008_LocationIdRequiredSectionEvent")]
+    partial class LocationIdRequiredSectionEvent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -125,8 +127,7 @@ namespace RoomLocator.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("SurveyId")
-                        .IsRequired();
+                    b.Property<string>("SurveyId");
 
                     b.Property<string>("Text");
 
@@ -371,8 +372,7 @@ namespace RoomLocator.Data.Migrations
                 {
                     b.HasOne("RoomLocator.Domain.Models.Survey", "Survey")
                         .WithMany("Questions")
-                        .HasForeignKey("SurveyId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("SurveyId");
                 });
 
             modelBuilder.Entity("RoomLocator.Domain.Models.QuestionAnswer", b =>

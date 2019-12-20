@@ -15,7 +15,8 @@ namespace RoomLocator.Data.Config
             builder
                 .HasMany(x => x.Coordinates)
                 .WithOne(x => x.MazeMapSection)
-                .HasForeignKey(x => x.SectionId);
+                .HasForeignKey(x => x.SectionId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

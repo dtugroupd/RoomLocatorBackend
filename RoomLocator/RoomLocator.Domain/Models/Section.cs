@@ -1,5 +1,6 @@
 ﻿using RoomLocator.Domain.Enums;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace RoomLocator.Domain.Models
 {
@@ -9,7 +10,7 @@ namespace RoomLocator.Domain.Models
     public class Section
     {
         public string Id { get; set; }
-        public string LocationId { get; set; }
+        [Required] public string LocationId { get; set; }
         public string SurveyId { get; set; }
         public int ZLevel { get; set; }
         public SectionType Type { get; set; } 
