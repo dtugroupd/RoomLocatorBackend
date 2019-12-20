@@ -15,12 +15,15 @@ namespace RoomLocator.Data.Config
             builder
                 .HasMany(x => x.Sections)
                 .WithOne(x => x.Location)
-                .HasForeignKey(x => x.LocationId);
+                .HasForeignKey(x => x.LocationId)
+                .OnDelete(DeleteBehavior.Restrict);
+              
 
             builder
                 .HasMany(x => x.Coordinates)
                 .WithOne(x => x.Location)
-                .HasForeignKey(x => x.LocationId);
+                .HasForeignKey(x => x.LocationId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder
                 .HasIndex(x => x.Name)
