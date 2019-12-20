@@ -2,7 +2,7 @@
 
 namespace Shared
 {
-    public class BaseException : Exception
+    public abstract class BaseException : Exception
     {
         public string Title { get; set; }
 
