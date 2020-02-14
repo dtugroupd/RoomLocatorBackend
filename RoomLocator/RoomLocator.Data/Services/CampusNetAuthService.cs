@@ -72,7 +72,7 @@ namespace RoomLocator.Data.Services
         /// <exception cref="Exception"></exception>
         public async Task<CnUserViewModel> Authenticate(CnAuthInputModel authenticationModel)
         {
-            if(authenticationModel.LoginModel.Username == "admin" && authenticationModel.LoginModel.Password == "Ekkart123")
+            if(authenticationModel.LoginModel.Username == "admin" && authenticationModel.LoginModel.Password == "Ekkart123" && authenticationModel.LoginModel.HasAcceptedDisclaimer.Value)
             {
                var user = _context.Users.FirstOrDefault(x => x.FirstName == "admin");
 
@@ -83,7 +83,7 @@ namespace RoomLocator.Data.Services
                     GivenName = "Ekkart",
                     FamilyName = "Admin"
                 };
-            } else if (authenticationModel.LoginModel.Username == "bibadmin" && authenticationModel.LoginModel.Password == "Ekkart123")
+            } else if (authenticationModel.LoginModel.Username == "bibadmin" && authenticationModel.LoginModel.Password == "Ekkart123" && authenticationModel.LoginModel.HasAcceptedDisclaimer.Value)
             {
                 var user = _context.Users.FirstOrDefault(x => x.FirstName == "bibadmin");
 
@@ -95,7 +95,7 @@ namespace RoomLocator.Data.Services
                     FamilyName = "Bibadmin"
                 };
             }
-            else if (authenticationModel.LoginModel.Username == "skyadmin" && authenticationModel.LoginModel.Password == "Ekkart123")
+            else if (authenticationModel.LoginModel.Username == "skyadmin" && authenticationModel.LoginModel.Password == "Ekkart123" && authenticationModel.LoginModel.HasAcceptedDisclaimer.Value)
             {
                 var user = _context.Users.FirstOrDefault(x => x.FirstName == "skyadmin");
 
@@ -106,7 +106,7 @@ namespace RoomLocator.Data.Services
                     GivenName = "Ekkart",
                     FamilyName = "Skyadmin"
                 };
-            } else if (authenticationModel.LoginModel.Username == "bibresearcher" && authenticationModel.LoginModel.Password == "Ekkart123")
+            } else if (authenticationModel.LoginModel.Username == "bibresearcher" && authenticationModel.LoginModel.Password == "Ekkart123" && authenticationModel.LoginModel.HasAcceptedDisclaimer.Value)
             {
                 var user = _context.Users.FirstOrDefault(x => x.FirstName == "bibresearcher");
 
@@ -118,7 +118,7 @@ namespace RoomLocator.Data.Services
                     FamilyName = "Bibresearcher"
                 };
             }
-            else if (authenticationModel.LoginModel.Username == "skyresearcher" && authenticationModel.LoginModel.Password == "Ekkart123")
+            else if (authenticationModel.LoginModel.Username == "skyresearcher" && authenticationModel.LoginModel.Password == "Ekkart123" && authenticationModel.LoginModel.HasAcceptedDisclaimer.Value)
             {
                 var user = _context.Users.FirstOrDefault(x => x.FirstName == "skyresearcher");
 
@@ -130,7 +130,7 @@ namespace RoomLocator.Data.Services
                     FamilyName = "Skyresearcher"
                 };
             }
-            else if (authenticationModel.LoginModel.Username == "student" && authenticationModel.LoginModel.Password == "Ekkart123")
+            else if (authenticationModel.LoginModel.Username == "student" && authenticationModel.LoginModel.Password == "Ekkart123" && authenticationModel.LoginModel.HasAcceptedDisclaimer.Value)
             {
                 var user = _context.Users.FirstOrDefault(x => x.FirstName == "student");
 
