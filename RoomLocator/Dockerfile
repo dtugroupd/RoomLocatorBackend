@@ -1,4 +1,4 @@
-FROM microsoft/dotnet:sdk AS build-env
+FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build-env
 
 COPY . /app
 
@@ -12,7 +12,7 @@ COPY . .
 WORKDIR /src/RoomLocator.Api
 RUN dotnet publish -c Release -o /app/out
 
-FROM microsoft/dotnet:aspnetcore-runtime
+FROM mcr.microsoft.com/dotnet/core/aspnet:2.2
 WORKDIR /app
 COPY --from=build-env /app/out .
 EXPOSE 80/tcp

@@ -37,14 +37,14 @@ namespace RoomLocator.Api.Helpers
             context.SaveChanges();
         }
 
-        public static void SeedEkkartAdminUser(RoomLocatorContext context)
+        public static void SeedEkkartUsers(RoomLocatorContext context)
         {
-            var existing = context.Users.FirstOrDefault(x => x.FirstName == "Ekkart");
-            if(existing == null)
+            var existingAdmin = context.Users.FirstOrDefault(x => x.FirstName == "admin");
+            if(existingAdmin == null)
             {
                 var user = new User()
                 {
-                    FirstName = "Ekkart",
+                    FirstName = "admin",
                     LastName = "Admin User",
                     Email = "example@example.com",
                     StudentId = "admin"
@@ -62,10 +62,140 @@ namespace RoomLocator.Api.Helpers
                 };
 
                 context.UserRoles.Add(adminUserRole);
+            }
+
+            var existingBibAdmin = context.Users.FirstOrDefault(x => x.FirstName == "bibadmin");
+            if (existingAdmin == null)
+            {
+                var user = new User()
+                {
+                    FirstName = "bibadmin",
+                    LastName = "Bibadmin User",
+                    Email = "example@example.com",
+                    StudentId = "bibadmin"
+                };
+
+                context.Users.Add(user);
+                context.SaveChanges();
+
+                var adminRole = context.Roles.FirstOrDefault(x => x.Name == "admin");
+                var location = context.Locations.FirstOrDefault(x => x.Name == "Bibliotek");
+                var bibAdminUserRole = new UserRole()
+                {
+                    UserId = user.Id,
+                    RoleId = adminRole.Id,
+                    LocationId = location.Id
+                };
+
+                context.UserRoles.Add(bibAdminUserRole);
+            }
+
+            var existingSkyAdmin = context.Users.FirstOrDefault(x => x.FirstName == "skyadmin");
+            if (existingAdmin == null)
+            {
+                var user = new User()
+                {
+                    FirstName = "skyadmin",
+                    LastName = "Skyadmin User",
+                    Email = "example@example.com",
+                    StudentId = "skyadmin"
+                };
+
+                context.Users.Add(user);
+                context.SaveChanges();
+
+                var adminRole = context.Roles.FirstOrDefault(x => x.Name == "admin");
+                var location = context.Locations.FirstOrDefault(x => x.Name == "Skylab");
+                var skyAdminUserRole = new UserRole()
+                {
+                    UserId = user.Id,
+                    RoleId = adminRole.Id,
+                    LocationId = location.Id
+                };
+
+                context.UserRoles.Add(skyAdminUserRole);
+
+            }
+
+            var existingBibResearcher = context.Users.FirstOrDefault(x => x.FirstName == "bibresearcher");
+            if (existingAdmin == null)
+            {
+                var user = new User()
+                {
+                    FirstName = "bibresearcher",
+                    LastName = "Bibresearcher User",
+                    Email = "example@example.com",
+                    StudentId = "bibresearcher"
+                };
+
+                context.Users.Add(user);
+                context.SaveChanges();
+
+                var researcherRole = context.Roles.FirstOrDefault(x => x.Name == "researcher");
+                var location = context.Locations.FirstOrDefault(x => x.Name == "Bibliotek");
+                var skyAdminUserRole = new UserRole()
+                {
+                    UserId = user.Id,
+                    RoleId = researcherRole.Id,
+                    LocationId = location.Id
+                };
+
+                context.UserRoles.Add(skyAdminUserRole);
+                context.SaveChanges();
+
+            }
+
+            var existingSkyResearcher = context.Users.FirstOrDefault(x => x.FirstName == "skyresearcher");
+            if (existingAdmin == null)
+            {
+                var user = new User()
+                {
+                    FirstName = "skyresearcher",
+                    LastName = "Skyresearcher User",
+                    Email = "example@example.com",
+                    StudentId = "skyresearcher"
+                };
+
+                context.Users.Add(user);
+                context.SaveChanges();
+
+                var researcherRole = context.Roles.FirstOrDefault(x => x.Name == "researcher");
+                var location = context.Locations.FirstOrDefault(x => x.Name == "Skylab");
+                var skyAdminUserRole = new UserRole()
+                {
+                    UserId = user.Id,
+                    RoleId = researcherRole.Id,
+                    LocationId = location.Id
+                };
+
+                context.UserRoles.Add(skyAdminUserRole);
                 context.SaveChanges();
             }
 
+            var existingStudentUser = context.Users.FirstOrDefault(x => x.FirstName == "student");
+            if (existingAdmin == null)
+            {
+                var user = new User()
+                {
+                    FirstName = "student",
+                    LastName = "Student User",
+                    Email = "example@example.com",
+                    StudentId = "student"
+                };
 
+                context.Users.Add(user);
+                context.SaveChanges();
+
+                var studentRole = context.Roles.FirstOrDefault(x => x.Name == "student");
+                var skyAdminUserRole = new UserRole()
+                {
+                    UserId = user.Id,
+                    RoleId = studentRole.Id,
+                };
+
+                context.UserRoles.Add(skyAdminUserRole);
+                context.SaveChanges();
+            }
         }
         
         /// <summary>

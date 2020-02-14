@@ -200,10 +200,10 @@ namespace RoomLocator.Api
             
             context.Database.Migrate();
             DatabaseSeedHelper.SeedRoles(context);
-            DatabaseSeedHelper.SeedEkkartAdminUser(context); // To bypass CN API 
             DatabaseSeedHelper.SeedLocations(context);
             DatabaseSeedHelper.SeedSensors(context);
             DatabaseSeedHelper.SeedDemoSurveys(context);
+            DatabaseSeedHelper.SeedEkkartUsers(context); // To bypass CN API 
             
             // Use this in production AFTER no survey on section issue has been fixed
             //if (env.IsDevelopment())

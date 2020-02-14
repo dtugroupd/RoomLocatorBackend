@@ -72,23 +72,77 @@ namespace RoomLocator.Data.Services
         /// <exception cref="Exception"></exception>
         public async Task<CnUserViewModel> Authenticate(CnAuthInputModel authenticationModel)
         {
-            if(authenticationModel.LoginModel.Username == "admin")
+            if(authenticationModel.LoginModel.Username == "admin" && authenticationModel.LoginModel.Password == "Ekkart123")
             {
-                if(authenticationModel.LoginModel.Password == "Ekkart123")
+               var user = _context.Users.FirstOrDefault(x => x.FirstName == "admin");
+
+                return new CnUserViewModel()
                 {
-                    var user = _context.Users.FirstOrDefault(x => x.FirstName == "Ekkart");
+                    UserId = user.Id,
+                    UserName = "admin",
+                    GivenName = "Ekkart",
+                    FamilyName = "Admin"
+                };
+            } else if (authenticationModel.LoginModel.Username == "bibadmin" && authenticationModel.LoginModel.Password == "Ekkart123")
+            {
+                var user = _context.Users.FirstOrDefault(x => x.FirstName == "bibadmin");
 
-                    return new CnUserViewModel()
-                    {
-                        UserId = user.Id,
-                        UserName = "admin",
-                        GivenName = "Ekkart",
-                        FamilyName = "Admin"
-                    };
-                }
+                return new CnUserViewModel()
+                {
+                    UserId = user.Id,
+                    UserName = "bibadmin",
+                    GivenName = "Ekkart",
+                    FamilyName = "Bibadmin"
+                };
+            }
+            else if (authenticationModel.LoginModel.Username == "skyadmin" && authenticationModel.LoginModel.Password == "Ekkart123")
+            {
+                var user = _context.Users.FirstOrDefault(x => x.FirstName == "skyadmin");
 
-                throw ExceptionFactory.Unauthorized();
-            } else
+                return new CnUserViewModel()
+                {
+                    UserId = user.Id,
+                    UserName = "skyadmin",
+                    GivenName = "Ekkart",
+                    FamilyName = "Skyadmin"
+                };
+            } else if (authenticationModel.LoginModel.Username == "bibresearcher" && authenticationModel.LoginModel.Password == "Ekkart123")
+            {
+                var user = _context.Users.FirstOrDefault(x => x.FirstName == "bibresearcher");
+
+                return new CnUserViewModel()
+                {
+                    UserId = user.Id,
+                    UserName = "bibresearcher",
+                    GivenName = "Ekkart",
+                    FamilyName = "Bibresearcher"
+                };
+            }
+            else if (authenticationModel.LoginModel.Username == "skyresearcher" && authenticationModel.LoginModel.Password == "Ekkart123")
+            {
+                var user = _context.Users.FirstOrDefault(x => x.FirstName == "skyresearcher");
+
+                return new CnUserViewModel()
+                {
+                    UserId = user.Id,
+                    UserName = "skyresearcher",
+                    GivenName = "Ekkart",
+                    FamilyName = "Skyresearcher"
+                };
+            }
+            else if (authenticationModel.LoginModel.Username == "student" && authenticationModel.LoginModel.Password == "Ekkart123")
+            {
+                var user = _context.Users.FirstOrDefault(x => x.FirstName == "student");
+
+                return new CnUserViewModel()
+                {
+                    UserId = user.Id,
+                    UserName = "student",
+                    GivenName = "Ekkart",
+                    FamilyName = "Student"
+                };
+            }
+            else
             {
                 // Normal login flow. Delete above spaghett.
                 var limitedPassword = await FetchLimitedPassword(authenticationModel);
