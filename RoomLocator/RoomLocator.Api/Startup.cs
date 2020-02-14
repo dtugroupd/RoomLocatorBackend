@@ -200,12 +200,16 @@ namespace RoomLocator.Api
             
             context.Database.Migrate();
             DatabaseSeedHelper.SeedRoles(context);
+            DatabaseSeedHelper.SeedEkkartAdminUser(context); // To bypass CN API 
             DatabaseSeedHelper.SeedLocations(context);
             DatabaseSeedHelper.SeedSensors(context);
-            if (env.IsDevelopment())
-            {
-                DatabaseSeedHelper.SeedDemoSurveys(context);
-            }
+            DatabaseSeedHelper.SeedDemoSurveys(context);
+            
+            // Use this in production AFTER no survey on section issue has been fixed
+            //if (env.IsDevelopment())
+            //{
+            //    DatabaseSeedHelper.SeedDemoSurveys(context);
+            //}
 
             app.UseSwagger();
             app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Room Locator API V1"); });

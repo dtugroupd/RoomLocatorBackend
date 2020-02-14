@@ -1,4 +1,5 @@
 ﻿using RoomLocator.Data.Config;
+using RoomLocator.Domain;
 using RoomLocator.Domain.Enums;
 using RoomLocator.Domain.Models;
 using System;
@@ -34,6 +35,37 @@ namespace RoomLocator.Api.Helpers
 
             context.Roles.AddRange(missingRoles);
             context.SaveChanges();
+        }
+
+        public static void SeedEkkartAdminUser(RoomLocatorContext context)
+        {
+            var existing = context.Users.FirstOrDefault(x => x.FirstName == "Ekkart");
+            if(existing == null)
+            {
+                var user = new User()
+                {
+                    FirstName = "Ekkart",
+                    LastName = "Admin User",
+                    Email = "example@example.com",
+                    StudentId = "admin"
+                };
+
+                context.Users.Add(user);
+                context.SaveChanges();
+
+                var adminRole = context.Roles.FirstOrDefault(x => x.Name == "admin");
+                var adminUserRole = new UserRole()
+                {
+                    UserId = user.Id,
+                    RoleId = adminRole.Id
+
+                };
+
+                context.UserRoles.Add(adminUserRole);
+                context.SaveChanges();
+            }
+
+
         }
         
         /// <summary>
